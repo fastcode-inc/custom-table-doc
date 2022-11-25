@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -10,12 +10,17 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MaterialModule } from './material/material.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ModalPopUpComponent } from './modal-pop-up/modal-pop-up.component';
+import { CustomTableComponent } from './custom-table/custom-table.component';
+import { ResizeColumnDirective } from './custom-table/resize-column.directive';
+import { MatTableExporterModule } from 'mat-table-exporter';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    ModalPopUpComponent
+    ModalPopUpComponent,
+    CustomTableComponent,
+    ResizeColumnDirective
   ],
   imports: [
     BrowserModule,
@@ -26,7 +31,9 @@ import { ModalPopUpComponent } from './modal-pop-up/modal-pop-up.component';
     ReactiveFormsModule,
     MatNativeDateModule,
     MaterialModule,
-    MatFormFieldModule
+    HttpClientModule,
+    MatFormFieldModule,
+    MatTableExporterModule
   ],
   providers: [],
   bootstrap: [AppComponent]
