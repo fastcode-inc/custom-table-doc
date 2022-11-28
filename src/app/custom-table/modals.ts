@@ -106,3 +106,12 @@ export interface MtxGridColumnMenu {
 }
 /** Possible button type values. */
 export declare type MtxGridButtonType = 'raised' | 'stroked' | 'flat' | 'icon' | 'fab' | 'mini-fab';
+
+export interface MtxGridColumnPinOption {
+    label: string | Observable<string>;
+    value: MtxGridColumnPinValue;
+    selected: boolean;
+    field: string;
+}
+
+export declare type MtxGridColumnPinValue = 'left' | 'right' | null;

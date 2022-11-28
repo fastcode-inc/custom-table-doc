@@ -96,8 +96,9 @@
 
     </mat-card-content>
 </mat-card>
-<div style="width: 80% !important;">
+<div >
     <app-custom-table
+    style="width: 80% !important;"
     [dataSource]="dataSource"
     [columns]="columns"
     [columnResizable]="columnResizable"
@@ -106,7 +107,6 @@
     [enableDelete]="deleteRow"
     [rowSelection]="rowSelection"
     [multiRowSelection]="multiRowSelection"
-    [stickyColumns]="stickyColumn"
     [stickyHeader]="stickyHeader"
     [stickyFooter]="stickyFooter"
     [filter]="simpleFilter"
@@ -116,7 +116,10 @@
     [expandRows]="isExpandEnable"
     [dndColumns]="dragEnable"
     [paginatorEnable]="paginationEnable"
-    toolbarTitle=""
+    [showToolbar]="true"
+    [columnResizable]="true"
+    [columnPinnable]="true"
+    [columnHideable]="true"
     
     ></app-custom-table>
 

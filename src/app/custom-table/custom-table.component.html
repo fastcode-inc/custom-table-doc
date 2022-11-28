@@ -2,59 +2,53 @@
     <mat-label>Filter</mat-label>
     <input matInput [ngModel]="globalFilter" (ngModelChange)="applyFilter($event)" placeholder="Ex. Mia" #input>
 </mat-form-field>
-    <mat-toolbar class="toolbar-container" *ngIf="showToolbar">
-        <span class="toolbar-title" *ngIf="toolbarTitle">{{toolbarTitle}}</span>
-        <span class="example-spacer"></span>
-    
-        <!-- <mat-form-field appearance="fill" style="height: 50px;" >
-                    <mat-label>Columns</mat-label>
-                    <mat-select [formControl]="columnsListCtrl" multiple>
-                        <mat-select-trigger>
-                            {{columnsListCtrl.value?.[0] || ''}}
-                            <span *ngIf="(columnsListCtrl.value?.length || 0) > 1" class="example-additional-selection">
-                                (+{{(columnsListCtrl.value?.length || 0) - 1}} {{columnsListCtrl.value?.length === 2 ? 'other' : 'others'}})
-                            </span>
-                        </mat-select-trigger>
-                        <mat-option *ngFor="let columns of columnsList" (click)="showhidecolumn(columns)" [value]="columns">{{columns}}
-                        </mat-option>
-                    </mat-select>
-            </mat-form-field> -->
-            
-            
-            <button class="export-button" mat-stroked-button color="primary" (click)="openMenu('showHideMenu',$event)">
-                <span>Columns Shown</span>
-            </button>
-            <button class="export-button" mat-stroked-button color="primary" (click)="openMenu('export',$event)">
-                <mat-icon>import_export</mat-icon> <span>Export Table</span>
-                <mat-icon>expand_more</mat-icon>
-            </button>
-            <div style="visibility: hidden; position:fixed" [style]="" [matMenuTriggerFor]="menu"
-            [style.left.px]="menuX"
-            [style.top.px]="menuY"
-            >
+<mat-toolbar class="toolbar-container" *ngIf="showToolbar">
+    <span class="toolbar-title" *ngIf="toolbarTitle">{{toolbarTitle}}</span>
+    <span class="example-spacer"></span>
+        <button class="export-button" mat-stroked-button color="primary" (click)="openMenu('toolbarMenu',$event)">
+            <span>Columns Shown</span>
+        </button>
+        <button class="export-button" mat-stroked-button color="primary" (click)="openMenu('export',$event)">
+            <mat-icon>import_export</mat-icon> <span>Export Table</span>
+            <mat-icon>expand_more</mat-icon>
+        </button>
+        <div style="visibility: hidden; position:fixed" [style]="" [matMenuTriggerFor]="menu"
+        [style.left.px]="menuX"
+        [style.top.px]="menuY"
+        >
+        </div>
+</mat-toolbar>
+<mat-menu #menu="matMenu" (closed)="menuClosed()">
+    <ng-container *ngIf="exportMenuCtrl">
+        <mat-option (click)="exporter.exportTable('xlsx')">Export to Excel</mat-option>
+        <mat-option (click)="exporter.exportTable('csv')">Export to CSV</mat-option>
+    </ng-container>
+
+    <ng-container *ngIf="gridToolbarMenuCtrl">
+        <div class="toolbar-menu-container" [formGroup]="toolbarMenuGroup">
+            <div class="toolbar-menu-item" *ngFor="let column of columnsArray" style="display: flex; "
+                (click)="$event.stopPropagation()">
+                <button *ngIf="columnPinnable" mat-icon-button color="currentColor" (click)="openPinnablePropertyMenu(column,$event)">
+                    <mat-icon class="toolbar-icons" [svgIcon]="column.pinned == 'left' || column.pinned == 'right'? 'pinned':'unPinned'"></mat-icon>
+                </button>
+                <mat-checkbox *ngIf="columnHideable" class="toolbar-menu-checkbox" style="width: max-content;"
+                    [formControlName]="column.field">{{column.header}}</mat-checkbox>
+                <span *ngIf="!columnHideable" class="toolbar-menu-item-title"
+                    style="width: max-content">{{column.header}}</span>
             </div>
-            </mat-toolbar>
-            <mat-menu #menu="matMenu" (closed)="menuClosed()">
-                <ng-container *ngIf="exportMenuCtrl">
-                    <mat-option (click)="exporter.exportTable('xlsx')">Export to Excel</mat-option>
-                    <mat-option (click)="exporter.exportTable('csv')">Export to CSV</mat-option>
-                </ng-container>
-                <ng-container *ngIf="hideShowMenuCtrl">
-                    <div  style="display: flex; flex-direction: column;">
-                        <div *ngFor="let columns of columnsList" style="display: flex; ">
-                            <mat-icon class="pinned-icon" svgIcon="unPinned"></mat-icon>
-                            <mat-checkbox (click)="$event.stopPropagation() ;showhidecolumn(columns)" style="width: max-content;">{{columns}}</mat-checkbox>
-                        </div>
-                    </div>
-                    <!-- <mat-selection-list #columns multiple="true"  class="toolbar-selection-list">
-                        <ng-container *ngFor="let columns of columnsList" style="display: flex;">
-                            <mat-list-option style="width: 100px;" class="hide-options" checkboxPosition="before" (click)="$event.stopPropagation() ;showhidecolumn(columns)" [value]="columns">
-                                {{columns}}
-                            </mat-list-option>
-                        </ng-container>
-                    </mat-selection-list> -->
-                </ng-container>
-            </mat-menu>
+        </div>
+    </ng-container>
+</mat-menu>
+<div style="visibility: hidden; position:fixed" [style]="" #pinnableSubMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="columnPinningOptionsTemplate" [style.left.px]="menuX"
+    [style.top.px]="menuY">
+</div>
+<mat-menu #columnPinningOptionsTemplate="matMenu" (closed)="resetPinOptions()">
+    <div class="toolbar-menu-columnPinnable-subMenu" *ngFor="let item of columnPinningOptions">
+    <mat-option (onSelectionChange)="updatePinningValue()">  <mat-icon *ngIf="item.selected">done</mat-icon>
+        <div *ngIf="!(item.selected)" style="height: 24px; width:24px; background-color:transparent"></div>
+            {{item.label}}</mat-option>
+    </div>
+</mat-menu>
 
 <div class="mat-elevation-z8">
     <div style="padding: 10px" *ngIf="addremoveColumns">
@@ -63,59 +57,62 @@
     </div>
     <table mat-table [dataSource]="dataSource" matSort cdkDropList cdkDropListOrientation="horizontal" matTableExporter
         #exporter="matTableExporter"
-        multiTemplateDataRows (cdkDropListDropped)="drop($event)">
+        multiTemplateDataRows (cdkDropListDropped)="drop($event)"
+        style="overflow: auto;">
 
         <!--dymanic columns are being generated here-->
-    <ng-container 
-        matColumnDef="{{column['field']}}" 
-        [style.width]="column.width ? column.width : undefined"
-        [style.maxWidth]="column.width ? column.width : undefined" 
-        [style.minWidth]="column.width ? column.width : undefined" 
-        *ngFor="let column of columnsArray; let i = index">
-        <!-- <div  *ngIf="columnResizable" >
-        <th matTooltip = "{{column.headerTooltip}}" mat-header-cell *matHeaderCellDef cdkDrag [mat-sort-header]="column['field']" [resizeColumn]="true" [index]="i"> 
-           <span>{{column.header}}</span>
-        </th>
-        </div> -->
-        <ng-container  *ngIf="!columnResizable" >
-        <th matTooltip="{{column.headerTooltip}}" mat-header-cell *matHeaderCellDef [mat-sort-header]="column['field']" [resizeColumn]="true" [index]="i"> 
-           <span>{{column.header}}</span>
-        </th>
-        </ng-container>
-        <td matTooltip="{{column.cellTooltip}}" mat-cell *matCellDef="let row">
-            <div *ngIf="!row.editable"> {{row[column.field]}} </div>
-            <div *ngIf="row.editable">
-                <mat-form-field appearance="fill">
-                    <mat-label>Favorite food</mat-label>
-                    <mat-select>
-                        <mat-option>
-                            One
-                        </mat-option>
-                        <mat-option>
-                            Two
-                        </mat-option>
-                        <mat-option>
-                            Three
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-        </td>
-        <td matTooltip="footer tooltip" mat-footer-cell *matFooterCellDef> {{column.header}} </td>
-    </ng-container>
+            <ng-container 
+                matColumnDef="{{column['field']}}" 
+                [sticky]="column.pinned == 'left' ? true:false"
+                [stickyEnd]="column.pinned == 'right' ? true:false"
+                [style.width]="column.width ? column.width : undefined"
+                [style.maxWidth]="column.width ? column.width : undefined" 
+                [style.minWidth]="column.width ? column.width : undefined" 
+                *ngFor="let column of columnsArray; let i = index">
+                <div  *ngIf="columnResizable" >
+                <th matTooltip = "{{column.headerTooltip}}" mat-header-cell *matHeaderCellDef  [resizeColumn]="true" [index]="i"> 
+                <span>{{column.header}}</span>
+                </th>
+                </div>
+                <ng-container  *ngIf="!columnResizable" >
+                <th matTooltip="{{column.headerTooltip}}" mat-header-cell *matHeaderCellDef cdkDrag [mat-sort-header]="column['field']" [resizeColumn]="true" [index]="i"> 
+                <span>{{column.header}}</span>
+                </th>
+                </ng-container>
+                <td matTooltip="{{column.cellTooltip}}" mat-cell *matCellDef="let row">
+                    <div *ngIf="!row.editable"> {{row[column.field]}} </div>
+                    <div *ngIf="row.editable">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Favorite food</mat-label>
+                            <mat-select>
+                                <mat-option>
+                                    One
+                                </mat-option>
+                                <mat-option>
+                                    Two
+                                </mat-option>
+                                <mat-option>
+                                    Three
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </td>
+                <td matTooltip="footer tooltip" mat-footer-cell *matFooterCellDef> {{column.header}} </td>
+            </ng-container>
         
-        <ng-container matColumnDef="edit">
-            <th matTooltip="Header tooltip" mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header> edit
-            </th>
-            <td matTooltip="cell tooltip" mat-cell *matCellDef="let row">
-                <mat-icon *ngIf="!row.editable && !row.editmodal" (click)="editEnable(row)" aria-hidden="false"
-                    aria-label="Example home icon" fontIcon="edit_note"></mat-icon>
-                <mat-icon *ngIf="row.editable && !row.editmodal" (click)="editEnable(row)" aria-hidden="false"
-                    aria-label="Example home icon" fontIcon="close"></mat-icon>
+            <ng-container matColumnDef="edit">
+                <th matTooltip="Header tooltip" mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header> edit
+                </th>
+                <td matTooltip="cell tooltip" mat-cell *matCellDef="let row">
+                    <mat-icon *ngIf="!row.editable && !row.editmodal" (click)="editEnable(row)" aria-hidden="false"
+                        aria-label="Example home icon" fontIcon="edit_note"></mat-icon>
+                    <mat-icon *ngIf="row.editable && !row.editmodal" (click)="editEnable(row)" aria-hidden="false"
+                        aria-label="Example home icon" fontIcon="close"></mat-icon>
 
-            </td>
-            <td matTooltip="footer tooltip" mat-footer-cell *matFooterCellDef> edit </td>
-        </ng-container>
+                </td>
+                <td matTooltip="footer tooltip" mat-footer-cell *matFooterCellDef> edit </td>
+            </ng-container>
 
         <ng-container matColumnDef="popup">
             <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header> popup

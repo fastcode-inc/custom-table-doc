@@ -1,15 +1,15 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import { animate, group, state, style, transition, trigger } from '@angular/animations';
 import { SelectionModel } from '@angular/cdk/collections';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, HostListener, Inject, Input, OnChanges, OnInit, Renderer2, SimpleChanges, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { merge, Observable } from 'rxjs';
-import { MtxGridColumn } from './modals';
+import { MtxGridColumn, MtxGridColumnPinOption } from './modals';
 import { CustomTableService } from './service/custom-table.service';
 export interface UserData {
   id: string;
@@ -66,6 +66,7 @@ const NAMES: string[] = [
 })
 export class CustomTableComponent implements OnInit, OnChanges {
   @ViewChild(MatMenuTrigger) menuTrigger!: MatMenuTrigger;
+  @ViewChild('pinnableSubMenuTrigger') pinnableSubMenuTrigger!: MatMenuTrigger;
   public ELEMENT_DATA: any;
   @Input() dataSource: any;
   @Input() columns: MtxGridColumn[] = [];
@@ -82,8 +83,11 @@ export class CustomTableComponent implements OnInit, OnChanges {
   @Input() selectionFilter: boolean = false;
   //toolbar inputs here
   @Input() showToolbar: boolean = false;
-  @Input() toolbarTitle: string = 'Custom Table Menu';
+  @Input() toolbarTitle: string = '';
   @Input() toolbarTempate: TemplateRef<any> | undefined;
+  @Input() columnHideable: boolean = true;
+  @Input() columnHideableChecked: 'show' | 'hide' = 'show';
+  @Input() columnPinnable: boolean = true;
 
   @Input() globalSearch: boolean = false;
   @Input() expandRows: boolean = false;
@@ -93,7 +97,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
   // API inputs
 
   exportMenuCtrl: boolean = false;
-  hideShowMenuCtrl: boolean = false;
+  gridToolbarMenuCtrl: boolean = false;
   editGridmodal: any = false;
   addremoveColumns: any = false;
   toggleColumnfilter: any = false;
@@ -109,8 +113,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
     { filter: false, name: 'popup', show: false },
     { filter: false, name: 'delete', show: false }
   ];
-
-  
+  public columnPinningOptions: MtxGridColumnPinOption[] = []
   headersFilters = this.dynamicDisplayedColumns.filter((x) => x.filter == true && x.show == true).map((x, i) => x.name + '_' + i);
   headersSelectFilters = this.dynamicDisplayedColumns.filter((x) => x.filter == true && x.show == true).map((x, i) => x.name + '_' + i + 1);
   
@@ -151,7 +154,8 @@ export class CustomTableComponent implements OnInit, OnChanges {
   constructor(
     public dialog: MatDialog,
     private renderer: Renderer2,
-    public  service: CustomTableService
+    public service: CustomTableService,
+    public formBuildersService: FormBuilder
   ) {
     this.ELEMENT_DATA = this.dataSource
 
@@ -168,7 +172,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
   /**
    * Control column ordering and which columns are displayed.
    */
-
+  toolbarMenuGroup!: FormGroup;
   columnDefinitions = [
     { def: 'id', label: 'ID', hide: this.id },
     { def: 'description', label: 'Description', hide: this.description },
@@ -233,6 +237,10 @@ export class CustomTableComponent implements OnInit, OnChanges {
           this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
           break;
         }
+        case 'columns': {
+          this.setColumnsData(changes[propetry].currentValue)
+          break;
+        }
         case 'inlineRowEditing': {
           this.showHideColumn('edit', changes[propetry].currentValue);
           break;
@@ -272,7 +280,12 @@ export class CustomTableComponent implements OnInit, OnChanges {
           break;
         }
         case 'showToolbar': {
-          this.columnFilterBySelection = changes[propetry].currentValue;
+          if (changes['columns']) {
+            this.setToolbarMenuControls(changes['columns'].currentValue);
+          }
+          else {
+            this.setToolbarMenuControls(this.columnsArray);
+          }
           break;
         }
         case 'expandRows': {
@@ -287,23 +300,20 @@ export class CustomTableComponent implements OnInit, OnChanges {
           this.paginationEnable = changes[propetry].currentValue;
           break;
         }
-        case 'columns': {
-          this.setColumnsData(changes[propetry].currentValue)
-          break;
-        }
       }
     })
   }
   menuX: number = 0
   menuY: number = 0
-  openMenu(type: string , event : MouseEvent) {
-    switch (type) {
+  openMenu(menuType: string, event: MouseEvent) {
+    switch (menuType) {
       case 'export': {
         this.exportMenuCtrl = true;
         break;
       }
-      case 'showHideMenu': {
-        this.hideShowMenuCtrl = true;
+      case 'toolbarMenu': {
+
+        this.gridToolbarMenuCtrl = true;
         break;
       }
     }
@@ -313,7 +323,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
   }
   menuClosed() {
     this.exportMenuCtrl = false;
-    this.hideShowMenuCtrl = false;
+    this.gridToolbarMenuCtrl = false;
   }
   setColumnsData(columns:MtxGridColumn[]) {
     if (columns.length) {
@@ -331,7 +341,6 @@ export class CustomTableComponent implements OnInit, OnChanges {
         this.dynamicDisplayedColumns.push({filter:true,name:col?.field,show:!(col.hide)});
       }
     })
-    return this.columnsList;
    }
 
   showHideColumn(name:string,value:string) {
@@ -540,6 +549,49 @@ export class CustomTableComponent implements OnInit, OnChanges {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+  }
+
+  /**create form control for columns */
+
+  setToolbarMenuControls(columns: MtxGridColumn[]) {
+    if (columns.length > 0 && this.showToolbar) {
+      const group = this.formBuildersService.group({});
+      columns.forEach((column: MtxGridColumn) => {
+        const control = this.formBuildersService.control(column.field);
+        group.addControl(column.field, control);
+      })
+      this.toolbarMenuGroup = group;
+    }
+  }
+
+  openPinnablePropertyMenu(column: MtxGridColumn, event: MouseEvent):void{
+    this.menuX = event.clientX;
+    this.menuY = event.clientY;
+    let options: MtxGridColumnPinOption[] = [
+      { label: "Pin Left", value: "left", selected: false ,field:column.field },
+      { label: "Pin Right", value: "right", selected: false, field: column.field },
+      { label: "No Pin", value: null, selected: false, field: column.field },
+    ]
+    if (column.pinned && column.pinned !== null) {
+      options.forEach((opt: MtxGridColumnPinOption) => {
+        if (opt.value === column.pinned) {
+          opt.selected = true;
+        }
+      })
+    }
+    else if (column.pinned == null || column.pinned == 'null') {
+      options[2].selected = true;
+    }
+    this.columnPinningOptions = options;
+    this.pinnableSubMenuTrigger.openMenu();
+
+  }
+
+  resetPinOptions() {
+    this.columnPinningOptions = [];
+  }
+  updatePinningValue() {
+
   }
 }
 function compare(a: number | string, b: number | string, isAsc: boolean) {

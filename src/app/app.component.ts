@@ -25,14 +25,30 @@ export class AppComponent implements OnInit {
   selectionFilter: any = false;
   columnFilterBySelection: any = true;
 
+//   public columns: MtxGridColumn[] = [
+//     { header: 'ID', field: 'id' , width:'250px',},
+//     { header: 'Name', field: 'name', width: '250px'},
+//     { header: 'Weight', field: 'weight', width: '250px'},
+//     { header: 'Symbol', field: 'symbol', width: '250px' },
+// ]
+
   public columns: MtxGridColumn[] = [
-    { header: 'ID', field: 'id' , width:'250px',headerTooltip:"this is the ID of the column"},
-    { header: 'Name', field: 'name', width: '250px',cellTooltip: 'this is the name of the column'},
-    { header: 'Weight', field: 'weight', width: '250px' },
-    { header: 'Symbol', field: 'symbol', width: '250px' , headerTooltip:"this is the symbol of the column"},
-]
-
-
+    { header: 'Position', field: 'position', width: '200px' ,pinned:"left"},
+    { header: 'Name', field: 'name', width: '200px', },
+    { header: 'tags', field: 'tag.0.value', width: '200px' },
+    { header: 'Weight', field: 'weight', width: '200px',  },
+    { header: 'Symbol', field: 'symbol', width: '200px' },
+    { header: 'Gender', field: 'gender', width: '200px' },
+    { header: 'Mobile', field: 'mobile', width: '200px' },
+    { header: 'Tele', field: 'tele', width: '200px' },
+    { header: 'City', field: 'city', width: '200px' },
+    { header: 'Address', field: 'address', width: '200px' },
+    { header: 'Date', field: 'date', width: '200px' },
+    { header: 'Website', field: 'website', width: '200px' },
+    { header: 'Company', field: 'company', width: '200px' },
+    { header: 'Email', field: 'email', width: '200px',  },
+    { header: 'Status', field: 'status', width: '200px' },
+  ];
   editGridmodal: any = false;
   addremoveColumns: any = false;
   toggleColumnfilter: any = false;
