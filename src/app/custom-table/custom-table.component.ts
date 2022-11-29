@@ -1,7 +1,7 @@
-import { animate, group, state, style, transition, trigger } from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SelectionModel } from '@angular/cdk/collections';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, ElementRef, HostListener, Inject, Input, OnChanges, OnInit, Renderer2, SimpleChanges, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, Inject, Input, OnChanges, OnInit, Renderer2, SimpleChanges, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
@@ -9,7 +9,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { merge, Observable } from 'rxjs';
-import { MtxGridColumn, MtxGridColumnPinOption } from './modals';
+import { DisplayColumn, MtxGridColumn, MtxGridColumnPinOption } from './modals';
 import { CustomTableService } from './service/custom-table.service';
 export interface UserData {
   id: string;
@@ -52,7 +52,7 @@ const NAMES: string[] = [
 ];
 
 @Component({
-  selector: 'app-custom-table',
+  selector: 'mat-table-ext',
   templateUrl: './custom-table.component.html',
   styleUrls: ['./custom-table.component.css'],
   encapsulation: ViewEncapsulation.None,
@@ -66,7 +66,7 @@ const NAMES: string[] = [
 })
 export class CustomTableComponent implements OnInit, OnChanges {
   @ViewChild(MatMenuTrigger) menuTrigger!: MatMenuTrigger;
-  @ViewChild('pinnableSubMenuTrigger') pinnableSubMenuTrigger!: MatMenuTrigger;
+  @ViewChild('columnMenuTrigger') columnMenuTrigger!: MatMenuTrigger;
   public ELEMENT_DATA: any;
   @Input() dataSource: any;
   @Input() columns: MtxGridColumn[] = [];
@@ -97,7 +97,8 @@ export class CustomTableComponent implements OnInit, OnChanges {
   // API inputs
 
   exportMenuCtrl: boolean = false;
-  gridToolbarMenuCtrl: boolean = false;
+  columnPinMenuCtrl: boolean = false;
+  hideShowMenuCtrl: boolean = false;
   editGridmodal: any = false;
   addremoveColumns: any = false;
   toggleColumnfilter: any = false;
@@ -118,6 +119,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
   headersSelectFilters = this.dynamicDisplayedColumns.filter((x) => x.filter == true && x.show == true).map((x, i) => x.name + '_' + i + 1);
   
   displayedColumns: string[] = [];
+  showHideColumnsArray: MtxGridColumn[] = [];
   totalSelectionList: any = [];
   columnsList: string[] = [];
   columnsArray: MtxGridColumn[] = [];
@@ -143,6 +145,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
     fruit: ''
   };
   globalFilter = '';
+  showHideFilter = '';
   singleFilter = "";
   individulFilter = ""
   filtersModel = [];
@@ -172,7 +175,8 @@ export class CustomTableComponent implements OnInit, OnChanges {
   /**
    * Control column ordering and which columns are displayed.
    */
-  toolbarMenuGroup!: FormGroup;
+  hideShowMenuGroup!: FormGroup;
+  columnPinMenuGroup!: FormGroup;
   columnDefinitions = [
     { def: 'id', label: 'ID', hide: this.id },
     { def: 'description', label: 'Description', hide: this.description },
@@ -223,7 +227,10 @@ export class CustomTableComponent implements OnInit, OnChanges {
         }
       )
     this.dataSource.filterPredicate = this.createFilter();
-
+    
+    this.hideShowMenuGroup.valueChanges.forEach(ctrlValues => {
+      this.updateColumnsHideShow(ctrlValues);
+    })
 
 
 
@@ -306,24 +313,29 @@ export class CustomTableComponent implements OnInit, OnChanges {
   menuX: number = 0
   menuY: number = 0
   openMenu(menuType: string, event: MouseEvent) {
+    this.menuX = event.clientX;
+    this.menuY = event.clientY;
     switch (menuType) {
       case 'export': {
         this.exportMenuCtrl = true;
+        this.menuTrigger.openMenu();
         break;
       }
-      case 'toolbarMenu': {
-
-        this.gridToolbarMenuCtrl = true;
+      case 'hideShow': {
+        this.hideShowMenuCtrl = true;
+        this.openHideShowMenu(this.columnsArray);
+        break;
+      }
+      case 'columnPin': {
+        this.columnPinMenuCtrl = true;
+        this.openHideShowMenu(this.columnsArray);
         break;
       }
     }
-    this.menuX = event.clientX;
-    this.menuY = event.clientY;
-    this.menuTrigger.openMenu();
+   
   }
   menuClosed() {
     this.exportMenuCtrl = false;
-    this.gridToolbarMenuCtrl = false;
   }
   setColumnsData(columns:MtxGridColumn[]) {
     if (columns.length) {
@@ -334,16 +346,18 @@ export class CustomTableComponent implements OnInit, OnChanges {
   setColumnsList(columns: MtxGridColumn[]) {
     this.columnsList = [];
     this.displayedColumns = ['select', 'edit', 'popup', 'delete'];
+    let columnsArray: DisplayColumn[] = []
     columns.forEach(col => {
       if (typeof col?.header == 'string') {
         this.columnsList.push(col?.header);
         this.displayedColumns.push(col?.field);
-        this.dynamicDisplayedColumns.push({filter:true,name:col?.field,show:!(col.hide)});
+        columnsArray.push({filter:true,name:col?.field,show:!(col.hide)});
       }
     })
+    this.dynamicDisplayedColumns = columnsArray.concat(this.dynamicDisplayedColumns);
    }
 
-  showHideColumn(name:string,value:string) {
+  showHideColumn(name:string,value:boolean) {
     this.dynamicDisplayedColumns.filter(a => a.name == name)[0].show = value;
   }
   onSelectionChange(event: any, value: any) {
@@ -557,10 +571,10 @@ export class CustomTableComponent implements OnInit, OnChanges {
     if (columns.length > 0 && this.showToolbar) {
       const group = this.formBuildersService.group({});
       columns.forEach((column: MtxGridColumn) => {
-        const control = this.formBuildersService.control(column.field);
+        const control = this.formBuildersService.control(true);
         group.addControl(column.field, control);
       })
-      this.toolbarMenuGroup = group;
+      this.hideShowMenuGroup = group;
     }
   }
 
@@ -583,15 +597,46 @@ export class CustomTableComponent implements OnInit, OnChanges {
       options[2].selected = true;
     }
     this.columnPinningOptions = options;
-    this.pinnableSubMenuTrigger.openMenu();
+    this.columnMenuTrigger.openMenu();
 
   }
 
-  resetPinOptions() {
+  resetMenuChecks() {
+    this.hideShowMenuCtrl = false;
+    this.showHideColumnsArray = [];
+    this.columnPinMenuCtrl = false;
     this.columnPinningOptions = [];
   }
   updatePinningValue() {
 
+  }
+  filterColumns(value:any) {
+    if (value !== '') {
+      this.showHideColumnsArray = this.columnsArray.filter((col: MtxGridColumn)=>{ return ((col.header!).toLowerCase()).includes((value).toLowerCase())})
+    }
+    else{
+      this.showHideColumnsArray = this.columnsArray;
+
+    }
+  }
+
+  openHideShowMenu(columns: MtxGridColumn[]) {
+    this.showHideColumnsArray = columns;
+    this.columnMenuTrigger.openMenu();
+
+  }
+  showHideAllColumns(val: boolean) {
+    let array = [...this.dynamicDisplayedColumns];
+    for (let i = 0; i < array.length; i++){
+
+      this.showHideColumn(array[i], val);
+    }
+  }
+  updateColumnsHideShow(values:any) {
+    let keys = Object.keys(values);
+    keys.forEach((key: string) => { 
+      this.showHideColumn(key, values[key]);
+    })
   }
 }
 function compare(a: number | string, b: number | string, isAsc: boolean) {

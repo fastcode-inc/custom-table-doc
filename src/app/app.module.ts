@@ -13,14 +13,15 @@ import { ModalPopUpComponent } from './modal-pop-up/modal-pop-up.component';
 import { CustomTableComponent } from './custom-table/custom-table.component';
 import { ResizeColumnDirective } from './custom-table/resize-column.directive';
 import { MatTableExporterModule } from 'mat-table-exporter';
-
+import { ColumnPinningComponent } from './custom-table/column-pinning.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     ModalPopUpComponent,
     CustomTableComponent,
-    ResizeColumnDirective
+    ResizeColumnDirective,
+    ColumnPinningComponent
   ],
   imports: [
     BrowserModule,

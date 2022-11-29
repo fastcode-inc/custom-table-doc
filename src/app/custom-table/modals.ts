@@ -5,7 +5,8 @@ import { Observable } from 'rxjs';
 /** Column definition of grid. */
 export interface MtxGridColumn {
     field: string;
-    header?: string | Observable<string>;
+    header?: string ;
+    name?: string;
     headerTooltip?: string;
     cellTooltip?: string;
     hide?: boolean;
@@ -29,6 +30,11 @@ export interface MtxGridColumn {
     description?: string;
     summary?: ((data: any[], colDef?: MtxGridColumn) => void) | string;
     class?: string;
+}
+export interface DisplayColumn {
+    filter: boolean;
+    name: string;
+    show: boolean;
 }
 /** Possible column type values. */
 export declare type MtxGridColumnType = 'tag' | 'button' | 'link' | 'image' | 'boolean' | 'number' | 'currency' | 'percent' | 'date';

@@ -5,14 +5,19 @@
 <mat-toolbar class="toolbar-container" *ngIf="showToolbar">
     <span class="toolbar-title" *ngIf="toolbarTitle">{{toolbarTitle}}</span>
     <span class="example-spacer"></span>
-        <button class="export-button" mat-stroked-button color="primary" (click)="openMenu('toolbarMenu',$event)">
-            <span>Columns Shown</span>
+        <button class="hide-button" mat-stroked-button color="primary" (click)="openMenu('hideShow',$event)">
+            <mat-icon>visibility</mat-icon>
+            <span>0</span>
+        </button>
+        <button class="pin-button" mat-stroked-button color="primary" (click)="openMenu('columnPin',$event)">
+            <mat-icon svgIcon="pinned"></mat-icon>
+            <span>0</span>
         </button>
         <button class="export-button" mat-stroked-button color="primary" (click)="openMenu('export',$event)">
-            <mat-icon>import_export</mat-icon> <span>Export Table</span>
+            <mat-icon>import_export</mat-icon> <span>Export</span>
             <mat-icon>expand_more</mat-icon>
         </button>
-        <div style="visibility: hidden; position:fixed" [style]="" [matMenuTriggerFor]="menu"
+        <div style="visibility: hidden; position:fixed" [matMenuTriggerFor]="menu"
         [style.left.px]="menuX"
         [style.top.px]="menuY"
         >
@@ -23,31 +28,45 @@
         <mat-option (click)="exporter.exportTable('xlsx')">Export to Excel</mat-option>
         <mat-option (click)="exporter.exportTable('csv')">Export to CSV</mat-option>
     </ng-container>
-
-    <ng-container *ngIf="gridToolbarMenuCtrl">
-        <div class="toolbar-menu-container" [formGroup]="toolbarMenuGroup">
-            <div class="toolbar-menu-item" *ngFor="let column of columnsArray" style="display: flex; "
-                (click)="$event.stopPropagation()">
-                <button *ngIf="columnPinnable" mat-icon-button color="currentColor" (click)="openPinnablePropertyMenu(column,$event)">
-                    <mat-icon class="toolbar-icons" [svgIcon]="column.pinned == 'left' || column.pinned == 'right'? 'pinned':'unPinned'"></mat-icon>
-                </button>
-                <mat-checkbox *ngIf="columnHideable" class="toolbar-menu-checkbox" style="width: max-content;"
-                    [formControlName]="column.field">{{column.header}}</mat-checkbox>
-                <span *ngIf="!columnHideable" class="toolbar-menu-item-title"
-                    style="width: max-content">{{column.header}}</span>
-            </div>
-        </div>
-    </ng-container>
 </mat-menu>
-<div style="visibility: hidden; position:fixed" [style]="" #pinnableSubMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="columnPinningOptionsTemplate" [style.left.px]="menuX"
+<div style="visibility: hidden; position:fixed" #columnMenuTrigger="matMenuTrigger" 
+[matMenuTriggerFor]="columnMenu" [style.left.px]="menuX"
     [style.top.px]="menuY">
 </div>
-<mat-menu #columnPinningOptionsTemplate="matMenu" (closed)="resetPinOptions()">
-    <div class="toolbar-menu-columnPinnable-subMenu" *ngFor="let item of columnPinningOptions">
-    <mat-option (onSelectionChange)="updatePinningValue()">  <mat-icon *ngIf="item.selected">done</mat-icon>
-        <div *ngIf="!(item.selected)" style="height: 24px; width:24px; background-color:transparent"></div>
-            {{item.label}}</mat-option>
-    </div>
+<mat-menu #columnMenu="matMenu" (closed)="resetMenuChecks()">
+            <div class="toolbar-menu-container" *ngIf="hideShowMenuCtrl" [formGroup]="hideShowMenuGroup" (click)="$event.stopPropagation()">
+                <h4>Visibile Columns</h4>
+                <form class="example-form">
+                    <mat-form-field appearance="fill" style="width: -webkit-fill-available;">
+                        <mat-label>Filter Columns</mat-label>
+                        <input matInput  [(ngModel)]="showHideFilter" (ngModelChange)="filterColumns($event)" [ngModelOptions]="{standalone: true}">
+                    </mat-form-field>
+                </form>
+                <div class="showHide-menu-columns-list">
+                    <div class="toolbar-menu-item" *ngFor="let column of showHideColumnsArray" style="display: flex; ">
+                        <mat-checkbox *ngIf="columnHideable" color="primary" class="toolbar-menu-checkbox" style="width: max-content;"
+                        [formControlName]="column.field">{{column.header}}</mat-checkbox>
+                    </div>
+                </div>
+                <!-- <div class="menu-buttons">
+                    <button mat-stroked-button color="primary" (click)="showHideAllColumns(false)">Hide All</button>
+                    <button mat-stroked-button color="primary" (click)="showHideAllColumns(true)">Show All</button>
+                </div> -->
+            </div>
+            <div class="toolbar-menu-container" *ngIf="columnPinMenuCtrl" (click)="$event.stopPropagation()">
+                <h4>Pin Columns</h4>
+                <form class="example-form">
+                    <mat-form-field appearance="fill" style="width: -webkit-fill-available;">
+                        <mat-label>Filter Columns</mat-label>
+                        <input matInput #message maxlength="256">
+                    </mat-form-field>
+                </form>
+                <div class="showHide-menu-columns-list">
+                    <div class="toolbar-menu-item" *ngFor="let column of showHideColumnsArray" style="display: flex; ">
+                        <span>{{column.header}}</span>
+                    </div>
+                </div>
+            </div>
 </mat-menu>
 
 <div class="mat-elevation-z8">
@@ -138,7 +157,7 @@
         </ng-container>
 
 
-        <ng-container matColumnDef="select" sticky={{stickyColumns}}>
+        <ng-container matColumnDef="select" sticky=true>
             <th mat-header-cell *matHeaderCellDef>
                 <mat-checkbox (change)="$event ? toggleAllRows() : null"
                     [checked]="selection.hasValue() && isAllSelected()"
