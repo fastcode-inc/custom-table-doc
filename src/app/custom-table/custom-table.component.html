@@ -58,13 +58,12 @@
                 <form class="example-form">
                     <mat-form-field appearance="fill" style="width: -webkit-fill-available;">
                         <mat-label>Filter Columns</mat-label>
-                        <input matInput #message maxlength="256">
+                        <input matInput [(ngModel)]="showHideFilter" (ngModelChange)="filterColumns($event)"
+                            [ngModelOptions]="{standalone: true}">
                     </mat-form-field>
                 </form>
                 <div class="showHide-menu-columns-list">
-                    <div class="toolbar-menu-item" *ngFor="let column of showHideColumnsArray" style="display: flex; ">
-                        <span>{{column.header}}</span>
-                    </div>
+                    <app-column-pinning [columns]="showHideColumnsArray" (columnsChanged)="setPinnedColumns($event)"></app-column-pinning>
                 </div>
             </div>
 </mat-menu>

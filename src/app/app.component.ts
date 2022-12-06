@@ -68,7 +68,7 @@ public columns: MtxGridColumn[] = [
   
   ngOnInit(): void { }
   addIconsToRegistery() {
-    let iconNames = ['pinned','unPinned']
+    let iconNames = ['pinLeft', 'pinRight', 'pinNone' , 'pinned']
     iconNames.forEach(icon => {
       this.matIconRegistry.addSvgIcon(icon, this.domSanitizer.bypassSecurityTrustResourceUrl(`../assets/customIcons/${icon}.svg`));
     })
