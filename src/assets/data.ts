@@ -1,5 +1,5 @@
 export const EXAMPLE_DATA: any[] = [
-    // { id: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H', editable: false, editmodal: false, deleterow: false },
+    // { id: 1, name: 'Hydrogen', weight: true, symbol: 'H', editable: true, editmodal: false, deleterow: false },
     // { id: 2, name: 'Helium', weight: 4.0026, symbol: 'He', editable: false, editmodal: false, deleterow: false },
     // { id: 3, name: 'Lithium', weight: 6.941, symbol: 'Li', editable: false, editmodal: false, deleterow: false },
     // { id: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be', editable: false, editmodal: false, deleterow: false },

@@ -14,6 +14,7 @@ import { CustomTableComponent } from './custom-table/custom-table.component';
 import { ResizeColumnDirective } from './custom-table/resize-column.directive';
 import { MatTableExporterModule } from 'mat-table-exporter';
 import { ColumnPinningComponent } from './components/column-pinning/column-pinning.component';
+import { PopupModalComponent } from './components/popup-modal/popup-modal.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { ColumnPinningComponent } from './components/column-pinning/column-pinni
     CustomTableComponent,
     ResizeColumnDirective,
     ColumnPinningComponent,
+    PopupModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,7 +36,7 @@ import { ColumnPinningComponent } from './components/column-pinning/column-pinni
     MaterialModule,
     HttpClientModule,
     MatFormFieldModule,
-    MatTableExporterModule
+    MatTableExporterModule,
   ],
   exports: [ColumnPinningComponent],
   providers: [],

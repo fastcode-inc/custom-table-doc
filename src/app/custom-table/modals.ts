@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 /** Column definition of grid. */
 export interface MtxGridColumn {
     field: string;
+    options?: string[] ;
     header?: string ;
     name?: string;
     headerTooltip?: string;

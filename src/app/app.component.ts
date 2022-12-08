@@ -16,8 +16,8 @@ export class AppComponent implements OnInit {
   columnResizable: any = false;
   stickyFooter: any = false;
   stickyHeader: any = false;
-  inlineRowEditing: any = false;
-  popupRowEditing: any = false;
+  inlineRowEditing: any = true;
+  popupRowEditing: any = true;
   deleteRow: any = false;
   rowSelection: any = false;
   multiRowSelection: any = false;
@@ -29,14 +29,14 @@ export class AppComponent implements OnInit {
 //     { header: 'ID', field: 'id' , width:'250px'},
 //     { header: 'Name', field: 'name', width: '250px'},
 //     { header: 'Weight', field: 'weight', width: '250px'},
-//     { header: 'Symbol', field: 'symbol', width: '250px' },
+//     { header: 'Symbol', field: 'symbol', width: '250px', options:['A','B','C','D','E','F']},
 // ]
 
 public columns: MtxGridColumn[] = [
     { header: 'Position', field: 'position', width: '200px' },
-    { header: 'Name', field: 'name', width: '200px', pinned: 'left' },
+    { header: 'Name', field: 'name', width: '200px' },
     { header: 'tags', field: 'tag.0.value', width: '200px' },
-    { header: 'Weight', field: 'weight', width: '200px', pinned: 'left' },
+    { header: 'Weight', field: 'weight', width: '200px' },
     { header: 'Symbol', field: 'symbol', width: '200px' },
     { header: 'Gender', field: 'gender', width: '200px' },
     { header: 'Mobile', field: 'mobile', width: '200px' },
@@ -46,7 +46,7 @@ public columns: MtxGridColumn[] = [
     { header: 'Date', field: 'date', width: '200px' },
     { header: 'Website', field: 'website', width: '200px' },
     { header: 'Company', field: 'company', width: '200px' },
-    { header: 'Email', field: 'email', width: '200px', pinned: 'right' },
+    { header: 'Email', field: 'email', width: '200px', },
     { header: 'Status', field: 'status', type: 'boolean', width: '200px' },
   ];
   editGridmodal: any = false;
@@ -68,7 +68,7 @@ public columns: MtxGridColumn[] = [
   
   ngOnInit(): void { }
   addIconsToRegistery() {
-    let iconNames = ['pinLeft', 'pinRight', 'pinNone' , 'pinned']
+    let iconNames = ['pinLeft', 'pinRight', 'pinNone', 'pinned','pinIcon'];
     iconNames.forEach(icon => {
       this.matIconRegistry.addSvgIcon(icon, this.domSanitizer.bypassSecurityTrustResourceUrl(`../assets/customIcons/${icon}.svg`));
     })

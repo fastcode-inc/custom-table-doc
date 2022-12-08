@@ -3,12 +3,13 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Inject, Input, OnChanges, OnInit, Renderer2, SimpleChanges, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { merge, Observable } from 'rxjs';
+import { PopupModalComponent } from '../components/popup-modal/popup-modal.component';
 import { DisplayColumn, MtxGridColumn, MtxGridColumnPinOption } from './modals';
 import { CustomTableService } from './service/custom-table.service';
 export interface UserData {
@@ -106,6 +107,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
   columnFilterBySelection: any = false;
   dragEnable: any = false;
   paginationEnable: any = true;
+  rowDataTemp!: any;
 
   // API inputs Ends
   dynamicDisplayedColumns: any[] = [
@@ -156,7 +158,6 @@ export class CustomTableComponent implements OnInit, OnChanges {
 
   constructor(
     public dialog: MatDialog,
-    private renderer: Renderer2,
     public service: CustomTableService,
     public formBuildersService: FormBuilder
   ) {
@@ -430,27 +431,36 @@ export class CustomTableComponent implements OnInit, OnChanges {
 
     let o1: Observable<boolean> = this.id.valueChanges;
     let o2: Observable<boolean> = this.description.valueChanges;
-    merge(o1, o2).subscribe((v) => {
-      this.columnDefinitions[0].hide = this.id;
-      this.columnDefinitions[1].hide = this.description;
-      console.log(this.columnDefinitions);
-    });
+    // merge(o1, o2).subscribe((v) => {
+    //   this.columnDefinitions[0].hide = this.id;
+    //   this.columnDefinitions[1].hide = this.description;
+    //   console.log(this.columnDefinitions);
+    // });
 
   }
   createFilter(): (data: any, filter: string) => boolean {
     const myFilterPredicate = (data: any, filter: string): boolean => {
       var globalMatch = !this.globalFilter;
 
+      let result: boolean = true
       if (this.globalFilter) {
         // search all text fields
-
-        globalMatch = data.name.toString().trim().toLowerCase().indexOf(this.globalFilter.toLowerCase()) !== -1 ||
-          data.id.toString().trim().toLowerCase().indexOf(this.globalFilter.toLowerCase()) !== -1 ||
-          data.fruit.toString().trim().toLowerCase().indexOf(this.globalFilter.toLowerCase()) !== -1 ||
-          data.progress.toString().trim().toLowerCase().indexOf(this.globalFilter.toLowerCase()) !== -1
+        let keys = Object.keys(data);
+        let expression = '';
+        keys.forEach(key => {
+          expression = expression + `data.${key}.toString().trim().toLowerCase().indexOf(this.globalFilter.toLowerCase()) !== -1 ||`
+        })
+        if (expression.charAt(expression.length - 2) + expression.charAt(expression.length - 1) == '||') {
+          expression = expression.substring(0, expression.length - 2)
+        }
+        result = eval(expression)
+        // globalMatch = data.name.toString().trim().toLowerCase().indexOf(this.globalFilter.toLowerCase()) !== -1 ||
+        //   data.id.toString().trim().toLowerCase().indexOf(this.globalFilter.toLowerCase()) !== -1 ||
+        //   data.fruit.toString().trim().toLowerCase().indexOf(this.globalFilter.toLowerCase()) !== -1 ||
+        //   data.progress.toString().trim().toLowerCase().indexOf(this.globalFilter.toLowerCase()) !== -1
       }
 
-      if (!globalMatch) {
+      if (!result) {
         return false;
       }
 
@@ -476,7 +486,12 @@ export class CustomTableComponent implements OnInit, OnChanges {
   }
   applyFilter(event: any) {
     this.globalFilter = event;
-    this.dataSource.filter = JSON.stringify(this.filterValues);
+    let columns: any = {};
+    this.columnsArray.forEach((column: MtxGridColumn) => {
+      if (column.field)
+        columns[column.field] = event;
+    })
+    this.dataSource.filter = JSON.stringify(columns);
   }
   applysingleFilter(event: any, value: any) {
     this.individulFilter = value.split('_')[0];
@@ -528,16 +543,23 @@ export class CustomTableComponent implements OnInit, OnChanges {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
-  editPopupEnable(row: any) {
-    console.log(row);
-    this.dialog.open(DialogDataExampleDialog, {
-      data: {
-        id: row.id,
-        name: row.name,
-        progress: row.progress,
-        fruit: row.fruit
-      },
-    });
+  async editPopupEnable(row: any, index?: any) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = "40%";
+    dialogConfig.height = "70%";
+    dialogConfig.maxWidth = "100%"
+    var rowData = { ...row };
+    dialogConfig.data = rowData;
+
+    this.dialog.open(PopupModalComponent, dialogConfig).afterClosed().subscribe(data => {
+      let index = this.ELEMENT_DATA.indexOf(row);
+      if (data && index > -1) {
+        this.ELEMENT_DATA[index] = data;
+        this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
+      }
+    })
+    console.log();
   }
 
 
@@ -619,7 +641,13 @@ export class CustomTableComponent implements OnInit, OnChanges {
 
     }
   }
-
+  returnDataType(val: any, column: MtxGridColumn) {
+    if (column.options) {
+      return 'selection';
+    } else {
+      return typeof val[column.field];
+    }
+  }
   openHideShowMenu(columns: MtxGridColumn[]) {
     this.showHideColumnsArray = columns;
     this.columnMenuTrigger.openMenu();
@@ -640,6 +668,14 @@ export class CustomTableComponent implements OnInit, OnChanges {
   }
   setPinnedColumns(event: MtxGridColumn[]) {
     console.log('TableCom',event)
+  }
+  setRowData(event: any, rowData: any, columns: any) {
+    console.log(this.columnsArray);
+    console.log(this.dataSource.data);
+
+    // console.log('TableCom', event)
+    // console.log('TableCom', columns)
+    // console.log('TableCom',rowData)
   }
 }
 function compare(a: number | string, b: number | string, isAsc: boolean) {
@@ -667,7 +703,7 @@ function createNewUser(id: number): UserData {
   template: `<h1 mat-dialog-title> Edit Row</h1>
   <div mat-dialog-content>
    
-    <div>
+    <div >
       <div> <input class="input" type="text" value={{data.id}}></div>
       <br>
       <div> <input type="text" class="input" value={{data.name}}></div>
@@ -680,6 +716,15 @@ function createNewUser(id: number): UserData {
   </div>
   `,
 })
-export class DialogDataExampleDialog {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any) { }
+export class DialogDataExampleDialog implements OnInit {
+  public dialogData!: any
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
+    this.dialogData = this.data;
+  }
+  ngOnInit(): void {
+    this.setData();
+  }
+  setData() {
+
+  }
 }

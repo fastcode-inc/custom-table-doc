@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { MtxGridColumn } from '../modals';
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +45,13 @@ export class CustomTableService {
     }
     else {
       return 'px'
+    }
+  }
+  returnDataType(val: any, column: MtxGridColumn) {
+    if (column.options) {
+      return 'selection';
+    } else {
+      return typeof val[column.field];
     }
   }
 }

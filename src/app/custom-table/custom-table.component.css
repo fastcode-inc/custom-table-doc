@@ -156,10 +156,6 @@ table th:hover .resize-handle {
 } */
 /* Group Code ends  */
 
-.mat-table {
-    width: 100%;
-}
-
 .mat-table.resizing {
     -moz-user-select: none;
     -ms-user-select: none;
@@ -262,4 +258,16 @@ table th:hover .resize-handle {
     height: 10em;
     max-height: 10em;
     overflow-y: auto;
+}
+.inline-editing-field {
+    width: -webkit-fill-available;
+}
+
+.mat-table-ext-container {
+    width:100% !important;
+    max-width: 100%;
+    overflow: auto;
+}
+.done-icon,.edit-icon{
+    cursor: pointer;
 }
