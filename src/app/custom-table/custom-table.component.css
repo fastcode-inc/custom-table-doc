@@ -64,7 +64,7 @@ tr.example-detail-row {
     opacity: 0.5;
 }
 
-tr.example-element-row:nth-child(4n-1) {
+.stripedRows {
     background: #dadada !important;
 }
 
@@ -165,7 +165,6 @@ table th:hover .resize-handle {
 
 .mat-table .mat-cell span {
     display: block;
-    overflow: hidden;
     text-overflow: ellipsis;
 }
 
@@ -200,7 +199,12 @@ table th:hover .resize-handle {
     justify-content: flex-end;
     align-items: center;
 }
-
+.mat-table-ext-container {
+    max-height: 500px;
+    width: 100%;
+    max-width: 100%;
+    overflow: auto;
+}
 .example-spacer {
     flex: 1 1 auto;
 }
@@ -262,12 +266,9 @@ table th:hover .resize-handle {
 .inline-editing-field {
     width: -webkit-fill-available;
 }
-
-.mat-table-ext-container {
-    width:100% !important;
-    max-width: 100%;
-    overflow: auto;
-}
 .done-icon,.edit-icon{
     cursor: pointer;
+}
+.main-table-ext-container{
+    padding: 10px;
 }

@@ -1,16 +1,17 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SelectionModel } from '@angular/cdk/collections';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, Inject, Input, OnChanges, OnInit, Renderer2, SimpleChanges, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { EventEmitter, Output } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, Renderer2, SimpleChanges, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { MatDialog, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { merge, Observable } from 'rxjs';
+import {Observable } from 'rxjs';
 import { PopupModalComponent } from '../components/popup-modal/popup-modal.component';
-import { DisplayColumn, MtxGridColumn, MtxGridColumnPinOption } from './modals';
+import { RowChange, DisplayColumn, MtxGridColumn, MtxGridColumnPinOption } from './modals';
 import { CustomTableService } from './service/custom-table.service';
 export interface UserData {
   id: string;
@@ -68,10 +69,12 @@ const NAMES: string[] = [
 export class CustomTableComponent implements OnInit, OnChanges {
   @ViewChild(MatMenuTrigger) menuTrigger!: MatMenuTrigger;
   @ViewChild('columnMenuTrigger') columnMenuTrigger!: MatMenuTrigger;
-  public ELEMENT_DATA: any;
-  @Input() dataSource: any;
+  public ELEMENT_DATA: any = [];
+  public tableDataSource: any;
+  @Input() dataSource!: MatTableDataSource<any>;
   @Input() columns: MtxGridColumn[] = [];
   @Input() columnResizable: boolean = false;
+  @Input() stripedRows: boolean = false;
   @Input() inlineRowEditing: boolean = false;
   @Input() popupRowEditing: boolean = false;
   @Input() enableDelete: boolean = false;
@@ -82,6 +85,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
   @Input() stickyHeader: boolean = false;
   @Input() filter: boolean = false;
   @Input() selectionFilter: boolean = false;
+  @Input() isLoading: boolean = false;
   //toolbar inputs here
   @Input() showToolbar: boolean = false;
   @Input() toolbarTitle: string = '';
@@ -89,11 +93,15 @@ export class CustomTableComponent implements OnInit, OnChanges {
   @Input() columnHideable: boolean = true;
   @Input() columnHideableChecked: 'show' | 'hide' = 'show';
   @Input() columnPinnable: boolean = true;
-
   @Input() globalSearch: boolean = false;
   @Input() expandRows: boolean = false;
   @Input() dndColumns: boolean = false;
   @Input() paginatorEnable: boolean = false;
+
+
+  @Output() inlineChange: any = new EventEmitter<RowChange>();
+  @Output() popupChange: any = new EventEmitter<RowChange>();
+  @Output() scroll: any = new EventEmitter<any>();
 
   // API inputs
 
@@ -130,16 +138,8 @@ export class CustomTableComponent implements OnInit, OnChanges {
   columnsToDisplay: string[] = this.displayedColumns.slice();
   selection = new SelectionModel<any>(true, []);
   @ViewChild('selectSearchRow') toggleselectRow: any;
-  @ViewChild(MatPaginator)
-  paginator!: MatPaginator;
-  @ViewChild(MatSort)
-  sort!: MatSort;
-
-  id_0 = new FormControl('');
-  name_1 = new FormControl('');
-  progress_2 = new FormControl('');
-  fruit_3 = new FormControl('');
-
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
   filterValues: any = {
     id: '',
     name: '',
@@ -161,7 +161,9 @@ export class CustomTableComponent implements OnInit, OnChanges {
     public service: CustomTableService,
     public formBuildersService: FormBuilder
   ) {
-    this.ELEMENT_DATA = this.dataSource
+    if (this.dataSource) {
+      this.ELEMENT_DATA = this.dataSource
+    }
 
   }
 
@@ -192,57 +194,25 @@ export class CustomTableComponent implements OnInit, OnChanges {
     this.setPropertyValue(changes);
   }
   ngOnInit() {
-    // this.nameList = ['', ...this.ELEMENT_DATA.filter((a: { name: any; }) => a.name).map((a: { name: any; }) => a.name)];
-    // this.progressList = ['', ...this.ELEMENT_DATA.filter((a: { name: any; }) => a.name).map((a: { progress: any; }) => a.progress)];
-    // this.fruitList = ['', ...this.ELEMENT_DATA.filter((a: { name: any; }) => a.name).map((a: { fruit: any; }) => a.fruit)];
-    // this.idList = ['', ...this.ELEMENT_DATA.filter((a: { name: any; }) => a.name).map((a: { id: any; }) => a.id)];
-    // this.totalSelectionList = [this.idList, this.nameList, this.progressList, this.fruitList]
-    // this.columnsList.forEach(a=> `${a}_0`  )
-    //`${this.columnsList[0]}_0`
-    this.id_0.valueChanges
-      .subscribe(
-        (id: any) => {
-          this.filterValues.name = id;
-          this.dataSource.filter = JSON.stringify(this.filterValues);
-        }
-      )
-    this.name_1.valueChanges
-      .subscribe(
-        name => {
-          this.filterValues.name = name;
-          this.dataSource.filter = JSON.stringify(this.filterValues);
-        }
-      )
-    this.progress_2.valueChanges
-      .subscribe(
-        progress => {
-          this.filterValues.name = progress;
-          this.dataSource.filter = JSON.stringify(this.filterValues);
-        }
-      )
-    this.fruit_3.valueChanges
-      .subscribe(
-        fruit => {
-          this.filterValues.fruit = fruit;
-          this.dataSource.filter = JSON.stringify(this.filterValues);
-        }
-      )
-    this.dataSource.filterPredicate = this.createFilter();
+    if (this.dataSource) {
+      this.dataSource.filterPredicate = this.createFilter();
+    }
     
     this.hideShowMenuGroup.valueChanges.forEach(ctrlValues => {
       this.updateColumnsHideShow(ctrlValues);
     })
-
-
-
   }
   setPropertyValue(changes: SimpleChanges) {
     let keys = Object.keys(changes);
     keys.forEach(propetry => {
       switch (propetry) {
         case 'dataSource': {
-          this.ELEMENT_DATA = changes[propetry].currentValue;
-          this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
+          if (changes[propetry].currentValue) {
+            this.ELEMENT_DATA = changes[propetry].currentValue;
+            this.dataSource = changes[propetry].currentValue;
+          } else {
+            this.dataSource=new MatTableDataSource([{}])
+          }
           break;
         }
         case 'columns': {
@@ -425,9 +395,10 @@ export class CustomTableComponent implements OnInit, OnChanges {
 
 
   ngAfterViewInit() {
-
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    if (this.dataSource) {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
 
     let o1: Observable<boolean> = this.id.valueChanges;
     let o2: Observable<boolean> = this.description.valueChanges;
@@ -435,6 +406,12 @@ export class CustomTableComponent implements OnInit, OnChanges {
     //   this.columnDefinitions[0].hide = this.id;
     //   this.columnDefinitions[1].hide = this.description;
     //   console.log(this.columnDefinitions);
+    // });
+    // const content = document.querySelector<any>('[id="tableContainer"]');
+    // const scroll$ = fromEvent(content, 'scroll').pipe(map(() => content));
+
+    // scroll$.subscribe(element => {
+    //   console.log(element,"Hazma");
     // });
 
   }
@@ -501,8 +478,15 @@ export class CustomTableComponent implements OnInit, OnChanges {
 
 
   editEnable(row: any) {
-    console.log(row);
-    this.ELEMENT_DATA.filter((a: { id: any; }) => a.id == row.id)[0].editable = !this.ELEMENT_DATA.filter((a: { id: any; }) => a.id == row.id)[0].editable;
+    this.ELEMENT_DATA.filter((a: any) => a.id == row.id)[0]['editable'] = !this.ELEMENT_DATA.filter((a: { id: any; }) => a.id == row.id)[0]['editable'];
+  }
+  saveData(row: any) {
+    this.ELEMENT_DATA.filter((a: any) => a.id == row.id)[0]['editable'] = !this.ELEMENT_DATA.filter((a: { id: any; }) => a.id == row.id)[0]['editable'];
+    let data: RowChange = {
+      row: row,
+      index: this.ELEMENT_DATA.indexOf(row)
+    }
+    this.inlineChange.emit(data);
   }
   editGridmodalChanged(event: any) {
     if (event.checked) {
@@ -543,7 +527,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
-  async editPopupEnable(row: any, index?: any) {
+  editPopupEnable(row: any, index?: any) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = "40%";
@@ -557,9 +541,13 @@ export class CustomTableComponent implements OnInit, OnChanges {
       if (data && index > -1) {
         this.ELEMENT_DATA[index] = data;
         this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
+        let dataChange: RowChange = {
+          row: data,
+          index: index
+        }
+        this.popupChange.emit(dataChange);
       }
     })
-    console.log();
   }
 
 
@@ -677,54 +665,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
     // console.log('TableCom', columns)
     // console.log('TableCom',rowData)
   }
-}
-function compare(a: number | string, b: number | string, isAsc: boolean) {
-  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
-}
-/** Builds and returns a new User. */
-function createNewUser(id: number): UserData {
-  const name =
-    NAMES[Math.round(Math.random() * (NAMES.length - 1))] +
-    ' ' +
-    NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) +
-    '.';
-
-  return {
-    id: id.toString(),
-    name: name,
-    progress: Math.round(Math.random() * 100).toString(),
-    fruit: FRUITS[Math.round(Math.random() * (FRUITS.length - 1))],
-  };
-}
-
-
-@Component({
-  selector: 'dialog-data-example-dialog',
-  template: `<h1 mat-dialog-title> Edit Row</h1>
-  <div mat-dialog-content>
-   
-    <div >
-      <div> <input class="input" type="text" value={{data.id}}></div>
-      <br>
-      <div> <input type="text" class="input" value={{data.name}}></div>
-      <br>
-      <div> <input type="text" class="input" value={{data.progress}}></div>
-      <br>
-      <div> <input type="text" class="input" value={{data.fruit}}></div>
-      <br>
-    </div>
-  </div>
-  `,
-})
-export class DialogDataExampleDialog implements OnInit {
-  public dialogData!: any
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
-    this.dialogData = this.data;
-  }
-  ngOnInit(): void {
-    this.setData();
-  }
-  setData() {
-
+  onScroll(event: any) {
+    this.scroll.emit(event);
   }
 }

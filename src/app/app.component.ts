@@ -1,9 +1,11 @@
 
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { EXAMPLE_DATA } from 'src/assets/data';
+import EXAMPLE_DATA  from 'src/assets/data.json';
 import { MtxGridColumn } from './custom-table/modals';
 import { MatIconRegistry } from '@angular/material/icon';
+import { CustomTableService } from './custom-table/service/custom-table.service';
+import { MatTableDataSource } from '@angular/material/table';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -11,6 +13,7 @@ import { MatIconRegistry } from '@angular/material/icon';
   
 })
 export class AppComponent implements OnInit {
+  isLoading: boolean = false;
   public dataSource:any;
   stickyColumn: any = false;
   columnResizable: any = false;
@@ -19,12 +22,19 @@ export class AppComponent implements OnInit {
   inlineRowEditing: any = true;
   popupRowEditing: any = true;
   deleteRow: any = false;
+  stripedRows: any = false;
   rowSelection: any = false;
   multiRowSelection: any = false;
   simpleFilter: any = false;
   selectionFilter: any = false;
   columnFilterBySelection: any = true;
 
+  public columns: MtxGridColumn[] = [
+    { header: 'ID', field: 'id' , width:'250px'},
+    { header: 'Name', field: 'name', width: '250px'},
+    { header: 'Age', field: 'age', width: '250px'},
+    { header: 'Address', field: 'address',},
+]
 //   public columns: MtxGridColumn[] = [
 //     { header: 'ID', field: 'id' , width:'250px'},
 //     { header: 'Name', field: 'name', width: '250px'},
@@ -32,23 +42,23 @@ export class AppComponent implements OnInit {
 //     { header: 'Symbol', field: 'symbol', width: '250px', options:['A','B','C','D','E','F']},
 // ]
 
-public columns: MtxGridColumn[] = [
-    { header: 'Position', field: 'position', width: '200px' },
-    { header: 'Name', field: 'name', width: '200px' },
-    { header: 'tags', field: 'tag.0.value', width: '200px' },
-    { header: 'Weight', field: 'weight', width: '200px' },
-    { header: 'Symbol', field: 'symbol', width: '200px' },
-    { header: 'Gender', field: 'gender', width: '200px' },
-    { header: 'Mobile', field: 'mobile', width: '200px' },
-    { header: 'Tele', field: 'tele', width: '200px' },
-    { header: 'City', field: 'city', width: '200px' },
-    { header: 'Address', field: 'address', width: '200px' },
-    { header: 'Date', field: 'date', width: '200px' },
-    { header: 'Website', field: 'website', width: '200px' },
-    { header: 'Company', field: 'company', width: '200px' },
-    { header: 'Email', field: 'email', width: '200px', },
-    { header: 'Status', field: 'status', type: 'boolean', width: '200px' },
-  ];
+// public columns: MtxGridColumn[] = [
+//     { header: '', field: 'position',  },
+//     { header: 'Name', field: 'name',  },
+//     { header: 'tags', field: 'tag.0.value', },
+//     { header: 'Weight', field: 'weight',  },
+//     { header: 'Symbol', field: 'symbol',  },
+//     { header: 'Gender', field: 'gender',  },
+//     { header: 'Mobile', field: 'mobile',  },
+//     { header: 'Tele', field: 'tele',  },
+//     { header: 'City', field: 'city',  },
+//     { header: 'Address', field: 'address',  },
+//     { header: 'Date', field: 'date',  },
+//     { header: 'Website', field: 'website',  },
+//     { header: 'Company', field: 'company',  },
+//     { header: 'Email', field: 'email',  },
+//     { header: 'Status', field: 'status', type: 'boolean',  },
+//   ];
   editGridmodal: any = false;
   addremoveColumns: any = false;
   toggleColumnfilter: any = false;
@@ -60,13 +70,15 @@ public columns: MtxGridColumn[] = [
   constructor(
     public domSanitizer: DomSanitizer,
     public matIconRegistry: MatIconRegistry,
+    public service: CustomTableService,
     
   ) {
-    this.dataSource = EXAMPLE_DATA;
+    this.loadPage(10);
     this.addIconsToRegistery();
    }
   
-  ngOnInit(): void { }
+  ngOnInit(): void {
+   }
   addIconsToRegistery() {
     let iconNames = ['pinLeft', 'pinRight', 'pinNone', 'pinned','pinIcon'];
     iconNames.forEach(icon => {
@@ -92,6 +104,35 @@ public columns: MtxGridColumn[] = [
         break;
       }
     }
+  }
+  showData(event:any, propetry:string) {
+    console.log(propetry, event);
+  }
+  onScroll(event: any) {
+    let pageLimit: number = 10;
+    let scrollHeight = event.target.scrollHeight;
+    let scrollTop = event.target.scrollTop;
+    let clientHeight = event.target.clientHeight;
+    let scrollPosition = scrollHeight - (scrollTop + clientHeight);
+    console.log('scrollPosition', scrollPosition);
+    if (scrollPosition <= 5) {
+      this.loadPage(pageLimit);
+    }
+  }
+  loadPage(limit: number) {
+    this.isLoading = true;
+    let offset = this.dataSource ? this.dataSource.data.length : 0;
+    this.service.getResults(offset, limit).subscribe(results => {
+      if (this.dataSource) {
+        const rows = [...this.dataSource.data, ...results.data];
+        this.dataSource = new MatTableDataSource(rows);
+      }
+      else {
+        const rows = [...results.data];
+        this.dataSource = new MatTableDataSource(rows);
+      }
+      this.isLoading = false;
+    });
   }
 }
 

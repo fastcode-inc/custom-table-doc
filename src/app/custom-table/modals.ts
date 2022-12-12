@@ -37,6 +37,10 @@ export interface DisplayColumn {
     name: string;
     show: boolean;
 }
+export interface RowChange {
+    row: { [key: string]: any};
+    index: number;
+}
 /** Possible column type values. */
 export declare type MtxGridColumnType = 'tag' | 'button' | 'link' | 'image' | 'boolean' | 'number' | 'currency' | 'percent' | 'date';
 /** Column type parameter. */

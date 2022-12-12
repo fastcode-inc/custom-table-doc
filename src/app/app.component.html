@@ -18,6 +18,11 @@
                 Delete Row
             </mat-slide-toggle>
         </section>
+         <section class="example-section">
+            <mat-slide-toggle [(ngModel)]="stripedRows" [disabled]="false">
+            Striped Rows
+            </mat-slide-toggle>
+        </section>
         <section class="example-section">
             <mat-slide-toggle (change)="showhidecolumn('select')" [disabled]="false">
                 multi select
@@ -96,7 +101,6 @@
 
     </mat-card-content>
 </mat-card>
-<div >
     <mat-table-ext
     [dataSource]="dataSource"
     [columns]="columns"
@@ -119,7 +123,10 @@
     [columnResizable]="false"
     [columnPinnable]="true"
     [columnHideable]="true"
+    [stripedRows]="stripedRows"
+    [isLoading]="isLoading"
+    (inlineChange)="showData($event,'inline change')"
+    (popupChange)="showData($event,'popup change')"
+    (scroll)="onScroll($event)"
     
     ></mat-table-ext>
-
-</div>

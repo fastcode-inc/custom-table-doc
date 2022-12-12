@@ -21,7 +21,6 @@ export class PopupModalComponent implements OnInit {
   }
   setData(row: any) {
     let key = Object.keys(row).filter(key => !(['editable', 'editmodal', 'deleterow'].includes(key)));
-    console.log(key);
     this.keys = key;
   }
   returnDataType(val: any, key:string) {
@@ -30,8 +29,5 @@ export class PopupModalComponent implements OnInit {
     } else {
       return typeof val[key];
     }
-  }
-  saveData() {
-    
   }
 }
