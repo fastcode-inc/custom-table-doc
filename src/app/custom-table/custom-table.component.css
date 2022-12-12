@@ -98,19 +98,10 @@ p {
     overflow: auto;
 }
 
-table {
-    width: 100%;
-}
-
 th,
 td {
     padding: 0 1rem;
 }
-
-th:nth-child(1) {
-    width: 20px;
-}
-
 ::ng-deep .mat-form-field-wrapper {
     padding-bottom: 0;
 }
@@ -222,7 +213,7 @@ table th:hover .resize-handle {
     flex-direction: column;
     margin: auto 0.8em;
     width: 15em;
-        height: 20em;
+    height: 20em;
 }
 
 .toolbar-menu-item-title{
@@ -271,4 +262,11 @@ table th:hover .resize-handle {
 }
 .main-table-ext-container{
     padding: 10px;
+}
+.mat-column-select{
+    width: 50px !important; 
+}
+.hidden{
+    display: none !important;
+    visibility: hidden;
 }

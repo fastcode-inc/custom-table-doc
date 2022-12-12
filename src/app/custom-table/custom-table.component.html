@@ -8,13 +8,21 @@
 <mat-toolbar class="toolbar-container" *ngIf="showToolbar">
     <span class="toolbar-title" *ngIf="toolbarTitle">{{toolbarTitle}}</span>
     <span class="example-spacer"></span>
-        <button class="hide-button" mat-stroked-button color="primary" (click)="openMenu('hideShow',$event)">
+    <ng-container *ngIf="multiRowSelection">
+        <button class="hide-button" mat-stroked-button color="primary" (click)="hideSelectedRows()" >
+            Hide Rows
+        </button>
+        <button class="hide-button" mat-stroked-button color="primary" (click)="showSelectedRows()">
+            Show All Rows
+        </button>
+    </ng-container>
+        <button class="hide-button" mat-stroked-button color="primary" (click)="openMenu('hideShow',$event)" matTooltip="Column Visibillity" matTooltipPosition="above">
             <mat-icon>visibility</mat-icon>
         </button>
-        <button class="pin-button" mat-stroked-button color="primary" (click)="openMenu('columnPin',$event)">
+        <button class="pin-button" mat-stroked-button color="primary" (click)="openMenu('columnPin',$event)" matTooltip="Column Pinning">
             <mat-icon svgIcon="pinIcon"></mat-icon>
         </button>
-        <button class="export-button" mat-stroked-button color="primary" (click)="openMenu('export',$event)">
+        <button class="export-button" mat-stroked-button color="primary" (click)="openMenu('export',$event)" matTooltip="Table Data Export">
             <mat-icon>import_export</mat-icon> <span>Export</span>
             <mat-icon>expand_more</mat-icon>
         </button>
@@ -74,7 +82,19 @@
     <table mat-table [dataSource]="dataSource" matSort cdkDropList cdkDropListOrientation="horizontal" matTableExporter
         #exporter="matTableExporter"
 multiTemplateDataRows (cdkDropListDropped)="drop($event)" >
-
+<div matColumnDef="select" sticky="true"> 
+    <th mat-header-cell *matHeaderCellDef >
+        <mat-checkbox (change)="$event ? toggleAllRows() : null" [checked]="selection.hasValue() && isAllSelected()"
+            [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+        </mat-checkbox>
+    </th>
+    <td mat-cell *matCellDef="let row;let i = dataIndex">
+        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? setSelectedRows(row,i) : null"
+            [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+        </mat-checkbox>
+    </td>
+    <td mat-footer-cell *matFooterCellDef></td>
+</div>
 <!--dymanic columns are being generated here-->
 <ng-container 
             matColumnDef="{{column['field']}}" 
@@ -94,7 +114,7 @@ multiTemplateDataRows (cdkDropListDropped)="drop($event)" >
             <span>{{column.header}}</span>
             </th>
     </ng-container>
-            <td matTooltip="{{column.cellTooltip}}" mat-cell *matCellDef="let row">
+            <td matTooltip="{{column.cellTooltip}}" mat-cell *matCellDef="let row" >
                 <div *ngIf="!row.editable"> {{row[column.field]}} </div>
                 <div *ngIf="row.editable">
                     <!-- Number Type -->
@@ -159,19 +179,7 @@ multiTemplateDataRows (cdkDropListDropped)="drop($event)" >
     <td mat-footer-cell *matFooterCellDef> delete </td>
 </ng-container>
 
-<ng-container matColumnDef="select" sticky=true>
-    <th mat-header-cell *matHeaderCellDef>
-        <mat-checkbox (change)="$event ? toggleAllRows() : null" [checked]="selection.hasValue() && isAllSelected()"
-            [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
-        </mat-checkbox>
-    </th>
-    <td mat-cell *matCellDef="let row">
-        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-            [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
-        </mat-checkbox>
-    </td>
-    <td mat-footer-cell *matFooterCellDef></td>
-</ng-container>
+
 
 <ng-container matColumnDef="expand">
     <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
@@ -241,7 +249,7 @@ multiTemplateDataRows (cdkDropListDropped)="drop($event)" >
                       </mat-form-field> -->
                 </div>
                 </th>
-                </ng-container>
+    </ng-container>
 
     <!-- Group Code Starts-->
     <!-- <ng-container matColumnDef="header-row-first-group">
@@ -262,9 +270,9 @@ multiTemplateDataRows (cdkDropListDropped)="drop($event)" >
     
     <tr style="height: auto;" mat-header-row class="no-default-height" *matHeaderRowDef="headersSelectFilters"></tr>
     
-    <!-- this for expansion-->
+    <!-- this for Rows-->
     <tr mat-row *matRowDef="let row; columns:getDisplayedColumns(); let i=dataIndex;" class="example-element-row"
-        [ngClass]="{'stripedRows':(stripedRows &&  i % 2 == 1)}" [class.example-expanded-row]="expandedElement === row"
+        [ngClass]="{'stripedRows':(stripedRows &&  i % 2 == 1)}" [class.hidden]="hiddenCtrl.isSelected(row) && hideRows" [class.example-expanded-row]="expandedElement === row"
         (click)="expandRows && expandedElement = expandedElement === row ? null : row">
     </tr>
 

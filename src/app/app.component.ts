@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import EXAMPLE_DATA  from 'src/assets/data.json';
-import { MtxGridColumn } from './custom-table/modals';
+import { MtxGridColumn, RowSelectionChange } from './custom-table/models';
 import { MatIconRegistry } from '@angular/material/icon';
 import { CustomTableService } from './custom-table/service/custom-table.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -30,10 +30,10 @@ export class AppComponent implements OnInit {
   columnFilterBySelection: any = true;
 
   public columns: MtxGridColumn[] = [
-    { header: 'ID', field: 'id' , width:'250px'},
-    { header: 'Name', field: 'name', width: '250px'},
-    { header: 'Age', field: 'age', width: '250px'},
-    { header: 'Address', field: 'address',},
+    { header: 'ID', field: 'id' ,type:'number',maxWidth:'50px'},
+    { header: 'Name', field: 'name', type: 'string', width: '70px' },
+    { header: 'Age', field: 'age', type: 'string' , width: '90px' },
+    { header: 'Address', field: 'address', type: 'string', width: '110px' },
 ]
 //   public columns: MtxGridColumn[] = [
 //     { header: 'ID', field: 'id' , width:'250px'},
@@ -133,6 +133,9 @@ export class AppComponent implements OnInit {
       }
       this.isLoading = false;
     });
+  }
+  onSelectionChange(event: RowSelectionChange) { 
+    console.log("Selection Change: ", event)
   }
 }
 

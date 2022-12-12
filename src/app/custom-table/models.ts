@@ -17,11 +17,11 @@ export interface MtxGridColumn {
     right?: string;
     width?: string;
     resizable?: boolean;
-    minWidth?: number;
-    maxWidth?: number;
+    minWidth?: string;
+    maxWidth?: string;
     sortable?: boolean | string;
     sortProp?: MtxGridColumnSortProp;
-    type?: MtxGridColumnType;
+    type: MtxGridColumnType;
     typeParameter?: MtxGridColumnTypeParameter;
     tag?: MtxGridColumnTag;
     buttons?: MtxGridColumnButton[];
@@ -41,8 +41,13 @@ export interface RowChange {
     row: { [key: string]: any};
     index: number;
 }
+export interface RowSelectionChange {
+    row: { [key: string]: any};
+    index: number;
+    isSelected: boolean;
+}
 /** Possible column type values. */
-export declare type MtxGridColumnType = 'tag' | 'button' | 'link' | 'image' | 'boolean' | 'number' | 'currency' | 'percent' | 'date';
+export declare type MtxGridColumnType = string | 'tag' | 'button' | 'link' | 'image' | 'boolean' | 'number' | 'currency' | 'percent' | 'date';
 /** Column type parameter. */
 export interface MtxGridColumnTypeParameter {
     currencyCode?: string;

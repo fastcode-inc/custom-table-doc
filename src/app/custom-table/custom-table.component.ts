@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { SelectionModel } from '@angular/cdk/collections';
+import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { EventEmitter, Output } from '@angular/core';
 import { Component, Input, OnChanges, OnInit, Renderer2, SimpleChanges, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
@@ -11,7 +11,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import {Observable } from 'rxjs';
 import { PopupModalComponent } from '../components/popup-modal/popup-modal.component';
-import { RowChange, DisplayColumn, MtxGridColumn, MtxGridColumnPinOption } from './modals';
+import { RowChange, DisplayColumn, MtxGridColumn, MtxGridColumnPinOption, RowSelectionChange } from './models';
 import { CustomTableService } from './service/custom-table.service';
 export interface UserData {
   id: string;
@@ -102,6 +102,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
   @Output() inlineChange: any = new EventEmitter<RowChange>();
   @Output() popupChange: any = new EventEmitter<RowChange>();
   @Output() scroll: any = new EventEmitter<any>();
+  @Output() selectionChanged: EventEmitter<RowSelectionChange> = new EventEmitter<any>();
 
   // API inputs
 
@@ -137,6 +138,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
   columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
   columnsToDisplay: string[] = this.displayedColumns.slice();
   selection = new SelectionModel<any>(true, []);
+  hiddenCtrl = new SelectionModel<any>(true, []);
   @ViewChild('selectSearchRow') toggleselectRow: any;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -154,6 +156,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
   filterKeys = {};
   toggleFilters = false;
   selectToggleFilters = false;
+  hideRows = false;
   expandedElement: any | null;
 
   constructor(
@@ -232,7 +235,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
           break;
         }
         case 'multiRowSelection': {
-          this.showHideColumn('select', changes[propetry].currentValue);
+          this.showSelectionColumn('select', changes[propetry].currentValue);
           break;
         }
         case 'stickyColumns': {
@@ -330,6 +333,15 @@ export class CustomTableComponent implements OnInit, OnChanges {
 
   showHideColumn(name:string,value:boolean) {
     this.dynamicDisplayedColumns.filter(a => a.name == name)[0].show = value;
+  }
+  showSelectionColumn(name: string, value: boolean) {
+    let col = this.dynamicDisplayedColumns.filter(a => a.name == name)[0];
+    let index = this.dynamicDisplayedColumns.findIndex((column: any) => column.name == name);
+    if (index > -1) {
+      this.dynamicDisplayedColumns.splice(index, 1);
+      this.dynamicDisplayedColumns.unshift(col);
+      this.dynamicDisplayedColumns.filter(a => a.name == name)[0].show = value;
+    }
   }
   onSelectionChange(event: any, value: any) {
     this.individulFilter = value.split('_')[0];
@@ -667,5 +679,32 @@ export class CustomTableComponent implements OnInit, OnChanges {
   }
   onScroll(event: any) {
     this.scroll.emit(event);
+  }
+  setSelectedRows(row: any, index: number) {
+    this.selection.toggle(row);
+    if (this.selection.isSelected(row)) {
+      this.selectionChanged.emit({ row: row, index: index, isSelected: true })
+    }
+    else {
+
+      this.selectionChanged.emit({ row: row, index: index, isSelected: false })
+    }
+  }
+  showSelectedRows() {
+    this.hideRows = false;
+    this.selection.clear();
+    this.hiddenCtrl.clear();
+  }
+  hideSelectedRows() {
+    if (!this.selection.isEmpty()) {
+      let values = [...this.selection.selected];
+      values.forEach(value => {
+        if (!this.hiddenCtrl.isSelected(value)) {
+          this.hiddenCtrl.toggle(value);
+        }
+      })
+      this.selection.clear();
+      this.hideRows = true;
+    }
   }
 }
