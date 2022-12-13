@@ -2,8 +2,5 @@
     display: flex;
     justify-content: flex-start;
     align-items: baseline;
-}
-
-.pinning-icon {
-    /* margin-right: 10px; */
+    height: 3em;
 }

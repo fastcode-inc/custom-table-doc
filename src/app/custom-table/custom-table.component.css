@@ -221,7 +221,14 @@ table th:hover .resize-handle {
     display: flex;
     align-items: center;
 }
+.toolbar-menu-item {
+    display: flex;
+    height: 3em;
+}
 
+.toolbar-menu-checkbox {
+    margin-left: 8%;
+}
 .toolbar-menu-checkbox.mat-checkbox {
     width: max-content;
     display: flex;
@@ -269,4 +276,13 @@ table th:hover .resize-handle {
 .hidden{
     display: none !important;
     visibility: hidden;
+}
+.action-column-cells {
+    width: 40px;
+    height: inherit;
+}
+.mat-icon.edit-column-icons{
+    height: 28px;
+    width: 28px;
+    font-size: 28px;
 }

@@ -165,7 +165,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
     public formBuildersService: FormBuilder
   ) {
     if (this.dataSource) {
-      this.ELEMENT_DATA = this.dataSource
+      this.ELEMENT_DATA = this.dataSource.data;
     }
 
   }
@@ -211,7 +211,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
       switch (propetry) {
         case 'dataSource': {
           if (changes[propetry].currentValue) {
-            this.ELEMENT_DATA = changes[propetry].currentValue;
+            this.ELEMENT_DATA = changes[propetry].currentValue.data;
             this.dataSource = changes[propetry].currentValue;
           } else {
             this.dataSource=new MatTableDataSource([{}])
