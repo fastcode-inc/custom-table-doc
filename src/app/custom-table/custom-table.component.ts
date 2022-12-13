@@ -97,6 +97,8 @@ export class CustomTableComponent implements OnInit, OnChanges {
   @Input() expandRows: boolean = false;
   @Input() dndColumns: boolean = false;
   @Input() paginatorEnable: boolean = false;
+  @Input() showFirstLastButtons: boolean = false;
+  @Input() pageSizeOptions: number[] = [5, 10, 20];
 
 
   @Output() inlineChange: any = new EventEmitter<RowChange>();
@@ -215,6 +217,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
           if (changes[propetry].currentValue) {
             this.ELEMENT_DATA = changes[propetry].currentValue.data;
             this.dataSource = changes[propetry].currentValue;
+            this.dataSource.paginator = this.paginator;
           } else {
             this.dataSource=new MatTableDataSource([{}])
           }

@@ -61,6 +61,7 @@ export class CustomTableService {
   }
   getResults(offset: number, limit: number): Observable<any> {
     return of(companyData.slice(offset, offset + limit)).pipe(
+      delay(new Date(Date.now() + 250)),
       map(d => ({ data: d }))
     );
   }
