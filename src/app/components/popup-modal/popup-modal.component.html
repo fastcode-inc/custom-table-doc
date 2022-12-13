@@ -9,22 +9,26 @@
     <mat-dialog-content>
         <div *ngFor="let key of keys">
             <!-- Number Type -->
-            <mat-form-field *ngIf="returnDataType(row,key) == 'number'" appearance="fill" class="inline-editing-field">
+            <mat-form-field *ngIf="types[key] == 'number'" appearance="fill" class="inline-editing-field">
                 <mat-label>{{key | titlecase}}</mat-label>
                 <input matInput type="number" [(ngModel)]="row[key]" [ngModelOptions]="{standalone: true}">
             </mat-form-field>
     
             <!-- String Type -->
     
-            <mat-form-field *ngIf="returnDataType(row,key) == 'string'" appearance="fill" class="inline-editing-field">
+            <mat-form-field *ngIf="types[key] == 'string'" appearance="fill" class="inline-editing-field">
+                <mat-label>{{key | titlecase}}</mat-label>
+                <input matInput type="text" [(ngModel)]="row[key]" [ngModelOptions]="{standalone: true}">
+            </mat-form-field>
+            <mat-form-field *ngIf="types[key] == 'date'" appearance="fill" class="inline-editing-field">
                 <mat-label>{{key | titlecase}}</mat-label>
                 <input matInput type="text" [(ngModel)]="row[key]" [ngModelOptions]="{standalone: true}">
             </mat-form-field>
             <!-- Selection Type -->
     
-            <mat-form-field *ngIf="returnDataType(row,key) == 'selection'" appearance="fill" class="inline-editing-field">
+            <mat-form-field *ngIf="types[key] == 'selection'" appearance="fill" class="inline-editing-field">
                 <mat-label>{{key | titlecase}}</mat-label>
-                <mat-select [value]="row[key]" [(ngModel)]="row[key]">
+                <mat-select [value]="row[key].value" [(ngModel)]="row[key].value">
                     <mat-option *ngFor="let option of row[key].options" [value]="option">
                         {{option}}
                     </mat-option>
@@ -32,7 +36,7 @@
             </mat-form-field>
             <!-- Boolean Type -->
             <p>
-                <mat-checkbox *ngIf="returnDataType(row,key) == 'boolean'" color="primary" [(ngModel)]="row[key]">
+                <mat-checkbox *ngIf="types[key] == 'boolean'" color="primary" [(ngModel)]="row[key]">
                     <mat-label>{{key | titlecase}}</mat-label>
                 </mat-checkbox>
             </p>

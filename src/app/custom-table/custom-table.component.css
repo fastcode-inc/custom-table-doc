@@ -28,7 +28,7 @@ td.mat-column-position {
 }
 
 tr.example-detail-row {
-    height: 0;
+    display: table-row !important;
 }
 
 
@@ -275,7 +275,6 @@ table th:hover .resize-handle {
 }
 .hidden{
     display: none !important;
-    visibility: hidden;
 }
 .action-column-cells {
     width: 40px;

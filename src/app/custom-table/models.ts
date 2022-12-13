@@ -47,7 +47,7 @@ export interface RowSelectionChange {
     isSelected: boolean;
 }
 /** Possible column type values. */
-export declare type MtxGridColumnType = string | 'tag' | 'button' | 'link' | 'image' | 'boolean' | 'number' | 'currency' | 'percent' | 'date';
+export declare type MtxGridColumnType ='selection' | string | 'tag' | 'button' | 'link' | 'image' | boolean | number | 'currency' | 'percent' | 'date';
 /** Column type parameter. */
 export interface MtxGridColumnTypeParameter {
     currencyCode?: string;

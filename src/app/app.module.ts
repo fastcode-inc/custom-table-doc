@@ -15,6 +15,7 @@ import { ResizeColumnDirective } from './custom-table/resize-column.directive';
 import { MatTableExporterModule } from 'mat-table-exporter';
 import { ColumnPinningComponent } from './components/column-pinning/column-pinning.component';
 import { PopupModalComponent } from './components/popup-modal/popup-modal.component';
+import { FilterColumnsComponentComponent } from './components/filter-columns-component/filter-columns-component.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { PopupModalComponent } from './components/popup-modal/popup-modal.compon
     ResizeColumnDirective,
     ColumnPinningComponent,
     PopupModalComponent,
+    FilterColumnsComponentComponent,
   ],
   imports: [
     BrowserModule,

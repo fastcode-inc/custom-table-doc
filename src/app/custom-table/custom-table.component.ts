@@ -120,13 +120,13 @@ export class CustomTableComponent implements OnInit, OnChanges {
 
   // API inputs Ends
   dynamicDisplayedColumns: any[] = [
-    { filter: true, name: 'select', show: false },
+    { filter: false, name: 'select', show: false },
     { filter: false, name: 'edit', show: false },
     { filter: false, name: 'popup', show: false },
     { filter: false, name: 'delete', show: false }
   ];
   public columnPinningOptions: MtxGridColumnPinOption[] = []
-  headersFilters = this.dynamicDisplayedColumns.filter((x) => x.filter == true && x.show == true).map((x, i) => x.name + '_' + i);
+  // headersFilters = [];
   headersSelectFilters = this.dynamicDisplayedColumns.filter((x) => x.filter == true && x.show == true).map((x, i) => x.name + '_' + i + 1);
   
   displayedColumns: string[] = [];
@@ -134,6 +134,8 @@ export class CustomTableComponent implements OnInit, OnChanges {
   totalSelectionList: any = [];
   columnsList: string[] = [];
   columnsArray: MtxGridColumn[] = [];
+  headersFilters: MtxGridColumn[]=[];
+  headersFiltersIds: string[]=[];
   columnsListCtrl = new FormControl([]);
   columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
   columnsToDisplay: string[] = this.displayedColumns.slice();
@@ -251,7 +253,23 @@ export class CustomTableComponent implements OnInit, OnChanges {
           break;
         }
         case 'filter': {
-          this.headersFilters = this.dynamicDisplayedColumns.filter((x) => x.filter == true && x.show == true).map((x, i) => x.name + '_' + i);
+          if (changes[propetry].currentValue) {
+            this.headersFiltersIds=this.columnsArray.map((column,i) => column.field+'_'+i)
+            let array:MtxGridColumn[] = []
+            this.columnsArray.forEach((column,i) => { 
+              let obj = {
+                type: column?.type,
+                field: column?.field + '_' + i
+              }
+              array.push(obj);
+            })
+            this.headersFilters = array;
+          }
+          else {
+            this.headersFilters = [];
+            this.headersFiltersIds = [];
+            this.dataSource.filter=''
+          }
           this.toggleFilters = changes[propetry].currentValue;
           break;
         }
@@ -349,7 +367,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
     if (this.individulFilter === 'id') { this.filterValues.id = event; }
     if (this.individulFilter === 'progress') { this.filterValues.progress = event; }
     if (this.individulFilter === 'fruit') { this.filterValues.fruit = event; }
-    this.dataSource.filter = JSON.stringify(this.filterValues);
+    // this.dataSource.filter = JSON.stringify(this.filterValues);
     this.dataSource.filterPredicate = this.createFilter();
   }
   drop(event: CdkDragDrop<string[]>) {
@@ -369,7 +387,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
   showhidecolumn(value: any) {
     this.dynamicDisplayedColumns.filter(a => a.name == value)[0].show = !this.dynamicDisplayedColumns.filter(a => a.name == value)[0].show;
     this.getDisplayedColumns();
-    this.headersFilters = this.dynamicDisplayedColumns.filter((x) => x.filter == true && x.show == true).map((x, i) => x.name + '_' + i);
+    // this.headersFilters = this.dynamicDisplayedColumns.filter((x) => x.filter == true && x.show == true).map((x, i) => x.name + '_' + i);
     this.headersSelectFilters = this.dynamicDisplayedColumns.filter((x) => x.filter == true && x.show == true).map((x, i) => x.name + '_' + i + 1);
   }
 
@@ -456,6 +474,10 @@ export class CustomTableComponent implements OnInit, OnChanges {
 
       let searchString = JSON.parse(filter);
 
+
+      if (this.individulFilter) {
+        return data[this.individulFilter].toString().trim().toLowerCase().indexOf(searchString[this.individulFilter].toString().toLowerCase()) !== -1;
+      }
       if (this.individulFilter == 'progress') {
         return data.progress.toString().trim().toLowerCase().indexOf(searchString.progress.toString().toLowerCase()) !== -1;
       }
@@ -482,9 +504,9 @@ export class CustomTableComponent implements OnInit, OnChanges {
     })
     this.dataSource.filter = JSON.stringify(columns);
   }
-  applysingleFilter(event: any, value: any) {
-    this.individulFilter = value.split('_')[0];
-    this.filterValues[value.split('_')[0]] = event
+  applysingleFilter(event:any,column:any) {
+    this.individulFilter = column.field;
+    this.filterValues[column.field] = event[column.field]
     this.dataSource.filter = JSON.stringify(this.filterValues);
   }
 
@@ -539,6 +561,13 @@ export class CustomTableComponent implements OnInit, OnChanges {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
+
+  expandRow(row: any, expand: boolean) {
+    if (this.expandRows) {
+      this.expandedElement = this.expandedElement === row ? null : row
+    }
+  }
+
   editPopupEnable(row: any, index?: any) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -546,7 +575,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
     dialogConfig.height = "70%";
     dialogConfig.maxWidth = "100%"
     var rowData = { ...row };
-    dialogConfig.data = rowData;
+    dialogConfig.data = {row:rowData , columns:[...this.columnsArray]};
 
     this.dialog.open(PopupModalComponent, dialogConfig).afterClosed().subscribe(data => {
       let index = this.ELEMENT_DATA.indexOf(row);

@@ -119,18 +119,22 @@
                 <div *ngIf="!row.editable"> {{row[column.field]}} </div>
                 <div *ngIf="row.editable">
                     <!-- Number Type -->
-                    <mat-form-field *ngIf="returnDataType(row,column) == 'number'" appearance="fill" class="inline-editing-field">
+                    <mat-form-field *ngIf="column.type == 'number'" appearance="outline" class="inline-editing-field">
                         <input matInput type="number" [(ngModel)]="row[column.field]" (ngModelChange)="setRowData($event,row,column)"
                             [ngModelOptions]="{standalone: true}">
                     </mat-form-field>
                         
                     <!-- String Type -->
-                    <mat-form-field *ngIf="returnDataType(row,column) == 'string'" appearance="fill" class="inline-editing-field">
+                    <mat-form-field *ngIf="column.type == 'string'" appearance="outline" class="inline-editing-field">
                         <input matInput type="text" [(ngModel)]="row[column.field]" (ngModelChange)="setRowData($event,row,column)"
                             [ngModelOptions]="{standalone: true}">
                     </mat-form-field>
+                    <mat-form-field *ngIf="column.type == 'date'" appearance="outline" class="inline-editing-field">
+                        <input matInput type="date" [(ngModel)]="row[column.field]" (ngModelChange)="setRowData($event,row,column)"
+                            [ngModelOptions]="{standalone: true}">
+                    </mat-form-field>
                     <!-- Selection Type -->
-                    <mat-form-field *ngIf="returnDataType(row,column) == 'selection'" appearance="fill" class="inline-editing-field">
+                    <mat-form-field *ngIf="column.type == 'selection'" appearance="outline" class="inline-editing-field">
                         <mat-select [value]="row[column.field]" [(ngModel)]="row[column.field]">
                             <mat-option *ngFor="let option of column.options" [value]="option">
                                 {{option}}
@@ -139,7 +143,7 @@
                     </mat-form-field>
                     <!-- Boolean Type -->
                     <div>
-                        <mat-checkbox (click)="$event.stopPropagation()"  *ngIf="returnDataType(row,column) == 'boolean'"  color="primary"
+                        <mat-checkbox (click)="$event.stopPropagation()"  *ngIf="column.type == 'boolean'"  color="primary"
                             [(ngModel)]="row[column.field]"></mat-checkbox>
                     </div>
                 </div>
@@ -209,25 +213,19 @@
 </ng-container>
 
 
-    <ng-container *ngFor="let headersFilter of headersFilters; let i=index" [matColumnDef]="headersFilter">
+    <ng-container *ngFor="let ids of headersFiltersIds; let i=index" [matColumnDef]="ids">
         <th mat-header-cell *matHeaderCellDef>
             <div class="filters-container" [class.animate]="toggleFilters">
-                <button style="visibility: hidden;" *ngIf="i == 0" mat-icon-button matTooltip="Clear Filters">
-                    <mat-icon>search_off</mat-icon>
-                </button>
-                <mat-form-field *ngIf="i > 0" appearance="outline">
-                    <input matInput class="form-field" [ngModel]="singleFilter"
-                        (ngModelChange)="applysingleFilter($event,headersFilter)" placeholder="Postion Filter">
-                </mat-form-field>
+                <app-filter-columns-component [obj]="columnsArray[i]" (filterOutput)="applysingleFilter($event,columnsArray[i])"></app-filter-columns-component>
             </div>
         </th>
     </ng-container>
     
-    <ng-container *ngFor="let headersSelectFilter of headersSelectFilters; let i=index"
+    <!-- <ng-container *ngFor="let headersSelectFilter of headersSelectFilters; let i=index"
         [matColumnDef]="headersSelectFilter">
         <th mat-header-cell *matHeaderCellDef>
             <div class="filters-container" [class.animate]="selectToggleFilters">
-    
+                
                 <mat-form-field appearance="outline">
                     <mat-label>Select</mat-label>
                     <mat-select (selectionChange)="onSelectionChange($event.value, headersSelectFilter)">
@@ -236,7 +234,7 @@
                     </mat-select>
                 </mat-form-field>
 
-                <!-- <mat-form-field *ngIf="i > 0" appearance="fill">
+                <mat-form-field *ngIf="i > 0" appearance="fill">
                         <mat-label>Toppings</mat-label>
                         <mat-select [formControl]="toppings" multiple>
                             <mat-select-trigger  (openedChange)="onSelectionChange($event)">
@@ -247,10 +245,10 @@
                           </mat-select-trigger>
                           <mat-option *ngFor="let topping of nameList" [value]="topping">{{topping}}</mat-option>
                         </mat-select>
-                      </mat-form-field> -->
+                      </mat-form-field>
                 </div>
                 </th>
-    </ng-container>
+    </ng-container> -->
 
     <!-- Group Code Starts-->
     <!-- <ng-container matColumnDef="header-row-first-group">
@@ -269,20 +267,20 @@
 
     <tr mat-header-row *matHeaderRowDef=" getDisplayedColumns(); sticky: stickyHeader"></tr>
     
-    <tr style="height: auto;" mat-header-row class="no-default-height" *matHeaderRowDef="headersSelectFilters"></tr>
+    <!-- <tr style="height: auto;" mat-header-row class="no-default-height" *matHeaderRowDef="headersSelectFilters"></tr> -->
     
     <!-- this for Rows-->
     <tr mat-row *matRowDef="let row; columns:getDisplayedColumns(); let i=dataIndex;" class="example-element-row"
         [ngClass]="{'stripedRows':(stripedRows &&  i % 2 == 1)}" [class.hidden]="hiddenCtrl.isSelected(row) && hideRows" [class.example-expanded-row]="expandedElement === row"
-        (click)="expandRows && expandedElement = expandedElement === row ? null : row">
+        (click)="expandRow(row, row !== expandedElement)">
     </tr>
 
-    <tr style="height: auto;" mat-header-row class="no-default-height" *matHeaderRowDef="headersFilters"></tr>
+    <tr style="height: auto;" mat-header-row class="no-default-height" *matHeaderRowDef="headersFiltersIds"></tr>
 
     <!-- <tr  mat-row *matRowDef="let row; columns: getDisplayedColumns();"   class="example-element-row" > </tr> -->
-
-    <tr style="height: auto;" mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row">
+    <tr style="height: auto;" mat-row *matRowDef="let row; columns: ['expandedDetail']" class="hidden" [ngClass]="{'example-detail-row': (expandRows && row === expandedElement)}">
     </tr>
+    
     <tr mat-footer-row *matFooterRowDef="getDisplayedColumns(); sticky: stickyFooter"></tr>
     
     </table>

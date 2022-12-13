@@ -30,10 +30,11 @@ export class AppComponent implements OnInit {
   columnFilterBySelection: any = true;
 
   public columns: MtxGridColumn[] = [
-    { header: 'ID', field: 'id' ,type:'number', width:"100px"},
-    { header: 'Name', field: 'name', type: 'string', width: '70px' },
-    { header: 'Age', field: 'age', type: 'string' , width: '90px' },
-    { header: 'Address', field: 'address', type: 'string', width: '110px' },
+    { header: 'ID', field: 'id' ,type:'number'},
+    { header: 'Name', field: 'name', type: 'string' },
+    { header: 'Age', field: 'age', type: 'date'  },
+    { header: 'Gender', field: 'gender', type: 'selection', options: ['male', 'female'] },
+    { header: 'Address', field: 'address', type: 'string' },
 ]
 //   public columns: MtxGridColumn[] = [
 //     { header: 'ID', field: 'id' , width:'250px'},
