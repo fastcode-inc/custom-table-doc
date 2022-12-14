@@ -9,7 +9,7 @@ import { MatTableDataSource } from '@angular/material/table';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  styleUrls: ['./app.component.scss'],
   
 })
 export class AppComponent implements OnInit {
@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
   columnFilterBySelection: any = true;
 
   public columns: MtxGridColumn[] = [
-    { header: 'ID', field: 'id' ,type:'number'},
+    { header: 'ID', field: 'id' ,type:'number' },
     { header: 'Name', field: 'name', type: 'string' },
     { header: 'Age', field: 'age', type: 'date'  },
     { header: 'Gender', field: 'gender', type: 'selection', options: ['male', 'female'] },

@@ -4,7 +4,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 @Component({
   selector: 'app-modal-pop-up',
   templateUrl: './modal-pop-up.component.html',
-  styleUrls: ['./modal-pop-up.component.css']
+  styleUrls: ['./modal-pop-up.component.scss']
 })
 export class ModalPopUpComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}

@@ -5,7 +5,7 @@ import { MtxGridColumn } from 'src/app/custom-table/models';
 @Component({
   selector: 'app-filter-columns-component',
   templateUrl: './filter-columns-component.component.html',
-  styleUrls: ['./filter-columns-component.component.css']
+  styleUrls: ['./filter-columns-component.component.scss']
 })
 export class FilterColumnsComponentComponent implements OnInit {
   @Input() obj!: any;

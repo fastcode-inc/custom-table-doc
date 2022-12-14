@@ -265,6 +265,9 @@ table th:hover .resize-handle {
 .inline-editing-field {
     width: -webkit-fill-available;
 }
+.inline-editing-field .mat-form-field-wrapper {
+    padding: 0;
+}
 .done-icon,.edit-icon{
     cursor: pointer;
 }
@@ -284,8 +287,8 @@ mat-card.main-table-ext-container{
     width: 40px;
     height: inherit;
 }
-.mat-icon.edit-column-icons{
-    height: 28px;
-    width: 28px;
-    font-size: 28px;
+
+
+.inline-editing-controls{
+    display: flex;
 }

@@ -4,7 +4,7 @@ import { MtxGridColumn } from 'src/app/custom-table/models';
 @Component({
   selector: 'app-column-pinning',
   templateUrl: './column-pinning.component.html',
-  styleUrls: ['./column-pinning.component.css']
+  styleUrls: ['./column-pinning.component.scss']
 })
 export class ColumnPinningComponent implements OnInit {
   @Input() columns!: MtxGridColumn[];

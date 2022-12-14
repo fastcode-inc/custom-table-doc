@@ -6,7 +6,7 @@ import { CustomTableService } from 'src/app/custom-table/service/custom-table.se
 @Component({
   selector: 'app-popup-modal',
   templateUrl: './popup-modal.component.html',
-  styleUrls: ['./popup-modal.component.css']
+  styleUrls: ['./popup-modal.component.scss']
 })
 export class PopupModalComponent implements OnInit {
 

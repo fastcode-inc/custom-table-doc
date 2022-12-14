@@ -1,7 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SelectionChange, SelectionModel } from '@angular/cdk/collections';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { EventEmitter, Output } from '@angular/core';
+import { ContentChild, EventEmitter, Output } from '@angular/core';
 import { Component, Input, OnChanges, OnInit, Renderer2, SimpleChanges, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -56,7 +56,7 @@ const NAMES: string[] = [
 @Component({
   selector: 'mat-table-ext',
   templateUrl: './custom-table.component.html',
-  styleUrls: ['./custom-table.component.css'],
+  styleUrls: ['./custom-table.component.scss'],
   encapsulation: ViewEncapsulation.None,
   animations: [
     trigger('detailExpand', [
@@ -118,7 +118,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
   columnFilterBySelection: any = false;
   dragEnable: any = false;
   paginationEnable: any = true;
-  rowDataTemp!: any;
+  rowDataTemp: any={};
 
   // API inputs Ends
   dynamicDisplayedColumns: any[] = [
@@ -514,14 +514,23 @@ export class CustomTableComponent implements OnInit, OnChanges {
   }
 
 
-  editEnable(row: any) {
+  editEnable(row: any,i: number) {
+    this.rowDataTemp['e'+i] = {...row};
     this.ELEMENT_DATA.filter((a: any) => a.id == row.id)[0]['editable'] = !this.ELEMENT_DATA.filter((a: { id: any; }) => a.id == row.id)[0]['editable'];
   }
-  saveData(row: any) {
+  cencelInlineEditing(row: any,i:number) { 
     this.ELEMENT_DATA.filter((a: any) => a.id == row.id)[0]['editable'] = !this.ELEMENT_DATA.filter((a: { id: any; }) => a.id == row.id)[0]['editable'];
+    this.rowDataTemp["e"+i] = {};
+  }
+  saveData(row: any, index: number) {
+    this.ELEMENT_DATA.filter((a: any) => a.id == row.id)[0]['editable'] = !this.ELEMENT_DATA.filter((a: { id: any; }) => a.id == row.id)[0]['editable'];
+    this.ELEMENT_DATA[index] = { ...this.rowDataTemp["e" + index] };
+    this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
+    row = { ...this.rowDataTemp["e" + index] };
+    this.rowDataTemp["e" + index] = {};
     let data: RowChange = {
       row: row,
-      index: this.ELEMENT_DATA.indexOf(row)
+      index: index
     }
     this.inlineChange.emit(data);
   }
@@ -700,14 +709,6 @@ export class CustomTableComponent implements OnInit, OnChanges {
   }
   setPinnedColumns(event: MtxGridColumn[]) {
     console.log('TableCom',event)
-  }
-  setRowData(event: any, rowData: any, columns: any) {
-    console.log(this.columnsArray);
-    console.log(this.dataSource.data);
-
-    // console.log('TableCom', event)
-    // console.log('TableCom', columns)
-    // console.log('TableCom',rowData)
   }
   onScroll(event: any) {
     this.scroll.emit(event);
