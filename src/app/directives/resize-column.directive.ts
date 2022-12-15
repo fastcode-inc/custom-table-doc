@@ -1,10 +1,16 @@
 import { Directive, OnInit, Renderer2, Input, ElementRef, OnChanges } from "@angular/core";
 
 @Directive({
-    selector: "[resizeColumn]"
+    selector: "[columnsResizable]"
 })
 export class ResizeColumnDirective implements OnInit, OnChanges {
-    @Input("resizeColumn") resizable: boolean= false;
+    columnsResizable$: boolean = false;
+    @Input() set columnsResizable(val: boolean) {
+        this.columnsResizable$ = val;
+    }
+    get columnsResizable() {
+        return this.columnsResizable$;
+    }
     @Input() index!: number;
     private startX!: number;
     private startWidth!: number;
@@ -17,31 +23,38 @@ export class ResizeColumnDirective implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        if (this.resizable) {
+        if (this.columnsResizable$) {
             const row = this.renderer.parentNode(this.column);
             const thead = this.renderer.parentNode(row);
             this.table = this.renderer.parentNode(thead);
 
             const resizer = this.renderer.createElement("span");
             this.renderer.addClass(resizer, "resize-holder");
+            this.renderer.setAttribute(resizer, 'id', "resizeHolderSpan");
             this.renderer.appendChild(this.column, resizer);
             this.renderer.listen(resizer, "mousedown", this.onMouseDown);
             this.renderer.listen(this.table, "mousemove", this.onMouseMove);
             this.renderer.listen("document", "mouseup", this.onMouseUp);
         }
+        else {
+            this.removeDragElementFromDom();
+        }
     }
     ngOnChanges() {
-        if (this.resizable) {
+        if (this.columnsResizable$) {
             const row = this.renderer.parentNode(this.column);
             const thead = this.renderer.parentNode(row);
-            this.table = this.renderer.parentNode(thead);
-
             const resizer = this.renderer.createElement("span");
+            this.table = this.renderer.parentNode(thead);
             this.renderer.addClass(resizer, "resize-holder");
+            this.renderer.setAttribute(resizer, 'id', "resizeHolderSpan");
             this.renderer.appendChild(this.column, resizer);
             this.renderer.listen(resizer, "mousedown", this.onMouseDown);
             this.renderer.listen(this.table, "mousemove", this.onMouseMove);
             this.renderer.listen("document", "mouseup", this.onMouseUp);
+        }
+        else {
+            this.removeDragElementFromDom();
         }
     }
 
@@ -52,7 +65,7 @@ export class ResizeColumnDirective implements OnInit, OnChanges {
     };
 
     onMouseMove = (event: MouseEvent) => {
-        const offset = 35;
+        const offset = 5;
         if (this.pressed && event.buttons) {
             this.renderer.addClass(this.table, "resizing");
             // Calculate width of column
@@ -77,4 +90,11 @@ export class ResizeColumnDirective implements OnInit, OnChanges {
             this.renderer.removeClass(this.table, "resizing");
         }
     };
+    removeDragElementFromDom() {
+        let ele = document.getElementById('resizeHolderSpan')
+        if (ele && ele !== null && ele !== undefined) {
+            this.renderer.removeChild(this.column, ele);
+        }
+    }
 }
+

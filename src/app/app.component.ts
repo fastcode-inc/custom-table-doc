@@ -30,8 +30,8 @@ export class AppComponent implements OnInit {
   columnFilterBySelection: any = true;
 
   public columns: MtxGridColumn[] = [
-    { header: 'ID', field: 'id' ,type:'number' },
-    { header: 'Name', field: 'name', type: 'string' },
+    { header: 'ID', field: 'id' ,type:'number' ,headerTooltip:{value: 'ID',tooltipPosition:"above"}},
+    { header: 'Name', field: 'name', type: 'string'},
     { header: 'Age', field: 'age', type: 'date'  },
     { header: 'Gender', field: 'gender', type: 'selection', options: ['male', 'female'] },
     { header: 'Address', field: 'address', type: 'string' },
@@ -67,6 +67,7 @@ export class AppComponent implements OnInit {
   topSearchFilter: any = false;
   isExpandEnable: any = false;
   dragEnable: any = false;
+  sorting: any = false;
   paginationEnable: any = true;
   constructor(
     public domSanitizer: DomSanitizer,

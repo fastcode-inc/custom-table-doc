@@ -8,8 +8,8 @@ export interface MtxGridColumn {
     options?: string[] ;
     header?: string ;
     name?: string;
-    headerTooltip?: string;
-    cellTooltip?: string;
+    headerTooltip?: TooltipProp;
+    cellTooltip?: TooltipProp;
     hide?: boolean;
     disabled?: boolean;
     pinned?: 'left' | 'right';
@@ -64,6 +64,13 @@ export interface MtxGridColumnSortProp {
     id?: string;
     start?: 'asc' | 'desc';
 }
+export interface TooltipProp {
+    value: string
+    tooltipPosition?: TooltipPosition;
+    tooltipTouchGestures?:'auto' | 'on' | 'off';
+    tooltipVisibility? : 'initial' | 'visible' | 'hidden';
+}
+export declare type TooltipPosition = 'left' | 'right' | 'above' | 'below' | 'before' | 'after';
 /** Column tag of grid. */
 export interface MtxGridColumnTag {
     [key: number]: MtxGridColumnTagValue;

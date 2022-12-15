@@ -7,11 +7,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table'  
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
-import { MaterialModule } from './material/material.module';
+import { MaterialModule } from './modules/material.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { ModalPopUpComponent } from './modal-pop-up/modal-pop-up.component';
 import { CustomTableComponent } from './custom-table/custom-table.component';
-import { ResizeColumnDirective } from './custom-table/resize-column.directive';
+import { ResizeColumnDirective } from './directives/resize-column.directive';
 import { MatTableExporterModule } from 'mat-table-exporter';
 import { ColumnPinningComponent } from './components/column-pinning/column-pinning.component';
 import { PopupModalComponent } from './components/popup-modal/popup-modal.component';
@@ -20,7 +19,6 @@ import { FilterColumnsComponentComponent } from './components/filter-columns-com
 @NgModule({
   declarations: [
     AppComponent,
-    ModalPopUpComponent,
     CustomTableComponent,
     ResizeColumnDirective,
     ColumnPinningComponent,

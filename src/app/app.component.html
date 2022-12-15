@@ -1,100 +1,95 @@
 
     <mat-card class="result">
-        <mat-card-content>
-            <h2 class="example-h2">Result</h2>
-            <section class="example-section">
-                <mat-slide-toggle (change)="showhidecolumn('inlineRowEditing')" [disabled]="false">
-                    Edit row on modal
-                </mat-slide-toggle>
-            </section>
-    
-            <section class="example-section">
-                <mat-slide-toggle (change)="showhidecolumn('popupRowEditing')" [disabled]="false">
-                    In line Edit row
-                </mat-slide-toggle>
-            </section>
-    
-            <section class="example-section">
-                <mat-slide-toggle (change)="showhidecolumn('enableDelete')" [disabled]="false">
-                    Delete Row
-                </mat-slide-toggle>
-            </section>
-            <section class="example-section">
-                <mat-slide-toggle [(ngModel)]="stripedRows" [disabled]="false">
-                    Striped Rows
-                </mat-slide-toggle>
-            </section>
-            <section class="example-section">
-                <mat-slide-toggle (change)="showhidecolumn('select')" [disabled]="false">
-                    multi select
-                </mat-slide-toggle>
-            </section>
-    
-            <section class="example-section">
-                <mat-slide-toggle [(ngModel)]="stickyColumn" [disabled]="false">
-                    Sticky Column
-                </mat-slide-toggle>
-            </section>
-            <section class="example-section">
-                <mat-slide-toggle [(ngModel)]="columnResizable" [disabled]="false">
-                    Column Resizable Property
-                </mat-slide-toggle>
-            </section>
-    
-            <section class="example-section">
-                <mat-slide-toggle [(ngModel)]="stickyHeader" [disabled]="false">
-                    Sticky Header
-                </mat-slide-toggle>
-            </section>
-    
-            <section class="example-section">
-                <mat-slide-toggle [(ngModel)]="stickyFooter" [disabled]="false">
-                    Sticky Footer
-                </mat-slide-toggle>
-            </section>
-            <section class="example-section">
-                <mat-slide-toggle [(ngModel)]="simpleFilter" [disabled]="false">
-                    Columns Filter
-                </mat-slide-toggle>
-            </section>
-    
-            <!-- <section class="example-section">
-                <mat-slide-toggle [(ngModel)]="selectionFilter" [disabled]="false">
-                    Columns Select Filter
-                </mat-slide-toggle>
-            </section> -->
-    
-    
-    
-    
-            <section class="example-section">
-                <mat-slide-toggle [(ngModel)]="columnFilterBySelection" [disabled]="false">
-                    {{columnFilterBySelection ? 'Toolbar enabled':'Toolbar Disabled'}}
-                </mat-slide-toggle>
-            </section>
-    
-            <section class="example-section">
-                <mat-slide-toggle [(ngModel)]="topSearchFilter" [disabled]="false">
-                    Search
-                </mat-slide-toggle>
-            </section>
-            <section class="example-section">
-                <mat-slide-toggle [(ngModel)]="isExpandEnable" [disabled]="false">
-                    is Expand Enable
-                </mat-slide-toggle>
-            </section>
-    
-            <section class="example-section">
-                <mat-slide-toggle [(ngModel)]="dragEnable" [disabled]="false">
-                    is Dear & Drop Enable
-                </mat-slide-toggle>
-            </section>
-    
-            <section class="example-section">
-                <mat-slide-toggle [(ngModel)]="paginationEnable" [disabled]="false">
-                    Pagination
-                </mat-slide-toggle>
-            </section>
+        <h2 class="example-h2">Table</h2>
+        <mat-card-content style="display: flex; gap: 50px;">
+<div style="display: flex;flex-direction: column;">
+    <section class="example-section">
+        <mat-slide-toggle (change)="showhidecolumn('inlineRowEditing')" [disabled]="false">
+            Edit row on modal
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle (change)="showhidecolumn('popupRowEditing')" [disabled]="false">
+            In line Edit row
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle (change)="showhidecolumn('enableDelete')" [disabled]="false">
+            Delete Row
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="stripedRows" [disabled]="false">
+            Striped Rows
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle (change)="showhidecolumn('select')" [disabled]="false">
+            multi select
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="stickyColumn" [disabled]="false">
+            Sticky Column
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="columnResizable" [disabled]="false">
+            Column Resizable
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="stickyHeader" [disabled]="false">
+            Sticky Header
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="stickyFooter" [disabled]="false">
+            Sticky Footer
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="simpleFilter" [disabled]="false">
+            Columns Filter
+        </mat-slide-toggle>
+    </section>
+</div>
+<div style="display: flex;flex-direction: column;">
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="columnFilterBySelection" [disabled]="false">
+            {{columnFilterBySelection ? 'Toolbar enabled':'Toolbar Disabled'}}
+        </mat-slide-toggle>
+    </section>
+
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="topSearchFilter" [disabled]="false">
+            Search
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="isExpandEnable" [disabled]="false">
+            is Expand Enable
+        </mat-slide-toggle>
+    </section>
+
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="dragEnable" [disabled]="false">
+            is Drag & Drop Enable
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="sorting" [disabled]="false">
+            Sorting
+        </mat-slide-toggle>
+    </section>
+
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="paginationEnable" [disabled]="false">
+            Pagination
+        </mat-slide-toggle>
+    </section>
+</div>
+            
     
     
         </mat-card-content>
@@ -112,7 +107,7 @@
     [multiRowSelection]="multiRowSelection"
     [stickyHeader]="stickyHeader"
     [stickyFooter]="stickyFooter"
-    [filter]="simpleFilter"
+    [columnFilter]="simpleFilter"
     [showToolbar]="columnFilterBySelection"
     [globalSearch]="topSearchFilter"
     [expandRows]="isExpandEnable"
@@ -121,11 +116,11 @@
     [pageSizeOptions]="[10, 25, 100]"
     [showFirstLastButtons]="true"
     [showToolbar]="true"
-    [columnResizable]="false"
     [columnPinnable]="true"
     [columnHideable]="true"
     [stripedRows]="stripedRows"
     [isLoading]="isLoading"
+    [sorting]="sorting"
     (inlineChange)="showData($event,'inline change')"
     (popupChange)="showData($event,'popup change')"
     (scroll)="onScroll($event)"
