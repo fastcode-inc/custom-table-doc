@@ -4,17 +4,22 @@
         <mat-card-content style="display: flex; gap: 50px;">
 <div style="display: flex;flex-direction: column;">
     <section class="example-section">
-        <mat-slide-toggle (change)="showhidecolumn('inlineRowEditing')" [disabled]="false">
-            Edit row on modal
+        <mat-slide-toggle [(ngModel)]="popupRowEditing" [disabled]="false">
+            Popup Editing
         </mat-slide-toggle>
     </section>
     <section class="example-section">
-        <mat-slide-toggle (change)="showhidecolumn('popupRowEditing')" [disabled]="false">
-            In line Edit row
+        <mat-slide-toggle [(ngModel)]="inlineRowEditing" [disabled]="false">
+            Inline Editing
         </mat-slide-toggle>
     </section>
     <section class="example-section">
-        <mat-slide-toggle (change)="showhidecolumn('enableDelete')" [disabled]="false">
+        <mat-slide-toggle [(ngModel)]="inCellEditing" [disabled]="false">
+            Cell Editing
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="deleteRow" [disabled]="false">
             Delete Row
         </mat-slide-toggle>
     </section>
@@ -24,13 +29,8 @@
         </mat-slide-toggle>
     </section>
     <section class="example-section">
-        <mat-slide-toggle (change)="showhidecolumn('select')" [disabled]="false">
-            multi select
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="stickyColumn" [disabled]="false">
-            Sticky Column
+        <mat-slide-toggle [(ngModel)]="multiRowSelection" [disabled]="false">
+           Multi Row Selection
         </mat-slide-toggle>
     </section>
     <section class="example-section">
@@ -56,25 +56,34 @@
 </div>
 <div style="display: flex;flex-direction: column;">
     <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="columnFilterBySelection" [disabled]="false">
-            {{columnFilterBySelection ? 'Toolbar enabled':'Toolbar Disabled'}}
+        <mat-slide-toggle [(ngModel)]="toolbarToggle" [disabled]="false">
+            Table Toolbar
         </mat-slide-toggle>
     </section>
-
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="columnPinnable" [disabled]="false">
+            Column Pinnable
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="columnHideable" [disabled]="false">
+            Column Hideable
+        </mat-slide-toggle>
+    </section>
     <section class="example-section">
         <mat-slide-toggle [(ngModel)]="topSearchFilter" [disabled]="false">
-            Search
+            Global Search
         </mat-slide-toggle>
     </section>
     <section class="example-section">
         <mat-slide-toggle [(ngModel)]="isExpandEnable" [disabled]="false">
-            is Expand Enable
+            Row Expandable
         </mat-slide-toggle>
     </section>
 
     <section class="example-section">
         <mat-slide-toggle [(ngModel)]="dragEnable" [disabled]="false">
-            is Drag & Drop Enable
+            Drag & Drop Columns
         </mat-slide-toggle>
     </section>
     <section class="example-section">
@@ -82,12 +91,37 @@
             Sorting
         </mat-slide-toggle>
     </section>
-
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="isLoading" [disabled]="false">
+            Loading Indicator
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="showFirstLastButtons" [disabled]="false">
+            Show First Last Page Buttons
+        </mat-slide-toggle>
+    </section>
     <section class="example-section">
         <mat-slide-toggle [(ngModel)]="paginationEnable" [disabled]="false">
             Pagination
         </mat-slide-toggle>
     </section>
+</div>
+<div style="display: flex;flex-direction: column;">
+        <section class="example-section">
+            <mat-form-field class="example-full-width" appearance="outline">
+                <mat-label>Table Height</mat-label>
+                <input matInput placeholder="Default is 500px" [(ngModel)]="tableHeight" [disabled]="false">
+            </mat-form-field>
+        </section>
+        <mat-divider></mat-divider>
+        <section class="example-section">
+            <mat-form-field class="example-full-width" appearance="outline">
+                <mat-label>Table Width</mat-label>
+                <input matInput placeholder="Default is 100%" [(ngModel)]="tableWidth" [disabled]="false">
+            </mat-form-field>
+        </section>
+        <mat-divider></mat-divider>
 </div>
             
     
@@ -101,6 +135,7 @@
     [columns]="columns"
     [columnResizable]="columnResizable"
     [inlineRowEditing]="inlineRowEditing"
+    [inCellEditing]="inCellEditing"
     [popupRowEditing]="popupRowEditing"
     [enableDelete]="deleteRow"
     [rowSelection]="rowSelection"
@@ -108,22 +143,25 @@
     [stickyHeader]="stickyHeader"
     [stickyFooter]="stickyFooter"
     [columnFilter]="simpleFilter"
-    [showToolbar]="columnFilterBySelection"
+    [showToolbar]="toolbarToggle"
     [globalSearch]="topSearchFilter"
     [expandRows]="isExpandEnable"
     [dndColumns]="dragEnable"
     [paginatorEnable]="paginationEnable"
     [pageSizeOptions]="[10, 25, 100]"
-    [showFirstLastButtons]="true"
-    [showToolbar]="true"
-    [columnPinnable]="true"
-    [columnHideable]="true"
+    [showFirstLastButtons]="showFirstLastButtons"
+    [columnPinnable]="columnPinnable"
+    [columnHideable]="columnHideable"
     [stripedRows]="stripedRows"
-    [isLoading]="isLoading"
+    [loadingIndicator]="isLoading"
     [sorting]="sorting"
+    [tableHeight]="tableHeight"
+    [tableWidth]="tableWidth"
     (inlineChange)="showData($event,'inline change')"
     (popupChange)="showData($event,'popup change')"
+    (cellChange)="showData($event,'Cell change')"
     (scroll)="onScroll($event)"
     (selectionChanged)="onSelectionChange($event)"
+    (rowDeleted)="showData($event,'Delete change')"
     
     ></mat-table-ext>

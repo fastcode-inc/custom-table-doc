@@ -139,13 +139,6 @@ table th:hover .resize-handle {
     opacity: 1;
     transition: .3s ease-in-out;
 }
-/* Group Code Starts  */
-/* th.mat-header-cell, td.mat-cell {
-    text-align: center;
-    border: 1px solid #CCC;
-    padding: 0 !important;
-} */
-/* Group Code ends  */
 
 .mat-table.resizing {
     -moz-user-select: none;
@@ -191,8 +184,6 @@ table th:hover .resize-handle {
     align-items: center;
 }
 .mat-table-ext-container {
-    height: 50vh;
-    /* max-height: 500px; */
     width: 100%;
     max-width: 100%;
     overflow: auto;
@@ -261,9 +252,6 @@ table th:hover .resize-handle {
     height: 10em;
     max-height: 10em;
     overflow-y: auto;
-}
-.inline-editing-field {
-    width: -webkit-fill-available;
 }
 .done-icon,.edit-icon{
     cursor: pointer;

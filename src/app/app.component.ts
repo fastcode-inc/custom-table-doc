@@ -19,15 +19,19 @@ export class AppComponent implements OnInit {
   columnResizable: any = false;
   stickyFooter: any = false;
   stickyHeader: any = false;
-  inlineRowEditing: any = true;
-  popupRowEditing: any = true;
+  inlineRowEditing: any = false;;
+  popupRowEditing: any = false;
+  inCellEditing: any = false;
   deleteRow: any = false;
   stripedRows: any = false;
   rowSelection: any = false;
   multiRowSelection: any = false;
   simpleFilter: any = false;
   selectionFilter: any = false;
-  columnFilterBySelection: any = true;
+  toolbarToggle: any = false;
+  showFirstLastButtons: any = false;
+  columnPinnable: any = false;
+  columnHideable: any = false;
 
   public columns: MtxGridColumn[] = [
     { header: 'ID', field: 'id' ,type:'number' ,headerTooltip:{value: 'ID',tooltipPosition:"above"}},
@@ -65,6 +69,8 @@ export class AppComponent implements OnInit {
   toggleColumnfilter: any = false;
   multiSelectRow: any = true;
   topSearchFilter: any = false;
+  tableHeight: string = '40vh';
+  tableWidth: string = '';
   isExpandEnable: any = false;
   dragEnable: any = false;
   sorting: any = false;

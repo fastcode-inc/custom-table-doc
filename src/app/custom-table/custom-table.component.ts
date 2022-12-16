@@ -1,7 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SelectionModel } from '@angular/cdk/collections';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { EventEmitter, Output } from '@angular/core';
+import { AfterViewInit, EventEmitter, HostListener, Output } from '@angular/core';
 import { Component, Input, OnChanges, OnInit, Renderer2, SimpleChanges, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -25,18 +25,20 @@ import { CustomTableService } from './service/custom-table.service';
     ]),
   ]
 })
-export class CustomTableComponent implements OnInit, OnChanges {
+export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   @ViewChild(MatMenuTrigger) menuTrigger!: MatMenuTrigger;
   @ViewChild('columnMenuTrigger') columnMenuTrigger!: MatMenuTrigger;
   @ViewChild('selectSearchRow') toggleselectRow: any;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  // Table inputs
   @Input() dataSource!: MatTableDataSource<any>;
   @Input() columns: MtxGridColumn[] = [];
   @Input() columnResizable: boolean = false;
   @Input() stripedRows: boolean = false;
   @Input() inlineRowEditing: boolean = false;
+  @Input() inCellEditing: boolean = false;
   @Input() popupRowEditing: boolean = false;
   @Input() enableDelete: boolean = false;
   @Input() rowSelection: boolean = false;
@@ -46,15 +48,16 @@ export class CustomTableComponent implements OnInit, OnChanges {
   @Input() stickyHeader: boolean = false;
   @Input() columnFilter: boolean = false;
   @Input() selectionFilter: boolean = false;
-  @Input() isLoading: boolean = false;
+  @Input() loadingIndicator: boolean = false;
   @Input() sorting: boolean = false;
-  //toolbar inputs here
   @Input() showToolbar: boolean = false;
   @Input() toolbarTitle: string = '';
+  @Input() tableHeight: string = '500px';
+  @Input() tableWidth: string = '100%';
   @Input() toolbarTempate: TemplateRef<any> | undefined;
-  @Input() columnHideable: boolean = true;
+  @Input() columnHideable: boolean = false;
   @Input() columnHideableChecked: 'show' | 'hide' = 'show';
-  @Input() columnPinnable: boolean = true;
+  @Input() columnPinnable: boolean = false;
   @Input() globalSearch: boolean = false;
   @Input() expandRows: boolean = false;
   @Input() dndColumns: boolean = false;
@@ -63,13 +66,15 @@ export class CustomTableComponent implements OnInit, OnChanges {
   @Input() pageSizeOptions: number[] = [5, 10, 20];
   
 
-
-  @Output() inlineChange: any = new EventEmitter<RowChange>();
-  @Output() popupChange: any = new EventEmitter<RowChange>();
+  // Table outputs
+  @Output() inlineChange: EventEmitter<any> = new EventEmitter<RowChange>();
+  @Output() cellChange: EventEmitter<any> = new EventEmitter<RowChange>();
+  @Output() popupChange: EventEmitter<any> = new EventEmitter<RowChange>();
+  @Output() rowDeleted: EventEmitter<any> = new EventEmitter<any>();
   @Output() scroll: any = new EventEmitter<any>();
   @Output() selectionChanged: EventEmitter<RowSelectionChange> = new EventEmitter<any>();
 
-  // API inputs
+
   columnPinningOptions: MtxGridColumnPinOption[] = []
   exportMenuCtrl: boolean = false;
   columnPinMenuCtrl: boolean = false;
@@ -82,21 +87,13 @@ export class CustomTableComponent implements OnInit, OnChanges {
   dragEnable: any = false;
   paginationEnable: any = true;
   rowDataTemp: any={};
-
-  dynamicDisplayedColumns: any[] = [
-    { filter: false, name: 'select', show: false },
-    { filter: false, name: 'edit', show: false },
-    { filter: false, name: 'popup', show: false },
-    { filter: false, name: 'delete', show: false }
-  ];
-
   displayedColumns: string[] = [];
   showHideColumnsArray: MtxGridColumn[] = [];
   totalSelectionList: any = [];
   columnsList: string[] = [];
   columnsArray: MtxGridColumn[] = [];
-  headersFilters: MtxGridColumn[]=[];
-  headersFiltersIds: string[]=[];
+  headersFilters: MtxGridColumn[] = [];
+  headersFiltersIds: string[] = [];
   columnsListCtrl = new FormControl([]);
   columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
   columnsToDisplay: string[] = this.displayedColumns.slice();
@@ -113,6 +110,17 @@ export class CustomTableComponent implements OnInit, OnChanges {
   toggleFilters = false;
   hideRows = false;
   expandedElement: any | null;
+  currentRowIndex: number = -1;
+  currentRow: any = {};
+  cellEditing: any = {};
+  hideShowMenuGroup!:FormGroup;
+  dynamicDisplayedColumns: any[] = [
+    { filter: false, name: 'select', show: false },
+    { filter: false, name: 'edit', show: false },
+    { filter: false, name: 'popup', show: false },
+    { filter: false, name: 'delete', show: false }
+  ];
+
 
   constructor(
     public dialog: MatDialog,
@@ -124,26 +132,9 @@ export class CustomTableComponent implements OnInit, OnChanges {
     }
 
   }
-
-  form: FormGroup = new FormGroup({
-    id: new FormControl(false),
-    description: new FormControl(false),
-  });
-
-  id = this.form.get('id')?.value;
-  description = this.form.get('description')?.value;
-
   /**
    * Control column ordering and which columns are displayed.
    */
-  hideShowMenuGroup!: FormGroup;
-  columnPinMenuGroup!: FormGroup;
-
-  getDisplayedColumns(form?:string): string[] {
-    let list = this.dynamicDisplayedColumns.filter((cd) => cd.show).map((cd) => cd.name);;
-    return list;
-
-  }
   ngOnChanges(changes: SimpleChanges) {
     this.setPropertyValue(changes);
   }
@@ -151,12 +142,18 @@ export class CustomTableComponent implements OnInit, OnChanges {
     if (this.dataSource) {
       this.dataSource.filterPredicate = this.createFilter();
     }
-    
-    this.hideShowMenuGroup.valueChanges.forEach(ctrlValues => {
-      this.updateColumnsHideShow(ctrlValues);
-    })
   }
-
+  setColumnHideShow() {
+    if (this.hideShowMenuGroup !== undefined && this.hideShowMenuGroup !== null) {
+      this.updateColumnsHideShow(this.hideShowMenuGroup.value);
+    }
+  }
+  ngAfterViewInit() {
+    if (this.dataSource) {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
+  }
   setPropertyValue(changes: SimpleChanges) {
     let keys = Object.keys(changes);
     keys.forEach(propetry => {
@@ -225,6 +222,12 @@ export class CustomTableComponent implements OnInit, OnChanges {
           this.toggleFilters = changes[propetry].currentValue;
           break;
         }
+        case 'globalSearch': {
+          if (changes[propetry].currentValue) {
+            this.dataSource.filterPredicate = this.createFilter();
+          }
+          break;
+        }
         case 'showToolbar': {
           if (changes['columns']) {
             this.setToolbarMenuControls(changes['columns'].currentValue);
@@ -249,7 +252,6 @@ export class CustomTableComponent implements OnInit, OnChanges {
         case 'sorting': {
           if (changes[propetry].currentValue) {
             this.dataSource.sort = this.sort;
-            
           }
           break;
         }
@@ -259,6 +261,11 @@ export class CustomTableComponent implements OnInit, OnChanges {
   }
   menuX: number = 0
   menuY: number = 0
+  getDisplayedColumns(): string[] {
+    let list = this.dynamicDisplayedColumns.filter((cd) => cd.show).map((cd) => cd.name);;
+    return list;
+
+  }
   openMenu(menuType: string, event: MouseEvent) {
     this.menuX = event.clientX;
     this.menuY = event.clientY;
@@ -302,7 +309,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
       }
     })
     this.dynamicDisplayedColumns = columnsArray.concat(this.dynamicDisplayedColumns);
-   }
+  }
 
   showHideColumn(name:string,value:boolean) {
     this.dynamicDisplayedColumns.filter(a => a.name == name)[0].show = value;
@@ -330,11 +337,6 @@ export class CustomTableComponent implements OnInit, OnChanges {
     }
   }
 
-  showhidecolumn(value: any) {
-    this.dynamicDisplayedColumns.filter(a => a.name == value)[0].show = !this.dynamicDisplayedColumns.filter(a => a.name == value)[0].show;
-    this.getDisplayedColumns();
-    }
-
   addColumn() {
     const randomColumn = Math.floor(Math.random() * this.displayedColumns.length);
     this.columnsToDisplay.push(this.displayedColumns[randomColumn]);
@@ -345,17 +347,11 @@ export class CustomTableComponent implements OnInit, OnChanges {
     this.toggleFilters = !this.toggleFilters;
   }
 
-  ngAfterViewInit() {
-    if (this.dataSource) {
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    }
-  }
+
   createFilter(): (data: any, filter: string) => boolean {
     const myFilterPredicate = (data: any, filter: string): boolean => {
       let result: boolean = true;
-      if (this.globalFilter)
-        {
+      if (this.globalFilter) {
         // search all text fields
         let keys = Object.keys(data);
         let expression = '';
@@ -363,24 +359,18 @@ export class CustomTableComponent implements OnInit, OnChanges {
           expression = expression + `data.${key}.toString().trim().toLowerCase().indexOf(this.globalFilter.toLowerCase()) !== -1 ||`
         })
         if (expression.charAt(expression.length - 2) + expression.charAt(expression.length - 1) == '||') {
-          expression = expression.substring(0, expression.length - 2)
+          expression = expression.substring(0, expression.length - 2);
         }
         result = eval(expression);
-        }
-
+      }
       if (!result) {
         return false;
       }
-
-
       let searchString = JSON.parse(filter);
-
-
       if (this.individulFilter) {
         return data[this.individulFilter].toString().trim().toLowerCase().indexOf(searchString[this.individulFilter].toString().toLowerCase()) !== -1;
       }
       return true;
-
     }
     return myFilterPredicate;
   }
@@ -404,6 +394,11 @@ export class CustomTableComponent implements OnInit, OnChanges {
     this.rowDataTemp['e'+i] = {...row};
     this.ELEMENT_DATA.filter((a: any) => a.id == row.id)[0]['editable'] = !this.ELEMENT_DATA.filter((a: { id: any; }) => a.id == row.id)[0]['editable'];
   }
+  setCellData(row: any, i: number) {
+    this.currentRow = { ...row };
+    this.currentRowIndex = i;
+    this.rowDataTemp['e' + i] = { ...row };
+  }
   cencelInlineEditing(row: any,i:number) { 
     this.ELEMENT_DATA.filter((a: any) => a.id == row.id)[0]['editable'] = !this.ELEMENT_DATA.filter((a: { id: any; }) => a.id == row.id)[0]['editable'];
     this.rowDataTemp["e"+i] = {};
@@ -419,6 +414,22 @@ export class CustomTableComponent implements OnInit, OnChanges {
       index: index
     }
     this.inlineChange.emit(data);
+  }
+  saveCellData() {
+    this.cellEditing = {};
+    let index = this.currentRowIndex;
+    if (index > -1) {
+      this.ELEMENT_DATA[index] = { ...this.rowDataTemp["e" + index] };
+      this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
+      this.rowDataTemp["e" + index] = {};
+      let data: RowChange = {
+        row: { ...this.rowDataTemp["e" + index] },
+        index: index
+      }
+      this.currentRowIndex = -1;
+      this.cellChange.emit(data);
+    }
+
   }
   editGridmodalChanged(event: any) {
     if (event.checked) {
@@ -458,6 +469,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
     this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.rowDeleted.emit({removedRow: row,fromIndex:index});
   }
 
   expandRow(row: any, expand: boolean) {
@@ -556,9 +568,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
     this.columnPinMenuCtrl = false;
     this.columnPinningOptions = [];
   }
-  updatePinningValue() {
 
-  }
   filterColumns(value:any) {
     if (value !== '') {
       this.showHideColumnsArray = this.columnsArray.filter((col: MtxGridColumn)=>{ return ((col.header!).toLowerCase()).includes((value).toLowerCase())})
@@ -576,7 +586,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
     }
   }
   openHideShowMenu(columns: MtxGridColumn[]) {
-    this.showHideColumnsArray = columns;
+    this.showHideColumnsArray = [...columns];
     this.columnMenuTrigger.openMenu();
 
   }
