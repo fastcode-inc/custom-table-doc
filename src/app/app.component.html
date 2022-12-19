@@ -2,7 +2,7 @@
     <mat-card class="result">
         <h2 class="example-h2">Table</h2>
         <mat-card-content style="display: flex; gap: 50px;">
-<div style="display: flex;flex-direction: column;">
+    <div style="display: flex;flex-direction: column;">
     <section class="example-section">
         <mat-slide-toggle [(ngModel)]="popupRowEditing" [disabled]="false">
             Popup Editing
@@ -60,14 +60,19 @@
             Table Toolbar
         </mat-slide-toggle>
     </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="columnPinnable" [disabled]="false">
+    <section class="example-section" style="padding-left: 15px;" >
+        <mat-slide-toggle [(ngModel)]="exportButtonEnable" [disabled]="!toolbarToggle">
+            Export Button
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section" style="padding-left: 15px;">
+        <mat-slide-toggle [(ngModel)]="columnPinnable" [disabled]="!toolbarToggle">
             Column Pinnable
         </mat-slide-toggle>
     </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="columnHideable" [disabled]="false">
-            Column Hideable
+    <section class="example-section" style="padding-left: 15px;">
+        <mat-slide-toggle [(ngModel)]="columnHideable" [disabled]="!toolbarToggle">
+            Column Hide/Show 
         </mat-slide-toggle>
     </section>
     <section class="example-section">
@@ -87,18 +92,8 @@
         </mat-slide-toggle>
     </section>
     <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="sorting" [disabled]="false">
-            Sorting
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section">
         <mat-slide-toggle [(ngModel)]="isLoading" [disabled]="false">
             Loading Indicator
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="showFirstLastButtons" [disabled]="false">
-            Show First Last Page Buttons
         </mat-slide-toggle>
     </section>
     <section class="example-section">
@@ -106,8 +101,40 @@
             Pagination
         </mat-slide-toggle>
     </section>
+    <section class="example-section" style="padding-left: 15px;">
+        <mat-slide-toggle [(ngModel)]="showFirstLastButtons" [disabled]="!paginationEnable">
+            Show First Last Page Buttons
+        </mat-slide-toggle>
+    </section>
 </div>
 <div style="display: flex;flex-direction: column;">
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="sorting" [disabled]="false">
+            Sorting
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="headerTemplateRefCtrl" [disabled]="false">
+            Header TemplateRef
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="columnTemplateRefCtrl" [disabled]="false">
+            Column TemplateRef
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="cellTemplateRefCtrl" (ngModelChange)="cellTemplateChange()" [disabled]="false">
+            Cell TemplateRef
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="toolbarTemplateRefCtrl" [disabled]="false">
+            Toolbar TemplateRef
+        </mat-slide-toggle>
+    </section>
+</div>
+<div style="display: flex; flex-direction: column;">
         <section class="example-section">
             <mat-form-field class="example-full-width" appearance="outline">
                 <mat-label>Table Height</mat-label>
@@ -119,6 +146,13 @@
             <mat-form-field class="example-full-width" appearance="outline">
                 <mat-label>Table Width</mat-label>
                 <input matInput placeholder="Default is 100%" [(ngModel)]="tableWidth" [disabled]="false">
+            </mat-form-field>
+        </section>
+        <mat-divider></mat-divider>
+        <section class="example-section" >
+            <mat-form-field class="example-full-width" appearance="outline" disabled>
+                <mat-label>Toolbar Height</mat-label>
+                <input matInput placeholder="Default is 50px" [(ngModel)]="toolbarHeight" [disabled]="!toolbarToggle">
             </mat-form-field>
         </section>
         <mat-divider></mat-divider>
@@ -144,6 +178,7 @@
     [stickyFooter]="stickyFooter"
     [columnFilter]="simpleFilter"
     [showToolbar]="toolbarToggle"
+    [toolbarHeight]="toolbarHeight"
     [globalSearch]="topSearchFilter"
     [expandRows]="isExpandEnable"
     [dndColumns]="dragEnable"
@@ -152,6 +187,7 @@
     [showFirstLastButtons]="showFirstLastButtons"
     [columnPinnable]="columnPinnable"
     [columnHideable]="columnHideable"
+    [exportButtonEnable]="exportButtonEnable"
     [stripedRows]="stripedRows"
     [loadingIndicator]="isLoading"
     [sorting]="sorting"
@@ -163,5 +199,32 @@
     (scroll)="onScroll($event)"
     (selectionChanged)="onSelectionChange($event)"
     (rowDeleted)="showData($event,'Delete change')"
-    
+    [headerTemplateRef]="headerTemplateRefCtrl?headerTemplate:undefined"
+    [columnTemplateRef]="columnTemplateRefCtrl?columnTemplateRef:undefined"
+    [toolbarTemplateRef]="columnTemplateRefCtrl?columnTemplateRef:undefined"
     ></mat-table-ext>
+    <ng-template #headerTemplate let-data="data">
+        <div style="display: flex;">
+            <mat-icon style="color:purple;">bolt</mat-icon><span style="font-size: 15px; font-style: italic;">{{data.header}}</span>
+        </div>
+    </ng-template>
+    <ng-template #columnTemplateRef let-column="column" let-row="row">
+        <div style="display: flex;">
+            <mat-icon style="color:blue">bolt</mat-icon><span style="font-size: 15px; font-style: italic;">{{row[column.field]}}</span>
+        </div>
+    </ng-template>
+    <ng-template #cellTemplate1 let-column="column" let-row="row">
+        <div style="display: flex;">
+            <mat-icon style="color:yellow">bolt</mat-icon><span style="font-size: 15px; font-style: italic;">{{row[column.field]}}</span>
+        </div>
+    </ng-template>
+    <ng-template #cellTemplate2 let-column="column" let-row="row">
+        <div style="display: flex;">
+            <mat-icon style="color:yellow">folder</mat-icon><span style="font-size: 15px; font-style: italic;">{{row[column.field]}}</span>
+        </div>
+    </ng-template>
+    <ng-template #toolbarTemplate let-column="column" let-row="row">
+        <div style="display: flex;">
+            <mat-icon style="color:yellow">folder</mat-icon><span style="font-size: 15px; font-style: italic;">{{row[column.field]}}</span>
+        </div>
+    </ng-template>

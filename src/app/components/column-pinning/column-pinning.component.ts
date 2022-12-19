@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MtxGridColumn } from 'src/app/custom-table/models';
+import { MtxGridColumn } from 'src/app/models/tableExtModels';
 
 @Component({
   selector: 'app-column-pinning',

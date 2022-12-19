@@ -27,6 +27,7 @@ export interface MtxGridColumn {
     buttons?: MtxGridColumnButton[];
     formatter?: (rowData: any, colDef?: MtxGridColumn) => void;
     cellTemplate?: TemplateRef<any> | null;
+    headerTemplate?: TemplateRef<any> | null;
     showExpand?: boolean;
     description?: string;
     summary?: ((data: any[], colDef?: MtxGridColumn) => void) | string;

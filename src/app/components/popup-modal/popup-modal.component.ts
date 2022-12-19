@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MtxGridColumn } from 'src/app/custom-table/models';
+import { MtxGridColumn } from 'src/app/models/tableExtModels';
 import { CustomTableService } from 'src/app/custom-table/service/custom-table.service';
 
 @Component({

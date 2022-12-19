@@ -1,8 +1,8 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import EXAMPLE_DATA  from 'src/assets/data.json';
-import { MtxGridColumn, RowSelectionChange } from './custom-table/models';
+import { MtxGridColumn, RowSelectionChange } from './models/tableExtModels';
 import { MatIconRegistry } from '@angular/material/icon';
 import { CustomTableService } from './custom-table/service/custom-table.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -29,12 +29,16 @@ export class AppComponent implements OnInit {
   simpleFilter: any = false;
   selectionFilter: any = false;
   toolbarToggle: any = false;
+  toolbarHeight: string = '';
   showFirstLastButtons: any = false;
   columnPinnable: any = false;
   columnHideable: any = false;
+  exportButtonEnable: any = false;
+  @ViewChild('cellTemplate1' ) cellTemplate1!: TemplateRef<any>;
+  @ViewChild('cellTemplate2' ) cellTemplate2!: TemplateRef<any>;
 
   public columns: MtxGridColumn[] = [
-    { header: 'ID', field: 'id' ,type:'number' ,headerTooltip:{value: 'ID',tooltipPosition:"above"}},
+    { header: 'ID', field: 'id', type: 'number', headerTooltip: { value: 'ID', tooltipPosition: "above" } },
     { header: 'Name', field: 'name', type: 'string'},
     { header: 'Age', field: 'age', type: 'date'  },
     { header: 'Gender', field: 'gender', type: 'selection', options: ['male', 'female'] },
@@ -75,6 +79,10 @@ export class AppComponent implements OnInit {
   dragEnable: any = false;
   sorting: any = false;
   paginationEnable: any = true;
+  headerTemplateRefCtrl: any = false;
+  cellTemplateRefCtrl: any = false;
+  columnTemplateRefCtrl: any = false;
+  toolbarTemplateRefCtrl: any = false;
   constructor(
     public domSanitizer: DomSanitizer,
     public matIconRegistry: MatIconRegistry,
@@ -115,6 +123,26 @@ export class AppComponent implements OnInit {
   }
   showData(event:any, propetry:string) {
     console.log(propetry, event);
+  }
+  cellTemplateChange() {
+    if (this.cellTemplateRefCtrl) {
+      this.columns = [
+        { header: 'ID', field: 'id', type: 'number', headerTooltip: { value: 'ID', tooltipPosition: "above" }, cellTemplate: this?.cellTemplate1 },
+        { header: 'Name', field: 'name', type: 'string' },
+        { header: 'Age', field: 'age', type: 'date', cellTemplate: this?.cellTemplate2 },
+        { header: 'Gender', field: 'gender', type: 'selection', options: ['male', 'female'] },
+        { header: 'Address', field: 'address', type: 'string' },
+      ]
+    }
+    else {
+      this.columns = [
+        { header: 'ID', field: 'id', type: 'number', headerTooltip: { value: 'ID', tooltipPosition: "above" }},
+        { header: 'Name', field: 'name', type: 'string' },
+        { header: 'Age', field: 'age', type: 'date' },
+        { header: 'Gender', field: 'gender', type: 'selection', options: ['male', 'female'] },
+        // { header: 'Address', field: 'address', type: 'string' },
+      ] 
+    }
   }
   onScroll(event: any) {
     let pageLimit: number = 10;

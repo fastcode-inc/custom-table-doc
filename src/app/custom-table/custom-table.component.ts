@@ -10,7 +10,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { PopupModalComponent } from '../components/popup-modal/popup-modal.component';
-import { RowChange, DisplayColumn, MtxGridColumn, MtxGridColumnPinOption, RowSelectionChange } from './models';
+import { RowChange, DisplayColumn, MtxGridColumn, MtxGridColumnPinOption, RowSelectionChange } from '../models/tableExtModels';
 import { CustomTableService } from './service/custom-table.service';
 @Component({
   selector: 'mat-table-ext',
@@ -53,6 +53,7 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   @Input() showToolbar: boolean = false;
   @Input() toolbarTitle: string = '';
   @Input() tableHeight: string = '500px';
+  @Input() toolbarHeight: string = '500px';
   @Input() tableWidth: string = '100%';
   @Input() toolbarTempate: TemplateRef<any> | undefined;
   @Input() columnHideable: boolean = false;
@@ -63,7 +64,11 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   @Input() dndColumns: boolean = false;
   @Input() paginatorEnable: boolean = false;
   @Input() showFirstLastButtons: boolean = false;
+  @Input() exportButtonEnable: boolean = false;
   @Input() pageSizeOptions: number[] = [5, 10, 20];
+  @Input() headerTemplateRef!: TemplateRef<any> | undefined;;
+  @Input() columnTemplateRef!: TemplateRef<any> | undefined;;
+  @Input() toolbarTemplateRef!: TemplateRef<any> | undefined;;
   
 
   // Table outputs
@@ -293,7 +298,7 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   }
   setColumnsData(columns:MtxGridColumn[]) {
     if (columns.length) {
-      this.columnsArray = columns;
+      this.columnsArray = [...columns];
       this.setColumnsList(columns);
     }
   }
@@ -308,6 +313,12 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
         columnsArray.push({filter:true,name:col?.field,show:!(col.hide)});
       }
     })
+    this.dynamicDisplayedColumns = [
+      { filter: false, name: 'select', show: false },
+      { filter: false, name: 'edit', show: false },
+      { filter: false, name: 'popup', show: false },
+      { filter: false, name: 'delete', show: false }
+    ]
     this.dynamicDisplayedColumns = columnsArray.concat(this.dynamicDisplayedColumns);
   }
 

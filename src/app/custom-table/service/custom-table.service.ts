@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { delay, map, Observable, of } from 'rxjs';
-import { MtxGridColumn } from '../models';
+import { MtxGridColumn } from '../../models/tableExtModels';
 import data from 'src/assets/data.json';
 import { HttpClient } from '@angular/common/http';
 const companyData = data as any[];

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MtxGridColumn } from 'src/app/custom-table/models';
+import { MtxGridColumn } from 'src/app/models/tableExtModels';
 
 @Component({
   selector: 'app-filter-columns-component',
