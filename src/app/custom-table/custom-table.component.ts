@@ -9,8 +9,8 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { PopupModalComponent } from '../components/popup-modal/popup-modal.component';
-import { RowChange, DisplayColumn, MtxGridColumn, MtxGridColumnPinOption, RowSelectionChange } from '../models/tableExtModels';
+import { EditingComponent } from '../components/editing/editing.component';
+import { RowChange, DisplayColumn, MtxGridColumn, MtxGridColumnPinOption, RowSelectionChange, CellTemplateRefMap } from '../models/tableExtModels';
 import { CustomTableService } from './service/custom-table.service';
 @Component({
   selector: 'mat-table-ext',
@@ -66,9 +66,11 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   @Input() showFirstLastButtons: boolean = false;
   @Input() exportButtonEnable: boolean = false;
   @Input() pageSizeOptions: number[] = [5, 10, 20];
-  @Input() headerTemplateRef!: TemplateRef<any> | undefined;;
-  @Input() columnTemplateRef!: TemplateRef<any> | undefined;;
   @Input() toolbarTemplateRef!: TemplateRef<any> | undefined;;
+  @Input() headerTemplateRef!: TemplateRef<any> | undefined;;
+  @Input() cellTemplateRef!: TemplateRef<any> | undefined;
+  //for separate template for columns
+  @Input() cellTemplateRefMap: CellTemplateRefMap={};
   
 
   // Table outputs
@@ -118,7 +120,8 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   currentRowIndex: number = -1;
   currentRow: any = {};
   cellEditing: any = {};
-  hideShowMenuGroup!:FormGroup;
+  hideShowMenuGroup!: FormGroup;
+  cellTemplate!:TemplateRef<any>
   dynamicDisplayedColumns: any[] = [
     { filter: false, name: 'select', show: false },
     { filter: false, name: 'edit', show: false },
@@ -498,7 +501,7 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
     var rowData = { ...row };
     dialogConfig.data = {row:rowData , columns:[...this.columnsArray]};
 
-    this.dialog.open(PopupModalComponent, dialogConfig).afterClosed().subscribe(data => {
+    this.dialog.open(EditingComponent, dialogConfig).afterClosed().subscribe(data => {
       let index = this.ELEMENT_DATA.indexOf(row);
       if (data && index > -1) {
         this.ELEMENT_DATA[index] = data;

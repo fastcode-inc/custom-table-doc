@@ -119,11 +119,6 @@
         </mat-slide-toggle>
     </section>
     <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="columnTemplateRefCtrl" [disabled]="false">
-            Column TemplateRef
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section">
         <mat-slide-toggle [(ngModel)]="cellTemplateRefCtrl" (ngModelChange)="cellTemplateChange()" [disabled]="false">
             Cell TemplateRef
         </mat-slide-toggle>
@@ -200,7 +195,8 @@
     (selectionChanged)="onSelectionChange($event)"
     (rowDeleted)="showData($event,'Delete change')"
     [headerTemplateRef]="headerTemplateRefCtrl?headerTemplate:undefined"
-    [columnTemplateRef]="columnTemplateRefCtrl?columnTemplateRef:undefined"
+    [cellTemplateRef]="cellTemplateRefCtrl?cellTemplateRef:undefined"
+    [cellTemplateRefMap]="{'id':cellTemplate1}"
     [toolbarTemplateRef]="toolbarTemplateRefCtrl?toolbarTemplate:undefined"
     ></mat-table-ext>
     <ng-template #headerTemplate let-data="data">
@@ -208,14 +204,14 @@
             <mat-icon style="color:purple;">bolt</mat-icon><span style="font-size: 15px; font-style: italic;">{{data.header}}</span>
         </div>
     </ng-template>
-    <ng-template #columnTemplateRef let-column="column" let-row="row">
+    <ng-template #cellTemplateRef let-column="column" let-row="row">
         <div style="display: flex;">
             <mat-icon style="color:blue">bolt</mat-icon><span style="font-size: 15px; font-style: italic;">{{row[column.field]}}</span>
         </div>
     </ng-template>
     <ng-template #cellTemplate1 let-column="column" let-row="row">
         <div style="display: flex;">
-            <mat-icon style="color:yellow">bolt</mat-icon><span style="font-size: 15px; font-style: italic;">{{row[column.field]}}</span>
+            <mat-icon style="color:green">bolt</mat-icon><span style="font-size: 15px; font-style: italic;">{{row[column.field]}}</span>
         </div>
     </ng-template>
     <ng-template #cellTemplate2 let-column="column" let-row="row">

@@ -81,7 +81,6 @@ export class AppComponent implements OnInit {
   paginationEnable: any = true;
   headerTemplateRefCtrl: any = false;
   cellTemplateRefCtrl: any = false;
-  columnTemplateRefCtrl: any = false;
   toolbarTemplateRefCtrl: any = false;
   constructor(
     public domSanitizer: DomSanitizer,
@@ -125,24 +124,24 @@ export class AppComponent implements OnInit {
     console.log(propetry, event);
   }
   cellTemplateChange() {
-    if (this.cellTemplateRefCtrl) {
-      this.columns = [
-        { header: 'ID', field: 'id', type: 'number', headerTooltip: { value: 'ID', tooltipPosition: "above" }, cellTemplate: this?.cellTemplate1 },
-        { header: 'Name', field: 'name', type: 'string' },
-        { header: 'Age', field: 'age', type: 'date', cellTemplate: this?.cellTemplate2 },
-        { header: 'Gender', field: 'gender', type: 'selection', options: ['male', 'female'] },
-        { header: 'Address', field: 'address', type: 'string' },
-      ]
-    }
-    else {
-      this.columns = [
-        { header: 'ID', field: 'id', type: 'number', headerTooltip: { value: 'ID', tooltipPosition: "above" }},
-        { header: 'Name', field: 'name', type: 'string' },
-        { header: 'Age', field: 'age', type: 'date' },
-        { header: 'Gender', field: 'gender', type: 'selection', options: ['male', 'female'] },
-        // { header: 'Address', field: 'address', type: 'string' },
-      ] 
-    }
+    // if (this.cellTemplateRefCtrl) {
+    //   this.columns = [
+    //     { header: 'ID', field: 'id', type: 'number', headerTooltip: { value: 'ID', tooltipPosition: "above" }, cellTemplate: this?.cellTemplate1 },
+    //     { header: 'Name', field: 'name', type: 'string' },
+    //     { header: 'Age', field: 'age', type: 'date', cellTemplate: this?.cellTemplate2 },
+    //     { header: 'Gender', field: 'gender', type: 'selection', options: ['male', 'female'] },
+    //     { header: 'Address', field: 'address', type: 'string' },
+    //   ]
+    // }
+    // else {
+    //   this.columns = [
+    //     { header: 'ID', field: 'id', type: 'number', headerTooltip: { value: 'ID', tooltipPosition: "above" }},
+    //     { header: 'Name', field: 'name', type: 'string' },
+    //     { header: 'Age', field: 'age', type: 'date' },
+    //     { header: 'Gender', field: 'gender', type: 'selection', options: ['male', 'female'] },
+    //     // { header: 'Address', field: 'address', type: 'string' },
+    //   ] 
+    // }
   }
   onScroll(event: any) {
     let pageLimit: number = 10;

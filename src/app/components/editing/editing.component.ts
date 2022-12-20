@@ -4,18 +4,18 @@ import { MtxGridColumn } from 'src/app/models/tableExtModels';
 import { CustomTableService } from 'src/app/custom-table/service/custom-table.service';
 
 @Component({
-  selector: 'app-popup-modal',
-  templateUrl: './popup-modal.component.html',
-  styleUrls: ['./popup-modal.component.scss']
+  selector: 'app-editing',
+  templateUrl: './editing.component.html',
+  styleUrls: ['./editing.component.scss']
 })
-export class PopupModalComponent implements OnInit {
+export class EditingComponent implements OnInit {
 
   public keys: string[] = [];
   public types:any ={};
   public columns: MtxGridColumn[] = [];
   constructor(
     @Inject(MAT_DIALOG_DATA) public row: any,
-    private dialogRef: MatDialogRef<PopupModalComponent>,
+    private dialogRef: MatDialogRef<EditingComponent>,
     public service: CustomTableService,
   ) {
     this.setData(row)

@@ -47,6 +47,10 @@ export interface RowSelectionChange {
     index: number;
     isSelected: boolean;
 }
+export interface CellTemplateRefMap {
+    [key: string]: TemplateRef<any>
+
+}
 /** Possible column type values. */
 export declare type MtxGridColumnType ='selection' | string | 'tag' | 'button' | 'link' | 'image' | boolean | number | 'currency' | 'percent' | 'date';
 /** Column type parameter. */

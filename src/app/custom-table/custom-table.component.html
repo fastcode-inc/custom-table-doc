@@ -107,11 +107,15 @@
             <div *ngIf="!row.editable && !cellEditing[i +'_'+column.field]" 
                     (dblclick)="cellEditing[i +'_'+column.field] = inCellEditing;setCellData(row,i)" 
                     matTooltip="{{column.cellTooltip}}"> 
-                    <span *ngIf="!columnTemplateRef && !column?.cellTemplate">{{row[column.field]}}</span>
-                    <ng-container *ngIf="column.cellTemplate" [ngTemplateOutlet]="column.cellTemplate" [ngTemplateOutletContext]="{row:row,column:column}">
-
+                    <span *ngIf="!cellTemplateRef && !column?.cellTemplate && !cellTemplateRefMap[column.field]">{{row[column.field]}}</span>
+                    <ng-container *ngIf="cellTemplateRefMap[column.field]" [ngTemplateOutlet]="cellTemplateRefMap[column.field]" [ngTemplateOutletContext]="{row:row,column:column,index:i}">
                     </ng-container>
-                    <ng-container *ngIf="columnTemplateRef" [ngTemplateOutlet]="columnTemplateRef" [ngTemplateOutletContext]="{row:row,column:column}">
+                    <ng-container *ngIf="cellTemplateRef && column.cellTemplate && !cellTemplateRefMap[column.field]" [ngTemplateOutlet]="column.cellTemplate" [ngTemplateOutletContext]="{row:row,column:column,index:i}">
+                    </ng-container>
+
+                    <ng-container *ngIf="!cellTemplateRef && column.cellTemplate && !cellTemplateRefMap[column.field]" [ngTemplateOutlet]="column.cellTemplate" [ngTemplateOutletContext]="{row:row,column:column,index:i}">
+                    </ng-container>
+                    <ng-container *ngIf="cellTemplateRef && !column.cellTemplate && !cellTemplateRefMap[column.field]" [ngTemplateOutlet]="cellTemplateRef" [ngTemplateOutletContext]="{row:row,column:column,index:i}">
                     </ng-container>
                     
 

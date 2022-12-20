@@ -13,7 +13,7 @@ import { CustomTableComponent } from './custom-table/custom-table.component';
 import { ResizeColumnDirective } from './directives/resize-column.directive';
 import { MatTableExporterModule } from 'mat-table-exporter';
 import { ColumnPinningComponent } from './components/column-pinning/column-pinning.component';
-import { PopupModalComponent } from './components/popup-modal/popup-modal.component';
+import { EditingComponent } from './components/editing/editing.component';
 import { FilterColumnsComponentComponent } from './components/filter-columns-component/filter-columns-component.component';
 
 @NgModule({
@@ -22,7 +22,7 @@ import { FilterColumnsComponentComponent } from './components/filter-columns-com
     CustomTableComponent,
     ResizeColumnDirective,
     ColumnPinningComponent,
-    PopupModalComponent,
+    EditingComponent,
     FilterColumnsComponentComponent,
   ],
   imports: [
