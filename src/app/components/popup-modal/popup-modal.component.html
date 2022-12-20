@@ -6,40 +6,42 @@
             <mat-icon mat-dialog-close style="cursor: pointer;" fxFlex="5">close</mat-icon>
         </button>
     </div>
-    <mat-dialog-content>
-        <div *ngFor="let key of keys">
-            <!-- Number Type -->
-            <mat-form-field *ngIf="types[key] == 'number'" appearance="fill" class="inline-editing-field">
-                <mat-label>{{key | titlecase}}</mat-label>
-                <input matInput type="number" [(ngModel)]="row['row'][key]" [ngModelOptions]="{standalone: true}">
-            </mat-form-field>
-    
-            <!-- String Type -->
-    
-            <mat-form-field *ngIf="types[key] == 'string'" appearance="fill" class="inline-editing-field">
-                <mat-label>{{key | titlecase}}</mat-label>
-                <input matInput type="text" [(ngModel)]="row['row'][key]" [ngModelOptions]="{standalone: true}">
-            </mat-form-field>
-            <mat-form-field *ngIf="types[key] == 'date'" appearance="fill" class="inline-editing-field">
-                <mat-label>{{key | titlecase}}</mat-label>
-                <input matInput type="text" [(ngModel)]="row['row'][key]" [ngModelOptions]="{standalone: true}">
-            </mat-form-field>
-            <!-- Selection Type -->
-    
-            <mat-form-field *ngIf="types[key] == 'selection'" appearance="fill" class="inline-editing-field">
-                <mat-label>{{key | titlecase}}</mat-label>
-                <mat-select [value]="row['row'][key].value" [(ngModel)]="row['row'][key].value">
-                    <mat-option *ngFor="let option of row['row'][key].options" [value]="option">
-                        {{option}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <!-- Boolean Type -->
-            <p>
-                <mat-checkbox *ngIf="types[key] == 'boolean'" color="primary" [(ngModel)]="row['row'][key]">
+    <mat-dialog-content style="margin-right: 20px;">
+        <div style="display: flex; flex-direction: column;">
+            <ng-container *ngFor="let key of keys">
+                <!-- Number Type -->
+                <mat-form-field *ngIf="types[key] == 'number'" appearance="outline" class="inline-editing-field">
                     <mat-label>{{key | titlecase}}</mat-label>
-                </mat-checkbox>
-            </p>
+                    <input matInput type="number" [(ngModel)]="row['row'][key]" [ngModelOptions]="{standalone: true}">
+                </mat-form-field>
+        
+                <!-- String Type -->
+        
+                <mat-form-field *ngIf="types[key] == 'string'" appearance="outline" class="inline-editing-field">
+                    <mat-label>{{key | titlecase}}</mat-label>
+                    <input matInput type="text" [(ngModel)]="row['row'][key]" [ngModelOptions]="{standalone: true}">
+                </mat-form-field>
+                <mat-form-field *ngIf="types[key] == 'date'" appearance="outline" class="inline-editing-field">
+                    <mat-label>{{key | titlecase}}</mat-label>
+                    <input matInput type="text" [(ngModel)]="row['row'][key]" [ngModelOptions]="{standalone: true}">
+                </mat-form-field>
+                <!-- Selection Type -->
+        
+                <mat-form-field *ngIf="types[key] == 'selection'" appearance="outline" class="inline-editing-field">
+                    <mat-label>{{key | titlecase}}</mat-label>
+                    <mat-select [value]="row['row'][key].value" [(ngModel)]="row['row'][key].value">
+                        <mat-option *ngFor="let option of row['row'][key].options" [value]="option">
+                            {{option}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <!-- Boolean Type -->
+                <p>
+                    <mat-checkbox *ngIf="types[key] == 'boolean'" color="primary" [(ngModel)]="row['row'][key]">
+                        <mat-label>{{key | titlecase}}</mat-label>
+                    </mat-checkbox>
+                </p>
+            </ng-container>
         </div>
     </mat-dialog-content>
     <div class="spacer"></div>

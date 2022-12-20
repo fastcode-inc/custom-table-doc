@@ -7,6 +7,7 @@
 </mat-form-field>
 <mat-toolbar class="toolbar-container" *ngIf="showToolbar" [style.height]="toolbarHeight?toolbarHeight:'50px'">
     <span class="toolbar-title" *ngIf="toolbarTitle">{{toolbarTitle}}</span>
+    <ng-container *ngIf="toolbarTemplateRef" [ngTemplateOutlet]="toolbarTemplateRef"></ng-container>
     <span class="example-spacer"></span>
     <ng-container *ngIf="multiRowSelection">
         <button class="hide-button" mat-stroked-button color="primary" (click)="hideSelectedRows()" >
@@ -16,17 +17,17 @@
             Show All Rows
         </button>
     </ng-container>
-        <button *ngIf="columnHideable" class="hide-button" mat-stroked-button color="primary" (click)="openMenu('hideShow',$event)" matTooltip="Column Visibillity" matTooltipPosition="above">
-            <mat-icon>visibility</mat-icon>
-        </button>
-        <button *ngIf="columnPinnable" class="pin-button" mat-stroked-button color="primary" (click)="openMenu('columnPin',$event)" matTooltip="Column Pinning">
-            <mat-icon svgIcon="pinIcon"></mat-icon>
-        </button>
-        <button  *ngIf="exportButtonEnable" class="export-button" mat-stroked-button color="primary" (click)="openMenu('export',$event)" matTooltip="Table Data Export">
-            <mat-icon>import_export</mat-icon> <span>Export</span>
-            <mat-icon>expand_more</mat-icon>
-        </button>
-        <div style="visibility: hidden; position:fixed" [matMenuTriggerFor]="menu" [style.left.px]="menuX" [style.top.px]="menuY"></div>
+    <button *ngIf="columnHideable" class="hide-button" mat-stroked-button color="primary" (click)="openMenu('hideShow',$event)" matTooltip="Column Visibillity" matTooltipPosition="above">
+        <mat-icon>visibility</mat-icon>
+    </button>
+    <button *ngIf="columnPinnable" class="pin-button" mat-stroked-button color="primary" (click)="openMenu('columnPin',$event)" matTooltip="Column Pinning">
+        <mat-icon svgIcon="pinIcon"></mat-icon>
+    </button>
+    <button  *ngIf="exportButtonEnable" class="export-button" mat-stroked-button color="primary" (click)="openMenu('export',$event)" matTooltip="Table Data Export">
+        <mat-icon>import_export</mat-icon> <span>Export</span>
+        <mat-icon>expand_more</mat-icon>
+    </button>
+    <div style="visibility: hidden; position:fixed" [matMenuTriggerFor]="menu" [style.left.px]="menuX" [style.top.px]="menuY"></div>
 </mat-toolbar>
 <mat-menu #menu="matMenu" (closed)="menuClosed()" id="exportMenu">
     <ng-container *ngIf="exportMenuCtrl">
@@ -114,9 +115,9 @@
                     </ng-container>
                     
 
-                </div>
+            </div>
             
-            <div *ngIf="row.editable || cellEditing[i +'_'+column.field]" (click)="$event.stopPropagation()">
+            <div *ngIf="row.editable || cellEditing[i +'_'+column.field]" (click)="$event.stopPropagation()" style="display: inline-block;">
                         <!-- Number Type -->
                         <mat-form-field *ngIf="column.type == 'number'" appearance="outline" class="inline-editing-field">
                             <input matInput type="number" [(ngModel)]="rowDataTemp['e'+i][column.field]"  [ngModelOptions]="{standalone: true}">
@@ -137,10 +138,8 @@
                             </mat-select>
                         </mat-form-field>
                         <!-- Boolean Type -->
-                        <div>
                             <mat-checkbox (click)="$event.stopPropagation()"  *ngIf="column.type == 'boolean'"  color="primary"
                                 [(ngModel)]="row[column.field]"></mat-checkbox>
-                        </div>
             </div>
         </td>
         <td matTooltip="footer tooltip" mat-footer-cell *matFooterCellDef> {{column.header}} </td>

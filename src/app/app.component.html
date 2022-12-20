@@ -129,7 +129,7 @@
         </mat-slide-toggle>
     </section>
     <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="toolbarTemplateRefCtrl" [disabled]="false">
+        <mat-slide-toggle [(ngModel)]="toolbarTemplateRefCtrl" [disabled]="!toolbarToggle">
             Toolbar TemplateRef
         </mat-slide-toggle>
     </section>
@@ -201,7 +201,7 @@
     (rowDeleted)="showData($event,'Delete change')"
     [headerTemplateRef]="headerTemplateRefCtrl?headerTemplate:undefined"
     [columnTemplateRef]="columnTemplateRefCtrl?columnTemplateRef:undefined"
-    [toolbarTemplateRef]="columnTemplateRefCtrl?columnTemplateRef:undefined"
+    [toolbarTemplateRef]="toolbarTemplateRefCtrl?toolbarTemplate:undefined"
     ></mat-table-ext>
     <ng-template #headerTemplate let-data="data">
         <div style="display: flex;">
@@ -223,8 +223,10 @@
             <mat-icon style="color:yellow">folder</mat-icon><span style="font-size: 15px; font-style: italic;">{{row[column.field]}}</span>
         </div>
     </ng-template>
-    <ng-template #toolbarTemplate let-column="column" let-row="row">
+    <ng-template #toolbarTemplate>
         <div style="display: flex;">
-            <mat-icon style="color:yellow">folder</mat-icon><span style="font-size: 15px; font-style: italic;">{{row[column.field]}}</span>
+            <button mat-button>
+                <mat-icon style="color:green">sync</mat-icon>
+            </button>
         </div>
     </ng-template>
