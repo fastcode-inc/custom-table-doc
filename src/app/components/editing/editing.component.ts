@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, TemplateRef } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MtxGridColumn } from 'src/app/models/tableExtModels';
 import { CustomTableService } from 'src/app/custom-table/service/custom-table.service';
@@ -10,22 +10,24 @@ import { CustomTableService } from 'src/app/custom-table/service/custom-table.se
 })
 export class EditingComponent implements OnInit {
 
+  public templateRef!: TemplateRef<any>;
   public keys: string[] = [];
-  public types:any ={};
+  public templateKeys: string[] = [];
+  public types: any = {};
+  public templateTypes: any = {};
   public columns: MtxGridColumn[] = [];
+  public templateRow: any = {};
   constructor(
-    @Inject(MAT_DIALOG_DATA) public row: any,
-    private dialogRef: MatDialogRef<EditingComponent>,
+    public dialogRef: MatDialogRef<EditingComponent>,
+    @Inject(MAT_DIALOG_DATA) public dialogData: any,
     public service: CustomTableService,
-  ) {
-    this.setData(row)
-
-  }
+  ) { }
   ngOnInit(): void {
+    this.setData(this.dialogData)
   }
   setData(value: any) {
     let row = value.row
-    let types:any={}
+    let types: any = {}
     this.columns = value.columns;
     this.columns.forEach(column => {
       if (column.type == 'selection') {
@@ -33,7 +35,7 @@ export class EditingComponent implements OnInit {
         let temp = row[column.field];
         row[column.field] = {
           value: temp,
-          options:column.options
+          options: column.options
         }
 
       }
@@ -43,11 +45,46 @@ export class EditingComponent implements OnInit {
     })
     this.keys = Object.keys(row).filter(key => !(['editable', 'editmodal', 'deleterow'].includes(key)));
     this.types = types;
+    this.setTemplateRef(value);
+  }
+  setTemplateRef(value: any) {
+    if (value.templateRef !== undefined) {
+      this.templateRow = { ...value.row };
+      let types: any = {};
+      this.templateKeys = Object.keys(this.templateRow).filter(key => !(['editable', 'editmodal', 'deleterow'].includes(key)));
+      this.columns.forEach(column => {
+        if (column.type == 'selection') {
+          types[column.field] = column.type;
+          let temp = this.templateRow[column.field];
+          this.templateRow[column.field] = {
+            value: temp,
+            options: column.options
+          }
+        }
+        else {
+          types[column.field] = column.type;
+        }
+      })
+      this.templateTypes = types;
+      this.templateRef = value.templateRef;
+    }
   }
   closeDialog() {
-    let rowData = {...this.row.row};
+    let rowData = { ...this.dialogData.row };
     this.keys.forEach((key: any) => {
       if (this.types[key] === "selection") {
+        let temp = rowData[key].value;
+        rowData[key] = temp;
+
+      }
+    })
+    this.dialogRef.close(rowData);
+  }
+  closeTemplateDialogMap = (row: any, keys: string[], types: string[]) => { this.closeTemplateDialog(row, keys, types) }
+  closeTemplateDialog(row: any, keys: string[], types: string[]) {
+    let rowData = { ...row };
+    keys.forEach((key: any) => {
+      if (types[key] === "selection") {
         let temp = rowData[key].value;
         rowData[key] = temp;
 

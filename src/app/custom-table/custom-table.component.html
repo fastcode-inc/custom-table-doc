@@ -122,28 +122,31 @@
             </div>
             
             <div *ngIf="row.editable || cellEditing[i +'_'+column.field]" (click)="$event.stopPropagation()" style="display: inline-block;">
-                        <!-- Number Type -->
-                        <mat-form-field *ngIf="column.type == 'number'" appearance="outline" class="inline-editing-field">
-                            <input matInput type="number" [(ngModel)]="rowDataTemp['e'+i][column.field]"  [ngModelOptions]="{standalone: true}">
-                        </mat-form-field> 
-                        <!-- String Type -->
-                        <mat-form-field *ngIf="column.type == 'string'" appearance="outline" class="inline-editing-field" >
-                            <input matInput type="text" [(ngModel)]="rowDataTemp['e'+i][column.field]" [ngModelOptions]="{standalone: true}">
-                        </mat-form-field>
-                        <mat-form-field *ngIf="column.type == 'date'" appearance="outline" class="inline-editing-field">
-                            <input matInput type="date" [(ngModel)]="rowDataTemp['e'+i][column.field]" [ngModelOptions]="{standalone: true}">
-                        </mat-form-field>
-                        <!-- Selection Type -->
-                        <mat-form-field *ngIf="column.type == 'selection'" appearance="outline" class="inline-editing-field">
-                            <mat-select [value]="rowDataTemp['e'+i][column.field]" [(ngModel)]="rowDataTemp['e'+i][column.field]">
-                                <mat-option *ngFor="let option of column.options" [value]="option">
-                                    {{option}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                        <!-- Boolean Type -->
-                            <mat-checkbox (click)="$event.stopPropagation()"  *ngIf="column.type == 'boolean'"  color="primary"
-                                [(ngModel)]="row[column.field]"></mat-checkbox>
+                <ng-container *ngIf="inlineEditingTemplateRef" [ngTemplateOutlet]="inlineEditingTemplateRef" [ngTemplateOutletContext]="{data:{index:i,row:row,column:column,updateFunc:updateInlineTemplateData}}" ></ng-container>
+                <ng-container *ngIf="!inlineEditingTemplateRef">
+                    <!-- Number Type -->
+                <mat-form-field *ngIf="column.type == 'number'" appearance="outline" class="inline-editing-field">
+                    <input matInput type="number" [(ngModel)]="rowDataTemp['e'+i][column.field]"  [ngModelOptions]="{standalone: true}">
+                </mat-form-field> 
+                <!-- String Type -->
+                <mat-form-field *ngIf="column.type == 'string'" appearance="outline" class="inline-editing-field" >
+                    <input matInput type="text" [(ngModel)]="rowDataTemp['e'+i][column.field]" [ngModelOptions]="{standalone: true}">
+                </mat-form-field>
+                <mat-form-field *ngIf="column.type == 'date'" appearance="outline" class="inline-editing-field">
+                    <input matInput type="date" [(ngModel)]="rowDataTemp['e'+i][column.field]" [ngModelOptions]="{standalone: true}">
+                </mat-form-field>
+                <!-- Selection Type -->
+                <mat-form-field *ngIf="column.type == 'selection'" appearance="outline" class="inline-editing-field">
+                    <mat-select [value]="rowDataTemp['e'+i][column.field]" [(ngModel)]="rowDataTemp['e'+i][column.field]">
+                        <mat-option *ngFor="let option of column.options" [value]="option">
+                            {{option}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <!-- Boolean Type -->
+                <mat-checkbox (click)="$event.stopPropagation()"  *ngIf="column.type == 'boolean'"  color="primary"
+                        [(ngModel)]="row[column.field]"></mat-checkbox>
+                </ng-container>
             </div>
         </td>
         <td matTooltip="footer tooltip" mat-footer-cell *matFooterCellDef> {{column.header}} </td>

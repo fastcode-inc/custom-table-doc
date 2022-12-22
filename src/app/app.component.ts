@@ -19,8 +19,8 @@ export class AppComponent implements OnInit {
   columnResizable: any = false;
   stickyFooter: any = false;
   stickyHeader: any = false;
-  inlineRowEditing: any = false;;
-  popupRowEditing: any = false;
+  inlineRowEditing: any = true;;
+  popupRowEditing: any = true;
   inCellEditing: any = false;
   deleteRow: any = false;
   stripedRows: any = false;
@@ -82,6 +82,8 @@ export class AppComponent implements OnInit {
   headerTemplateRefCtrl: any = false;
   cellTemplateRefCtrl: any = false;
   toolbarTemplateRefCtrl: any = false;
+  popupTemplateRefCtrl: any = true;
+  inlineTemplateRefCtrl: any = true;
   constructor(
     public domSanitizer: DomSanitizer,
     public matIconRegistry: MatIconRegistry,
@@ -124,24 +126,24 @@ export class AppComponent implements OnInit {
     console.log(propetry, event);
   }
   cellTemplateChange() {
-    // if (this.cellTemplateRefCtrl) {
-    //   this.columns = [
-    //     { header: 'ID', field: 'id', type: 'number', headerTooltip: { value: 'ID', tooltipPosition: "above" }, cellTemplate: this?.cellTemplate1 },
-    //     { header: 'Name', field: 'name', type: 'string' },
-    //     { header: 'Age', field: 'age', type: 'date', cellTemplate: this?.cellTemplate2 },
-    //     { header: 'Gender', field: 'gender', type: 'selection', options: ['male', 'female'] },
-    //     { header: 'Address', field: 'address', type: 'string' },
-    //   ]
-    // }
-    // else {
-    //   this.columns = [
-    //     { header: 'ID', field: 'id', type: 'number', headerTooltip: { value: 'ID', tooltipPosition: "above" }},
-    //     { header: 'Name', field: 'name', type: 'string' },
-    //     { header: 'Age', field: 'age', type: 'date' },
-    //     { header: 'Gender', field: 'gender', type: 'selection', options: ['male', 'female'] },
-    //     // { header: 'Address', field: 'address', type: 'string' },
-    //   ] 
-    // }
+    if (this.cellTemplateRefCtrl) {
+      this.columns = [
+        { header: 'ID', field: 'id', type: 'number', headerTooltip: { value: 'ID', tooltipPosition: "above" }, cellTemplate: this?.cellTemplate1 },
+        { header: 'Name', field: 'name', type: 'string' },
+        { header: 'Age', field: 'age', type: 'date', cellTemplate: this?.cellTemplate2 },
+        { header: 'Gender', field: 'gender', type: 'selection', options: ['male', 'female'] },
+        { header: 'Address', field: 'address', type: 'string' },
+      ]
+    }
+    else {
+      this.columns = [
+        { header: 'ID', field: 'id', type: 'number', headerTooltip: { value: 'ID', tooltipPosition: "above" }},
+        { header: 'Name', field: 'name', type: 'string' },
+        { header: 'Age', field: 'age', type: 'date' },
+        { header: 'Gender', field: 'gender', type: 'selection', options: ['male', 'female'] },
+        // { header: 'Address', field: 'address', type: 'string' },
+      ] 
+    }
   }
   onScroll(event: any) {
     let pageLimit: number = 10;

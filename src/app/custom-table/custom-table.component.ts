@@ -69,6 +69,8 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   @Input() toolbarTemplateRef!: TemplateRef<any> | undefined;;
   @Input() headerTemplateRef!: TemplateRef<any> | undefined;;
   @Input() cellTemplateRef!: TemplateRef<any> | undefined;
+  @Input() popupEditingTemplateRef!: TemplateRef<any> | undefined;
+  @Input() inlineEditingTemplateRef!: TemplateRef<any> | undefined;
   //for separate template for columns
   @Input() cellTemplateRefMap: CellTemplateRefMap={};
   
@@ -147,6 +149,10 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
     this.setPropertyValue(changes);
   }
   ngOnInit() {
+    this.service.selectedRow.subscribe((row: any) => { 
+      console.log(this);
+      console.log(row);
+    })
     if (this.dataSource) {
       this.dataSource.filterPredicate = this.createFilter();
     }
@@ -419,9 +425,15 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   }
   saveData(row: any, index: number) {
     this.ELEMENT_DATA.filter((a: any) => a.id == row.id)[0]['editable'] = !this.ELEMENT_DATA.filter((a: { id: any; }) => a.id == row.id)[0]['editable'];
-    this.ELEMENT_DATA[index] = { ...this.rowDataTemp["e" + index] };
+    if (!this.inlineEditingTemplateRef) {
+      this.ELEMENT_DATA[index] = { ...this.rowDataTemp["e" + index] };
+      row = { ...this.rowDataTemp["e" + index] };
+      
+    }
+    else {
+      this.ELEMENT_DATA[index] = { ...row };
+    }
     this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
-    row = { ...this.rowDataTemp["e" + index] };
     this.rowDataTemp["e" + index] = {};
     let data: RowChange = {
       row: row,
@@ -499,7 +511,7 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
     dialogConfig.height = "70%";
     dialogConfig.maxWidth = "100%"
     var rowData = { ...row };
-    dialogConfig.data = {row:rowData , columns:[...this.columnsArray]};
+    dialogConfig.data = {row:rowData , columns:[...this.columnsArray],templateRef:this.popupEditingTemplateRef};
 
     this.dialog.open(EditingComponent, dialogConfig).afterClosed().subscribe(data => {
       let index = this.ELEMENT_DATA.indexOf(row);
@@ -661,4 +673,5 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
       this.dataSource.filterPredicate = this.createFilter();
     }
   }
+  updateInlineTemplateData = (row: any) => { console.log("HAZMA ASLAM<", row); this.service.selectedRow.next(row) };
 }

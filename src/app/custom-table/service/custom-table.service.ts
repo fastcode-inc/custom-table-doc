@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { delay, map, Observable, of } from 'rxjs';
+import { BehaviorSubject, delay, map, Observable, of } from 'rxjs';
 import { MtxGridColumn } from '../../models/tableExtModels';
 import data from 'src/assets/data.json';
 import { HttpClient } from '@angular/common/http';
@@ -8,7 +8,8 @@ const companyData = data as any[];
   providedIn: 'root'
 })
 export class CustomTableService {
-
+ public selectedRow = new BehaviorSubject<any>(null);
+ public selectedRowIndex = new BehaviorSubject<any>(null);
   constructor(
     public http:HttpClient
   ) { }
