@@ -71,6 +71,7 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   @Input() cellTemplateRef!: TemplateRef<any> | undefined;
   @Input() popupEditingTemplateRef!: TemplateRef<any> | undefined;
   @Input() inlineEditingTemplateRef!: TemplateRef<any> | undefined;
+  @Input() cellEditingTemplateRef!: TemplateRef<any> | undefined;
   //for separate template for columns
   @Input() cellTemplateRefMap: CellTemplateRefMap={};
   
@@ -96,6 +97,7 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   dragEnable: any = false;
   paginationEnable: any = true;
   rowDataTemp: any={};
+  inlineEditingTemplateRefData: any={};
   displayedColumns: string[] = [];
   showHideColumnsArray: MtxGridColumn[] = [];
   totalSelectionList: any = [];
@@ -403,7 +405,7 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
     })
     this.dataSource.filter = JSON.stringify(columns);
   }
-  applysingleFilter(event:any,column:any) {
+  applySingleFilter(event:any,column:any) {
     this.individulFilter = column.field;
     this.filterValues[column.field] = event[column.field]
     this.dataSource.filter = JSON.stringify(this.filterValues);
@@ -411,9 +413,18 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
 
 
   editEnable(row: any,i: number) {
-    this.rowDataTemp['e'+i] = {...row};
+    this.rowDataTemp['e' + i] = { ...row };
     this.ELEMENT_DATA.filter((a: any) => a.id == row.id)[0]['editable'] = !this.ELEMENT_DATA.filter((a: { id: any; }) => a.id == row.id)[0]['editable'];
   }
+  getInlineEditingData(row: any, index: number,column:any) {
+    this.inlineEditingTemplateRefData={
+      row:{...row},
+      column:{...column},
+      index: index,
+      updateFunc: this.updateInlineTemplateData
+    }
+    return this.inlineEditingTemplateRefData;
+   }
   setCellData(row: any, i: number) {
     this.currentRow = { ...row };
     this.currentRowIndex = i;
@@ -421,17 +432,20 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   }
   cencelInlineEditing(row: any,i:number) { 
     this.ELEMENT_DATA.filter((a: any) => a.id == row.id)[0]['editable'] = !this.ELEMENT_DATA.filter((a: { id: any; }) => a.id == row.id)[0]['editable'];
-    this.rowDataTemp["e"+i] = {};
+    this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
+    this.rowDataTemp["e" + i] = {};
+    this.service.selectedRow.next(undefined)
   }
   saveData(row: any, index: number) {
-    this.ELEMENT_DATA.filter((a: any) => a.id == row.id)[0]['editable'] = !this.ELEMENT_DATA.filter((a: { id: any; }) => a.id == row.id)[0]['editable'];
     if (!this.inlineEditingTemplateRef) {
       this.ELEMENT_DATA[index] = { ...this.rowDataTemp["e" + index] };
       row = { ...this.rowDataTemp["e" + index] };
-      
     }
     else {
-      this.ELEMENT_DATA[index] = { ...row };
+      let changedData = this.service.selectedRow.value;
+      if (changedData) {
+        this.ELEMENT_DATA[index] = { ...changedData };
+      }
     }
     this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
     this.rowDataTemp["e" + index] = {};
@@ -440,16 +454,25 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
       index: index
     }
     this.inlineChange.emit(data);
+    this.ELEMENT_DATA.filter((a: any) => a.id == row.id)[0]['editable'] = !this.ELEMENT_DATA.filter((a: { id: any; }) => a.id == row.id)[0]['editable'];
   }
   saveCellData() {
     this.cellEditing = {};
     let index = this.currentRowIndex;
     if (index > -1) {
-      this.ELEMENT_DATA[index] = { ...this.rowDataTemp["e" + index] };
+      if (this.cellEditingTemplateRef ) {
+        let changedData = this.service.selectedRow.value;
+        if (changedData) {
+          this.ELEMENT_DATA[index] = { ...changedData };
+        }
+      }
+      else {
+        this.ELEMENT_DATA[index] = { ...this.rowDataTemp["e" + index] };
+      }
       this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
       this.rowDataTemp["e" + index] = {};
       let data: RowChange = {
-        row: { ...this.rowDataTemp["e" + index] },
+        row: { ...this.ELEMENT_DATA[index] },
         index: index
       }
       this.currentRowIndex = -1;

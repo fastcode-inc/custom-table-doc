@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
   stickyHeader: any = false;
   inlineRowEditing: any = true;;
   popupRowEditing: any = true;
-  inCellEditing: any = false;
+  inCellEditing: any = true;
   deleteRow: any = false;
   stripedRows: any = false;
   rowSelection: any = false;
@@ -38,11 +38,11 @@ export class AppComponent implements OnInit {
   @ViewChild('cellTemplate2' ) cellTemplate2!: TemplateRef<any>;
 
   public columns: MtxGridColumn[] = [
-    { header: 'ID', field: 'id', type: 'number', headerTooltip: { value: 'ID', tooltipPosition: "above" } },
-    { header: 'Name', field: 'name', type: 'string'},
-    { header: 'Age', field: 'age', type: 'date'  },
-    { header: 'Gender', field: 'gender', type: 'selection', options: ['male', 'female'] },
-    { header: 'Address', field: 'address', type: 'string' },
+    { header: 'ID', field: 'id', type: 'number', headerTooltip: { value: 'ID', tooltipPosition: "above" } ,width:"600px"},
+    { header: 'Name', field: 'name', type: 'string',width:"500px"},
+    { header: 'Age', field: 'age', type: 'date'  ,width:"500px"},
+    { header: 'Gender', field: 'gender', type: 'selection', options: ['male', 'female'] ,width:"500px"},
+    { header: 'Address', field: 'address', type: 'string' ,width:"500px"},
 ]
 //   public columns: MtxGridColumn[] = [
 //     { header: 'ID', field: 'id' , width:'250px'},
@@ -78,12 +78,14 @@ export class AppComponent implements OnInit {
   isExpandEnable: any = false;
   dragEnable: any = false;
   sorting: any = false;
+  infiniteScroll: any = false;
   paginationEnable: any = true;
   headerTemplateRefCtrl: any = false;
   cellTemplateRefCtrl: any = false;
   toolbarTemplateRefCtrl: any = false;
   popupTemplateRefCtrl: any = true;
   inlineTemplateRefCtrl: any = true;
+  cellEditingTemplateRefCtrl: any = true;
   constructor(
     public domSanitizer: DomSanitizer,
     public matIconRegistry: MatIconRegistry,
@@ -152,7 +154,7 @@ export class AppComponent implements OnInit {
     let clientHeight = event.target.clientHeight;
     let scrollPosition = scrollHeight - (scrollTop + clientHeight);
     console.log('scrollPosition', scrollPosition);
-    if (scrollPosition <= 5) {
+    if (scrollPosition <= 5 && this.infiniteScroll) {
       this.loadPage(pageLimit);
     }
   }
