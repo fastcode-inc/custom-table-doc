@@ -75,8 +75,8 @@
 <mat-progress-bar *ngIf="loadingIndicator" mode="indeterminate"></mat-progress-bar>
 <section id="tableContainer" class="mat-table-ext-container" (scroll)="onScroll($event)" [style.height]="tableHeight ? tableHeight :'500px'">
     <table mat-table [dataSource]="dataSource" matSort cdkDropList cdkDropListOrientation="horizontal" matTableExporter
-        #exporter="matTableExporter" multiTemplateDataRows (cdkDropListDropped)="drop($event)" (click)="saveCellData()">
-    <div matColumnDef="select" sticky="true"> 
+        #exporter="matTableExporter" multiTemplateDataRows (cdkDropListDropped)="drop($event)" (click)="saveCellData()" [style.width]="scrollbarH?'max-content':'100%'">
+    <ng-container matColumnDef="select" sticky="true"> 
         <th mat-header-cell *matHeaderCellDef >
             <mat-checkbox (change)="$event ? toggleAllRows() : null" [checked]="selection.hasValue() && isAllSelected()"
                 [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
@@ -88,7 +88,7 @@
             </mat-checkbox>
         </td>
         <td mat-footer-cell *matFooterCellDef></td>
-    </div>
+    </ng-container>
 <!--dymanic columns are being generated here-->
     <div matColumnDef="{{column['field']}}" 
     [sticky]="column.pinned == 'left' ? true:false"

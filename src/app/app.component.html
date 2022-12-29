@@ -119,6 +119,11 @@
         </mat-slide-toggle>
     </section>
     <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="scrollbarH" [disabled]="false">
+            Horizontal Scroll
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
         <mat-slide-toggle [(ngModel)]="headerTemplateRefCtrl" [disabled]="false">
             Header TemplateRef
         </mat-slide-toggle>
@@ -208,6 +213,7 @@
     [sorting]="sorting"
     [tableHeight]="tableHeight"
     [tableWidth]="tableWidth"
+    [scrollbarH]="scrollbarH"
     (inlineChange)="showData($event,'inline change')"
     (popupChange)="showData($event,'popup change')"
     (cellChange)="showData($event,'Cell change')"

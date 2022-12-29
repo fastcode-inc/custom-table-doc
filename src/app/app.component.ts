@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
   stickyHeader: any = false;
   inlineRowEditing: any = true;;
   popupRowEditing: any = true;
-  inCellEditing: any = true;
+  inCellEditing: any = false;
   deleteRow: any = false;
   stripedRows: any = false;
   rowSelection: any = false;
@@ -38,12 +38,12 @@ export class AppComponent implements OnInit {
   @ViewChild('cellTemplate2' ) cellTemplate2!: TemplateRef<any>;
 
   public columns: MtxGridColumn[] = [
-    { header: 'ID', field: 'id', type: 'number', headerTooltip: { value: 'ID', tooltipPosition: "above" } ,width:"600px"},
-    { header: 'Name', field: 'name', type: 'string',width:"500px"},
-    { header: 'Age', field: 'age', type: 'date'  ,width:"500px"},
-    { header: 'Gender', field: 'gender', type: 'selection', options: ['male', 'female'] ,width:"500px"},
-    { header: 'Address', field: 'address', type: 'string' ,width:"500px"},
-]
+    { header: 'ID', field: 'id', type: 'number', headerTooltip: { value: 'ID', tooltipPosition: "above" },width:'' },
+    { header: 'Name', field: 'name', type: 'string'},
+    { header: 'Age', field: 'age', type: 'date'  },
+    { header: 'Gender', field: 'gender', type: 'selection', options: ['male', 'female'] },
+    { header: 'Address', field: 'address', type: 'string'},
+// ]
 //   public columns: MtxGridColumn[] = [
 //     { header: 'ID', field: 'id' , width:'250px'},
 //     { header: 'Name', field: 'name', width: '250px'},
@@ -52,22 +52,22 @@ export class AppComponent implements OnInit {
 // ]
 
 // public columns: MtxGridColumn[] = [
-//     { header: '', field: 'position',  },
-//     { header: 'Name', field: 'name',  },
-//     { header: 'tags', field: 'tag.0.value', },
-//     { header: 'Weight', field: 'weight',  },
-//     { header: 'Symbol', field: 'symbol',  },
-//     { header: 'Gender', field: 'gender',  },
-//     { header: 'Mobile', field: 'mobile',  },
-//     { header: 'Tele', field: 'tele',  },
-//     { header: 'City', field: 'city',  },
-//     { header: 'Address', field: 'address',  },
-//     { header: 'Date', field: 'date',  },
-//     { header: 'Website', field: 'website',  },
-//     { header: 'Company', field: 'company',  },
-//     { header: 'Email', field: 'email',  },
-//     { header: 'Status', field: 'status', type: 'boolean',  },
-//   ];
+//     { header: '', field: 'position', type:'string' },
+//   { header: 'Name', field: 'name', type: 'string' },
+//   { header: 'tags', field: 'tag.0.value', type: 'string' },
+//   { header: 'Weight', field: 'weight', type: 'string' },
+  // { header: 'Symbol', field: 'symbol', type: 'string' },
+  // { header: 'Gender', field: 'gender', type: 'string' },
+  // { header: 'Mobile', field: 'mobile', type: 'string' },
+  // { header: 'Tele', field: 'tele', type: 'string' },
+  // { header: 'City', field: 'city', type: 'string' },
+  // { header: 'Address', field: 'address', type: 'string' },
+  // { header: 'Date', field: 'date', type: 'string' },
+  // { header: 'Website', field: 'website', type: 'string' },
+  // { header: 'Company', field: 'company', type: 'string' },
+  // { header: 'Email', field: 'email', type: 'string' },
+  //   { header: 'Status', field: 'status', type: 'boolean',  },
+  ];
   editGridmodal: any = false;
   addremoveColumns: any = false;
   toggleColumnfilter: any = false;
@@ -79,6 +79,7 @@ export class AppComponent implements OnInit {
   dragEnable: any = false;
   sorting: any = false;
   infiniteScroll: any = false;
+  scrollbarH: any = false;
   paginationEnable: any = true;
   headerTemplateRefCtrl: any = false;
   cellTemplateRefCtrl: any = false;

@@ -28,7 +28,6 @@ import { CustomTableService } from './service/custom-table.service';
 export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   @ViewChild(MatMenuTrigger) menuTrigger!: MatMenuTrigger;
   @ViewChild('columnMenuTrigger') columnMenuTrigger!: MatMenuTrigger;
-  @ViewChild('selectSearchRow') toggleselectRow: any;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -55,6 +54,7 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   @Input() tableHeight: string = '500px';
   @Input() toolbarHeight: string = '500px';
   @Input() tableWidth: string = '100%';
+  @Input() scrollbarH: boolean = false;
   @Input() toolbarTempate: TemplateRef<any> | undefined;
   @Input() columnHideable: boolean = false;
   @Input() columnHideableChecked: 'show' | 'hide' = 'show';
@@ -271,7 +271,6 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
           }
           break;
         }
-          
       }
     })
   }
