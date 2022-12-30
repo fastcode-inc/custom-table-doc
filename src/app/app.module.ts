@@ -15,6 +15,10 @@ import { MatTableExporterModule } from 'mat-table-exporter';
 import { ColumnPinningComponent } from './components/column-pinning/column-pinning.component';
 import { EditingComponent } from './components/editing/editing.component';
 import { FilterColumnsComponentComponent } from './components/filter-columns-component/filter-columns-component.component';
+import { DocumentationComponent } from './documentation/documentation.component';
+import { SharedModule } from './modules/shared.module';
+import { RouterModule } from '@angular/router';
+import { DOCS_APP_ROUTES } from './routes';
 
 @NgModule({
   declarations: [
@@ -24,6 +28,7 @@ import { FilterColumnsComponentComponent } from './components/filter-columns-com
     ColumnPinningComponent,
     EditingComponent,
     FilterColumnsComponentComponent,
+    DocumentationComponent,
   ],
   imports: [
     BrowserModule,
@@ -37,6 +42,12 @@ import { FilterColumnsComponentComponent } from './components/filter-columns-com
     HttpClientModule,
     MatFormFieldModule,
     MatTableExporterModule,
+    SharedModule,
+    RouterModule.forRoot(DOCS_APP_ROUTES, {
+      // scrollPositionRestoration: 'enabled',
+      // anchorScrolling: 'enabled',
+    }),
+    SharedModule,
   ],
   exports: [ColumnPinningComponent],
   providers: [],
