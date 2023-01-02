@@ -1,7 +1,7 @@
 @use '../../../../styles/constants';
 
 app-component-viewer {
-  width: calc(100% - #{constants.$sidenav-width + 1} - #{constants.$content-padding-sidenav * 2});
+  width: calc(100% - #{constants.$content-padding-sidenav * 2});
   font-weight: 400;
   line-height: 1.5;
 
@@ -17,7 +17,9 @@ app-component-viewer {
     padding-left: constants.$content-padding-side-xs;
     padding-right: constants.$content-padding-side-xs;
   }
-
+  .docs-component-viewer{
+    width: 75%;
+  }
   .docs-component-viewer-section-tab {
     min-width: 160px;
     text-transform: uppercase;

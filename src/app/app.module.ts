@@ -19,15 +19,17 @@ import { DocumentationComponent } from './documentation/documentation.component'
 import { SharedModule } from './modules/shared.module';
 import { RouterModule } from '@angular/router';
 import { DOCS_APP_ROUTES } from './routes';
+import { CustomTableModule } from './modules/customTable.module';
+import { TableOfContentsModule } from './components/shared/table-of-contents/table-of-contents.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CustomTableComponent,
-    ResizeColumnDirective,
-    ColumnPinningComponent,
-    EditingComponent,
-    FilterColumnsComponentComponent,
+    // CustomTableComponent,
+    // ResizeColumnDirective,
+    // ColumnPinningComponent,
+    // EditingComponent,
+    // FilterColumnsComponentComponent,
     DocumentationComponent,
   ],
   imports: [
@@ -43,13 +45,18 @@ import { DOCS_APP_ROUTES } from './routes';
     MatFormFieldModule,
     MatTableExporterModule,
     SharedModule,
+    CustomTableModule,
+    TableOfContentsModule,
     RouterModule.forRoot(DOCS_APP_ROUTES, {
       // scrollPositionRestoration: 'enabled',
       // anchorScrolling: 'enabled',
     }),
     SharedModule,
   ],
-  exports: [ColumnPinningComponent],
+  exports: [
+    CustomTableModule,
+    TableOfContentsModule,
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

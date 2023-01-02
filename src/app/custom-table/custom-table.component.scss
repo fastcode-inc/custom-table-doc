@@ -57,12 +57,16 @@ tr.example-detail-row {
 }
 
 .stripedRows {
-    background: #dadada !important;
+    background: #eaeaea !important;
+}
+.hoverClass:hover {
+    background: #dbdbdb !important;
 }
 
-tr.example-element-row:not(.example-expanded-row):hover {
-    background: whitesmoke;
-}
+// tr.example-element-row:not(.example-expanded-row):hover {
+//     background: whitesmoke;
+// }
+
 
 tr.example-element-row:not(.example-expanded-row):active {
     background: #efefef;
@@ -77,11 +81,6 @@ tr.example-element-row:not(.example-expanded-row):active {
     padding: 10px;
 
 }
-
-p {
-    font-family: Lato;
-}
-
 .d-none {
     display: none;
 }

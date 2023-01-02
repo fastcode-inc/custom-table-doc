@@ -1,0 +1,14 @@
+<mat-table-ext 
+  [dataSource]="list"
+  [columns]="columns"
+  [expandRows]="true"
+  [expansionTemplateRef]="expansionTpl"
+  (expansionChange)="log($event)">
+</mat-table-ext>
+
+<ng-template #expansionTpl let-row="row">
+  <div style="height: 70px;">
+    {{row.name}}
+
+  </div>
+</ng-template>

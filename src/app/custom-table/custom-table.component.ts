@@ -10,7 +10,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { EditingComponent } from '../components/editing/editing.component';
-import { RowChange, DisplayColumn, MtxGridColumn, MtxGridColumnPinOption, RowSelectionChange, CellTemplateRefMap } from '../models/tableExtModels';
+import { RowChange, DisplayColumn, MtxGridColumn, MtxGridColumnPinOption, RowSelectionChange, CellTemplateRefMap, ExpansionChange } from '../models/tableExtModels';
 import { CustomTableService } from './service/custom-table.service';
 @Component({
   selector: 'mat-table-ext',
@@ -36,6 +36,7 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   @Input() columns: MtxGridColumn[] = [];
   @Input() columnResizable: boolean = false;
   @Input() stripedRows: boolean = false;
+  @Input() rowHover: boolean = false;
   @Input() inlineRowEditing: boolean = false;
   @Input() inCellEditing: boolean = false;
   @Input() popupRowEditing: boolean = false;
@@ -45,14 +46,15 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   @Input() stickyColumns: boolean = false;
   @Input() stickyFooter: boolean = false;
   @Input() stickyHeader: boolean = false;
+  @Input() showFooterRow: boolean = false;
   @Input() columnFilter: boolean = false;
   @Input() selectionFilter: boolean = false;
   @Input() loadingIndicator: boolean = false;
   @Input() sorting: boolean = false;
   @Input() showToolbar: boolean = false;
   @Input() toolbarTitle: string = '';
-  @Input() tableHeight: string = '500px';
-  @Input() toolbarHeight: string = '500px';
+  @Input() tableHeight: string = '';
+  @Input() toolbarHeight: string = '50px';
   @Input() tableWidth: string = '100%';
   @Input() scrollbarH: boolean = false;
   @Input() toolbarTempate: TemplateRef<any> | undefined;
@@ -62,13 +64,14 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   @Input() globalSearch: boolean = false;
   @Input() expandRows: boolean = false;
   @Input() dndColumns: boolean = false;
-  @Input() paginatorEnable: boolean = false;
+  @Input() showPaginator: boolean = true;
   @Input() showFirstLastButtons: boolean = false;
   @Input() exportButtonEnable: boolean = false;
   @Input() pageSizeOptions: number[] = [5, 10, 20];
   @Input() toolbarTemplateRef!: TemplateRef<any> | undefined;;
   @Input() headerTemplateRef!: TemplateRef<any> | undefined;;
   @Input() cellTemplateRef!: TemplateRef<any> | undefined;
+  @Input() expansionTemplateRef!: TemplateRef<any> | undefined;
   @Input() popupEditingTemplateRef!: TemplateRef<any> | undefined;
   @Input() inlineEditingTemplateRef!: TemplateRef<any> | undefined;
   @Input() cellEditingTemplateRef!: TemplateRef<any> | undefined;
@@ -83,6 +86,7 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   @Output() rowDeleted: EventEmitter<any> = new EventEmitter<any>();
   @Output() scroll: any = new EventEmitter<any>();
   @Output() selectionChanged: EventEmitter<RowSelectionChange> = new EventEmitter<any>();
+  @Output() expansionChange: EventEmitter<ExpansionChange> = new EventEmitter<any>();
 
 
   columnPinningOptions: MtxGridColumnPinOption[] = []
@@ -95,7 +99,6 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   multiSelectRow: any = true;
   columnFilterBySelection: any = false;
   dragEnable: any = false;
-  paginationEnable: any = true;
   rowDataTemp: any={};
   inlineEditingTemplateRefData: any={};
   displayedColumns: string[] = [];
@@ -259,10 +262,6 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
         }
         case 'dndColumns': {
           this.dragEnable = changes[propetry].currentValue;
-          break;
-        }
-        case 'paginatorEnable': {
-          this.paginationEnable = changes[propetry].currentValue;
           break;
         }
         case 'sorting': {
@@ -520,8 +519,9 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
     this.rowDeleted.emit({removedRow: row,fromIndex:index});
   }
 
-  expandRow(row: any, expand: boolean) {
+  expandRow(row: any, expand: boolean,index:number) {
     if (this.expandRows) {
+      this.expansionChange.emit({data: row, expanded: expand,index:index})
       this.expandedElement = this.expandedElement === row ? null : row
     }
   }
@@ -685,7 +685,7 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
     }
   }
   reCal() {
-    if (this.paginatorEnable) {
+    if (this.showPaginator) {
       this.dataSource.paginator = this.paginator;
     }
     if (this.sorting) {

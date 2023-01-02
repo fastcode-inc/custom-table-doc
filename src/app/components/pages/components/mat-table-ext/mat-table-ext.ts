@@ -4,7 +4,25 @@ import { SharedModule } from 'src/app/modules/shared.module';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { TableBasicComponent, tableBasicExampleConfig } from './example/basic';
+import { BasicComponent, basicExampleConfig } from './example/basic';
+import { CustomTableModule } from 'src/app/modules/customTable.module';
+import { ColumnResizeComponent, columnResizeExampleConfig } from './example/column-resize';
+import { LoadingStatusComponent, loadingStatusExampleConfig } from './example/loading-status';
+import { HidePaginationComponent, hidePaginationExampleConfig } from './example/hide-pagination';
+import { SortableComponent, sortableExampleConfig } from './example/sortable';
+import { RowSelectableComponent, rowSelectableExampleConfig } from './example/row-selectable';
+import { ExpandableRowComponent, expandableRowExampleConfig } from './example/expandable-row';
+import { ColumnHidingPinningComponent, columnHidingPinningExampleConfig } from './example/column-hiding-pinning';
+import { HoverStripedComponent, hoverStripedExampleConfig } from './example/hover-striped';
+import { TableExportComponent, exportExampleConfig } from './example/table-export';
+import { RowOpComponent, rowOpExampleConfig } from './example/row-with-operations';
+import { columnReorderComponent, columnReorderExampleConfig } from './example/column-reorder';
+import { CustomCellTemplateComponent, customCellTemplateExampleConfig } from './example/custom-cell-template';
+import { CustomCellTemplate2Component, customCellTemplate2ExampleConfig } from './example/custom-cell-template-2';
+import { CustomHeaderTemplateComponent, customHeaderTemplateExampleConfig } from './example/custom-header-template';
+import { VitualScrollingComponent, vitualScrollingExampleConfig } from './example/vitual-scrolling';
+import { CustomToolbarTemplateComponent, customToolbarTemplateExampleConfig } from './example/custom-toolbar-template';
+import { CustomPopupEditTemplateComponent, customPopupEditTemplateExampleConfig } from './example/custom-popup-edit-template';
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/data-grid/', '_json');
 }
@@ -35,6 +53,7 @@ export class MatTableExtApiComponent implements OnInit {
 @NgModule({
   imports: [
     SharedModule,
+    CustomTableModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -50,7 +69,26 @@ export class MatTableExtApiComponent implements OnInit {
         pathMatch: 'full',
         data: {
           examples: [
-            tableBasicExampleConfig,
+            basicExampleConfig,
+            columnResizeExampleConfig,
+            loadingStatusExampleConfig,
+            hidePaginationExampleConfig,
+            sortableExampleConfig,
+            rowSelectableExampleConfig,
+            expandableRowExampleConfig,
+            columnHidingPinningExampleConfig,
+            exportExampleConfig,
+            hoverStripedExampleConfig,
+            vitualScrollingExampleConfig,
+            rowOpExampleConfig,
+            columnReorderExampleConfig,
+            customCellTemplateExampleConfig,
+            customCellTemplate2ExampleConfig,
+            customHeaderTemplateExampleConfig,
+            customToolbarTemplateExampleConfig,
+            customPopupEditTemplateExampleConfig
+
+            
           ],
         },
       },
@@ -68,8 +106,24 @@ export class MatTableExtApiComponent implements OnInit {
   declarations: [
     MatTableExtOverviewComponent,
     MatTableExtApiComponent,
-    TableBasicComponent,
-    
+    BasicComponent,
+    ColumnResizeComponent,
+    LoadingStatusComponent,
+    HidePaginationComponent,
+    SortableComponent,
+    RowSelectableComponent,
+    ExpandableRowComponent,
+    ColumnHidingPinningComponent,
+    HoverStripedComponent,
+    VitualScrollingComponent,
+    TableExportComponent,
+    RowOpComponent,
+    columnReorderComponent,
+    CustomCellTemplateComponent,
+    CustomCellTemplate2Component,
+    CustomHeaderTemplateComponent,
+    CustomToolbarTemplateComponent,
+    CustomPopupEditTemplateComponent,
   ],
 })
 export class MatTableExtModule { }

@@ -4,7 +4,7 @@ import { DocumentationComponent } from './documentation/documentation.component'
 import { AppComponent } from './app.component';
 
 const routes: Routes = [
-  { path: 'documentation', component: DocumentationComponent },
+  // { path: 'documentation', component: DocumentationComponent },
 ];
 
 @NgModule({

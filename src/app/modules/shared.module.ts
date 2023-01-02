@@ -57,7 +57,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { MaterialModule } from './material.module';
-import { CustomTableComponent } from '../custom-table/custom-table.component';
+import { TableOfContentsModule } from '../components/shared/table-of-contents/table-of-contents.module';
 
 @NgModule({
   imports: [
@@ -112,7 +112,7 @@ import { CustomTableComponent } from '../custom-table/custom-table.component';
     PortalModule,
     ScrollingModule,
     DialogModule,
-    MatFormFieldModule
+    MatFormFieldModule,
   ],
   exports: [
     CommonModule,
@@ -126,6 +126,7 @@ import { CustomTableComponent } from '../custom-table/custom-table.component';
     Navbar,
     NavigationFocus,
     MaterialModule,
+    TableOfContentsModule,
   ],
   declarations: [
     HeaderLinkComponent,

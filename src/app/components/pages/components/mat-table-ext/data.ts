@@ -2,12 +2,6 @@ export const EXAMPLE_DATA: any[] = [
     {
         position: 1,
         name: 'Boron',
-        tag: [
-            {
-                color: 'red',
-                value: [1, 2],
-            },
-        ],
         weight: 10.811,
         symbol: 'B',
         gender: 'male',
@@ -25,12 +19,6 @@ export const EXAMPLE_DATA: any[] = [
     {
         position: 2,
         name: 'Helium',
-        tag: [
-            {
-                color: 'blue',
-                value: [3, 4],
-            },
-        ],
         weight: 8.0026,
         symbol: 'He',
         gender: 'female',
@@ -48,12 +36,6 @@ export const EXAMPLE_DATA: any[] = [
     {
         position: 3,
         name: 'Nitrogen',
-        tag: [
-            {
-                color: 'yellow',
-                value: [5, 6],
-            },
-        ],
         weight: 14.0067,
         symbol: 'N',
         gender: 'male',

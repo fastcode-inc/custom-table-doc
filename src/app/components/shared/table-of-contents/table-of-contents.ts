@@ -6,12 +6,14 @@ import {
   Input,
   OnDestroy,
   OnInit,
+  NgZone,
+  ChangeDetectorRef,
 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { fromEvent, Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
-import { NavigationFocusService } from '../navigation-focus/navigation-focus.service';
+import {DOCUMENT} from '@angular/common';
+import {ActivatedRoute, Router} from '@angular/router';
+import {fromEvent, Subscription} from 'rxjs';
+import {debounceTime} from 'rxjs/operators';
+import {NavigationFocusService} from '../navigation-focus/navigation-focus.service';
 
 interface LinkSection {
   name: string;
@@ -38,62 +40,62 @@ interface Link {
 @Component({
   selector: 'table-of-contents',
   styleUrls: ['./table-of-contents.scss'],
-  templateUrl: './table-of-contents.html',
+  templateUrl: './table-of-contents.html'
 })
 export class TableOfContents implements OnInit, AfterViewInit, OnDestroy {
-  @Input() container!: string;
+  @Input() container: string | undefined;
 
   _linkSections: LinkSection[] = [];
   _links: Link[] = [];
-
   _rootUrl = this._router.url.split('#')[0];
-  private _scrollContainer: any;
+
+  private _scrollContainer: HTMLElement | Window | null = null;
   private _urlFragment = '';
   private subscriptions = new Subscription();
 
-  constructor(
-    private _router: Router,
-    private _route: ActivatedRoute,
-    private _element: ElementRef,
-    private _navigationFocusService: NavigationFocusService,
-    @Inject(DOCUMENT) private _document: Document
-  ) {
-    this.subscriptions.add(
-      this._navigationFocusService.navigationEndEvents.subscribe(() => {
+  constructor(private _router: Router,
+              private _route: ActivatedRoute,
+              private _element: ElementRef,
+              private _navigationFocusService: NavigationFocusService,
+              @Inject(DOCUMENT) private _document: Document,
+              private _ngZone: NgZone,
+              private _changeDetectorRef: ChangeDetectorRef) {
+
+    this.subscriptions.add(this._navigationFocusService.navigationEndEvents
+      .subscribe(() => {
         const rootUrl = _router.url.split('#')[0];
         if (rootUrl !== this._rootUrl) {
           this._rootUrl = rootUrl;
         }
-      })
-    );
+      }));
 
-    this.subscriptions.add(
-      this._route.fragment.subscribe(fragment => {
-        this._urlFragment = fragment as string;
+    this.subscriptions.add(this._route.fragment.subscribe(fragment => {
+      if (fragment != null) {
+        this._urlFragment = fragment;
 
         const target = document.getElementById(this._urlFragment);
         if (target) {
           target.scrollIntoView();
         }
-      })
-    );
+      }
+    }));
   }
 
   ngOnInit(): void {
     // On init, the sidenav content element doesn't yet exist, so it's not possible
     // to subscribe to its scroll event until next tick (when it does exist).
-    Promise.resolve().then(() => {
-      this._scrollContainer = this.container
-        ? this._document.querySelectorAll(this.container)[0]
-        : window;
+    this._ngZone.runOutsideAngular(() => {
+      Promise.resolve().then(() => {
+        this._scrollContainer = this.container ?
+          this._document.querySelector(this.container) as HTMLElement :
+          window;
 
-      if (this._scrollContainer) {
-        this.subscriptions.add(
-          fromEvent(this._scrollContainer, 'scroll')
-            .pipe(debounceTime(10))
-            .subscribe(() => this.onScroll())
-        );
-      }
+        if (this._scrollContainer) {
+          this.subscriptions.add(fromEvent(this._scrollContainer, 'scroll').pipe(
+              debounceTime(10))
+              .subscribe(() => this.onScroll()));
+        }
+      });
     });
   }
 
@@ -106,10 +108,7 @@ export class TableOfContents implements OnInit, AfterViewInit, OnDestroy {
   }
 
   updateScrollPosition(): void {
-    const target = document.getElementById(this._urlFragment);
-    if (target) {
-      target.scrollIntoView();
-    }
+    this._document.getElementById(this._urlFragment)?.scrollIntoView();
   }
 
   resetHeaders() {
@@ -118,44 +117,59 @@ export class TableOfContents implements OnInit, AfterViewInit, OnDestroy {
   }
 
   addHeaders(sectionName: string, docViewerContent: HTMLElement, sectionIndex = 0) {
-    const headers = Array.from<HTMLHeadingElement>(docViewerContent.querySelectorAll('h3, h4'));
-    const links: Link[] = [];
-    headers.forEach(header => {
+    const links = Array.from(docViewerContent.querySelectorAll('h3, h4'), header => {
       // remove the 'link' icon name from the inner text
-      const name = header.innerText.trim().replace(/^link/, '');
-      const { top } = header.getBoundingClientRect();
-      links.push({
+      const name = (header as HTMLElement).innerText.trim().replace(/^link/, '');
+      const {top} = header.getBoundingClientRect();
+      return {
         name,
         type: header.tagName.toLowerCase(),
-        top,
+        top: top,
         id: header.id,
-        active: false,
-      });
+        active: false
+      };
     });
-    this._linkSections[sectionIndex] = { name: sectionName, links };
+
+    this._linkSections[sectionIndex] = {name: sectionName, links};
     this._links.push(...links);
   }
 
   /** Gets the scroll offset of the scroll container */
   private getScrollOffset(): number | void {
-    const { top } = this._element.nativeElement.getBoundingClientRect();
-    if (typeof this._scrollContainer.scrollTop !== 'undefined') {
-      return this._scrollContainer.scrollTop + top;
-    } else if (typeof this._scrollContainer.pageYOffset !== 'undefined') {
-      return this._scrollContainer.pageYOffset + top;
+    const {top} = this._element.nativeElement.getBoundingClientRect();
+    const container = this._scrollContainer;
+
+    if (container instanceof HTMLElement) {
+      return container.scrollTop + top;
+    }
+
+    if (container) {
+      return container.pageYOffset + top;
     }
   }
 
   private onScroll(): void {
-    for (let i = 0; i < this._links.length; i++) {
-      this._links[i].active = this.isLinkActive(this._links[i], this._links[i + 1]);
-    }
-  }
-
-  private isLinkActive(currentLink: any, nextLink: any): boolean {
-    // A link is considered active if the page is scrolled passed the anchor without also
-    // being scrolled passed the next link
     const scrollOffset = this.getScrollOffset();
-    return scrollOffset >= currentLink.top && !(nextLink && nextLink.top < scrollOffset);
+    let hasChanged = false;
+
+    for (let i = 0; i < this._links.length; i++) {
+      // A link is considered active if the page is scrolled past the
+      // anchor without also being scrolled passed the next link.
+      const currentLink = this._links[i];
+      const nextLink = this._links[i + 1];
+      const isActive = scrollOffset >= currentLink.top &&
+                       (!nextLink || nextLink.top >= scrollOffset);
+
+      if (isActive !== currentLink.active) {
+        currentLink.active = isActive;
+        hasChanged = true;
+      }
+    }
+
+    if (hasChanged) {
+      // The scroll listener runs outside of the Angular zone so
+      // we need to bring it back in only when something has changed.
+      this._ngZone.run(() => this._changeDetectorRef.markForCheck());
+    }
   }
 }

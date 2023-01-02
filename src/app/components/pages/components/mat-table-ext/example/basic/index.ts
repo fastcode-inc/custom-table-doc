@@ -1,8 +1,8 @@
-import { AppComponent as TableBasicComponent } from './app.component';
+import { AppComponent as BasicComponent } from './app.component';
 
-const tableBasicExampleConfig = {
+const basicExampleConfig = {
   title: 'Basic',
-  component: TableBasicComponent,
+  component: BasicComponent,
   files: [
     {
       file: 'app.component.html',
@@ -19,12 +19,12 @@ const tableBasicExampleConfig = {
       content: require('!!highlight-loader?raw=true&lang=scss!./app.component.scss'),
       filecontent: require('!!raw-loader!./app.component.scss'),
     },
-    {
-      file: 'data.ts',
-      content: require('!!highlight-loader?raw=true&lang=typescript!../../data.ts'),
-      filecontent: require('!!raw-loader!../../data.ts'),
-    },
+    // {
+    //   file: 'data.ts',
+    //   content: require('!!highlight-loader?raw=true&lang=typescript!../../data.ts'),
+    //   filecontent: require('!!raw-loader!../../data.ts'),
+    // },
   ],
 };
 
-export { TableBasicComponent, tableBasicExampleConfig };
+export { BasicComponent, basicExampleConfig };

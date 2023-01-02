@@ -3,7 +3,7 @@ import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 @Component({
   selector: 'doc-heading',
   template: `
-    <h3 [id]="id">
+    <h3 style="font-size:1.5em; font-weight:bold" [id]="id">
       <header-link [example]="text"></header-link>
       <span> {{text}}</span>
     </h3>

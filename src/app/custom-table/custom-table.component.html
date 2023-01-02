@@ -73,7 +73,7 @@
     <button mat-raised-button (click)="removeColumn()"> Remove column </button>
 </div>
 <mat-progress-bar *ngIf="loadingIndicator" mode="indeterminate"></mat-progress-bar>
-<section id="tableContainer" class="mat-table-ext-container" (scroll)="onScroll($event)" [style.height]="tableHeight ? tableHeight :'500px'">
+<section id="tableContainer" class="mat-table-ext-container" (scroll)="onScroll($event)" [style.height]="tableHeight ? tableHeight :'max-content'">
     <table mat-table [dataSource]="dataSource" matSort cdkDropList cdkDropListOrientation="horizontal" matTableExporter
         #exporter="matTableExporter" multiTemplateDataRows (cdkDropListDropped)="drop($event)" (click)="saveCellData()" [style.width]="scrollbarH?'max-content':'100%'">
     <ng-container matColumnDef="select" sticky="true"> 
@@ -87,7 +87,9 @@
                 [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
             </mat-checkbox>
         </td>
-        <td mat-footer-cell *matFooterCellDef></td>
+        <ng-container *ngIf="showFooterRow">
+            <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
     </ng-container>
 <!--dymanic columns are being generated here-->
     <div matColumnDef="{{column['field']}}" 
@@ -166,7 +168,9 @@
                 </ng-container>
             </div>
         </td>
-        <td matTooltip="footer tooltip" mat-footer-cell *matFooterCellDef> {{column.header}} </td>
+        <ng-container *ngIf="showFooterRow">
+            <td matTooltip="footer tooltip" mat-footer-cell *matFooterCellDef> {{column.footerText}} </td>
+        </ng-container>
     </div>
     
     <ng-container matColumnDef="edit" stickyEnd="false">
@@ -219,15 +223,11 @@
 
     <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
     <ng-container matColumnDef="expandedDetail">
-        <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+        <td mat-cell *matCellDef="let element;let i=dataIndex " [attr.colspan]="columnsToDisplayWithExpand.length">
             <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-                <div class="example-element-diagram">
-
-                </div>
-                <div class="example-element-description">
-                    test
-                    <span class="example-element-description-attribution"> -- Wikipedia </span>
-                </div>
+                <ng-container *ngIf="expansionTemplateRef"
+                    [ngTemplateOutlet]="expansionTemplateRef" [ngTemplateOutletContext]="{$explicit:element,row:element,index:i}">
+                </ng-container>
             </div>
         </td>
     </ng-container>
@@ -243,18 +243,21 @@
 
     <tr mat-header-row *matHeaderRowDef=" getDisplayedColumns(); sticky: stickyHeader"></tr>
     <tr mat-row *matRowDef="let row; columns:getDisplayedColumns(); let i=dataIndex;" class="example-element-row"
-        [ngClass]="{'stripedRows':(stripedRows &&  i % 2 == 1)}" [class.hidden]="hiddenCtrl.isSelected(row) && hideRows" [class.example-expanded-row]="expandedElement === row"
-        (click)="expandRow(row, row !== expandedElement)">
+        [ngClass]="{'stripedRows':(stripedRows &&  i % 2 == 1),'hoverClass':rowHover}" [class.hidden]="hiddenCtrl.isSelected(row) && hideRows" [class.example-expanded-row]="expandedElement === row"
+        (click)="expandRow(row, row !== expandedElement,i)">
     </tr>
 
     <tr style="height: auto;" mat-header-row class="no-default-height" *matHeaderRowDef="headersFiltersIds"></tr>
     <tr style="height: auto;" mat-row *matRowDef="let row; columns: ['expandedDetail']" class="hidden" [ngClass]="{'example-detail-row': (expandRows && row === expandedElement)}">
     </tr>
+    <ng-container *ngIf="showFooterRow">
+        <tr mat-footer-row *matFooterRowDef="getDisplayedColumns(); sticky: stickyFooter"></tr>
+    </ng-container>
+
     
-    <tr mat-footer-row *matFooterRowDef="getDisplayedColumns(); sticky: stickyFooter"></tr>
     
     </table>
 </section>
-<mat-paginator *ngIf="paginationEnable" [pageSizeOptions]="pageSizeOptions" [showFirstLastButtons]="showFirstLastButtons" aria-label="Select page of users">
+<mat-paginator *ngIf="showPaginator" [pageSizeOptions]="pageSizeOptions" [showFirstLastButtons]="showFirstLastButtons" aria-label="Select page of users">
 </mat-paginator>
 </mat-card>

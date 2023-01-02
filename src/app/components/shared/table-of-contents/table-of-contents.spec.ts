@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {waitForAsync, ComponentFixture, TestBed} from '@angular/core/testing';
 import {Observable} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {TableOfContents} from './table-of-contents';

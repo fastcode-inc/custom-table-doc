@@ -8,6 +8,7 @@ export interface MtxGridColumn {
     options?: string[] ;
     header?: string ;
     name?: string;
+    footerText?: string;
     headerTooltip?: TooltipProp;
     cellTooltip?: TooltipProp;
     hide?: boolean;
@@ -46,6 +47,11 @@ export interface RowSelectionChange {
     row: { [key: string]: any};
     index: number;
     isSelected: boolean;
+}
+export interface ExpansionChange {
+    data: { [key: string]: any};
+    index: number;
+    expanded: boolean;
 }
 export interface CellTemplateRefMap {
     [key: string]: TemplateRef<any>

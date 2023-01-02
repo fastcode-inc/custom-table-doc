@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { EXAMPLE_DATA } from '../../data';
-import { MtxGridColumn } from 'src/app/models/tableExtModels';
+import { MTExColumn } from '../../types';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'data-grid-example',
@@ -8,32 +9,22 @@ import { MtxGridColumn } from 'src/app/models/tableExtModels';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  columns: MtxGridColumn[] = [
+  columns: MTExColumn[] = [
     { header: 'Name', field: 'name',type:'string' },
     {
       header: 'Weight',
       field: 'weight',
       type: 'number',
-      typeParameter: {
-        digitsInfo: '1.2-2',
-      },
     },
-    { header: 'Gender', field: 'gender', type:'selection' ,options:['Male','Female'] },
+    { header: 'Gender', field: 'gender', type:'selection' ,options:['male','female'] },
     { header: 'Mobile', field: 'mobile',type:'string' },
     { header: 'City', field: 'city', type: 'string' },
     {
       header: 'Date',
       field: 'date',
-      type: 'date',
-      typeParameter: {
-        format: 'yyyy-MM-dd',
-      },
+      type: 'date'
     },
   ];
 
-  list = EXAMPLE_DATA;
-
-  trackByName(index: number, item: any) {
-    return item.name;
-  }
+  list = new MatTableDataSource(EXAMPLE_DATA);
 }
