@@ -2,6 +2,7 @@ import { AppComponent as ColumnResizeComponent } from './app.component';
 
 const columnResizeExampleConfig = {
   title: 'Column resize',
+  description: '<p>Turn the checkbox on to test the Column Resizing</p>',
   component: ColumnResizeComponent,
   files: [
     {

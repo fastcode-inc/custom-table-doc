@@ -43,6 +43,6 @@ export class AppComponent {
       type: 'string'
     },
   ];
-
+  columnResizable = false;
   list = new MatTableDataSource([...EXAMPLE_DATA, ...EXAMPLE_DATA, ...EXAMPLE_DATA]);
 }

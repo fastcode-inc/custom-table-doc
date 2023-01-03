@@ -67,7 +67,7 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   @Input() showPaginator: boolean = true;
   @Input() showFirstLastButtons: boolean = false;
   @Input() exportButtonEnable: boolean = false;
-  @Input() pageSizeOptions: number[] = [5, 10, 20];
+  @Input() pageSizeOptions: number[] = [10, 50, 100];
   @Input() toolbarTemplateRef!: TemplateRef<any> | undefined;;
   @Input() headerTemplateRef!: TemplateRef<any> | undefined;;
   @Input() cellTemplateRef!: TemplateRef<any> | undefined;
@@ -111,7 +111,7 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   columnsListCtrl = new FormControl([]);
   columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
   columnsToDisplay: string[] = this.displayedColumns.slice();
-  selection = new SelectionModel<any>(true, []);
+  selection = new SelectionModel<any>(false, []);
   hiddenCtrl = new SelectionModel<any>(true, []);
   ELEMENT_DATA: any = [];
   filterValues: any = {};
@@ -203,8 +203,13 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
           this.showHideColumn('delete', changes[propetry].currentValue);
           break;
         }
-        case 'multiRowSelection': {
+        case 'rowSelection': {
+          this.selection = new SelectionModel<any>(true, []);
           this.showSelectionColumn('select', changes[propetry].currentValue);
+          break;
+        }
+        case 'multiRowSelection': {
+          this.selection = new SelectionModel<any>(changes[propetry].currentValue, []);
           break;
         }
         case 'stickyColumns': {
@@ -411,8 +416,12 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
 
 
   editEnable(row: any,i: number) {
-    this.rowDataTemp['e' + i] = { ...row };
-    this.ELEMENT_DATA.filter((a: any) => a.id == row.id)[0]['editable'] = !this.ELEMENT_DATA.filter((a: { id: any; }) => a.id == row.id)[0]['editable'];
+    const rowData: any = {}
+    rowData['e' + i] = { ...row };
+    this.rowDataTemp = rowData;
+    setTimeout(() => {
+      this.ELEMENT_DATA[i]['editable'] = !this.ELEMENT_DATA[i]['editable'];
+    }, 0);
   }
   getInlineEditingData(row: any, index: number,column:any) {
     this.inlineEditingTemplateRefData={
@@ -452,7 +461,7 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
       index: index
     }
     this.inlineChange.emit(data);
-    this.ELEMENT_DATA.filter((a: any) => a.id == row.id)[0]['editable'] = !this.ELEMENT_DATA.filter((a: { id: any; }) => a.id == row.id)[0]['editable'];
+    this.ELEMENT_DATA[index]['editable'] = false;
   }
   saveCellData() {
     this.cellEditing = {};

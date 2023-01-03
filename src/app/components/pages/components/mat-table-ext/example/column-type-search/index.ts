@@ -1,8 +1,8 @@
-import { AppComponent as CustomFooterTemplateComponent } from './app.component';
+import { AppComponent as ColumnSearchFilterComponent } from './app.component';
 
-const customFooterTemplateExampleConfig = {
-  title: 'Custom footer template',
-  component: CustomFooterTemplateComponent,
+const columnSearchFilterExampleConfig = {
+  title: 'Column Search Filter',
+  component: ColumnSearchFilterComponent,
   files: [
     {
       file: 'app.component.html',
@@ -22,4 +22,4 @@ const customFooterTemplateExampleConfig = {
   ],
 };
 
-export { CustomFooterTemplateComponent, customFooterTemplateExampleConfig };
+export { ColumnSearchFilterComponent, columnSearchFilterExampleConfig };

@@ -28,8 +28,10 @@ export class EditingComponent implements OnInit {
   setData(value: any) {
     let row = value.row
     let types: any = {}
+    this.keys = [];
     this.columns = value.columns;
     this.columns.forEach(column => {
+      this.keys.push(column.field);
       if (column.type == 'selection') {
         types[column.field] = column.type;
         let temp = row[column.field];
@@ -43,7 +45,7 @@ export class EditingComponent implements OnInit {
         types[column.field] = column.type;
       }
     })
-    this.keys = Object.keys(row).filter(key => !(['editable', 'editmodal', 'deleterow'].includes(key)));
+    // this.keys = Object.keys(row).filter(key => !(['editable', 'editmodal', 'deleterow'].includes(key)));
     this.types = types;
     this.setTemplateRef(value);
   }
@@ -51,8 +53,9 @@ export class EditingComponent implements OnInit {
     if (value.templateRef !== undefined) {
       this.templateRow = { ...value.row };
       let types: any = {};
-      this.templateKeys = Object.keys(this.templateRow).filter(key => !(['editable', 'editmodal', 'deleterow'].includes(key)));
+      this.templateKeys = [];
       this.columns.forEach(column => {
+        this.templateKeys.push(column.field);
         if (column.type == 'selection') {
           types[column.field] = column.type;
           let temp = this.templateRow[column.field];

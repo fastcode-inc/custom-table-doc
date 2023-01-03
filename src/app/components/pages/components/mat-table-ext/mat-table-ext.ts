@@ -23,6 +23,10 @@ import { CustomHeaderTemplateComponent, customHeaderTemplateExampleConfig } from
 import { VitualScrollingComponent, vitualScrollingExampleConfig } from './example/vitual-scrolling';
 import { CustomToolbarTemplateComponent, customToolbarTemplateExampleConfig } from './example/custom-toolbar-template';
 import { CustomPopupEditTemplateComponent, customPopupEditTemplateExampleConfig } from './example/custom-popup-edit-template';
+import { CustomInlineEditTemplateComponent, customInlineEditTemplateExampleConfig } from './example/custom-inline-edit-template';
+import { GlobalSearchFilterComponent, globalSearchFilterExampleConfig } from './example/global-search';
+import { ColumnSearchFilterComponent, columnSearchFilterExampleConfig } from './example/column-type-search';
+import { StickyHeaderFooterComponent, stickyHeaderFooterExampleConfig } from './example/sticky-header-footer';
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/data-grid/', '_json');
 }
@@ -86,7 +90,11 @@ export class MatTableExtApiComponent implements OnInit {
             customCellTemplate2ExampleConfig,
             customHeaderTemplateExampleConfig,
             customToolbarTemplateExampleConfig,
-            customPopupEditTemplateExampleConfig
+            customPopupEditTemplateExampleConfig,
+            customInlineEditTemplateExampleConfig,
+            globalSearchFilterExampleConfig,
+            columnSearchFilterExampleConfig,
+            stickyHeaderFooterExampleConfig,
 
             
           ],
@@ -124,6 +132,10 @@ export class MatTableExtApiComponent implements OnInit {
     CustomHeaderTemplateComponent,
     CustomToolbarTemplateComponent,
     CustomPopupEditTemplateComponent,
+    CustomInlineEditTemplateComponent,
+    GlobalSearchFilterComponent,
+    ColumnSearchFilterComponent,
+    StickyHeaderFooterComponent
   ],
 })
 export class MatTableExtModule { }

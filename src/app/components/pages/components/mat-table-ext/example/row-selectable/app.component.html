@@ -1,16 +1,13 @@
-<div style="background-color: red;">
-  <mat-checkbox [(ngModel)]="rowSelectable">Row selectable</mat-checkbox>
-  <mat-checkbox [(ngModel)]="hideRowSelectionCheckbox">Hide checkbox</mat-checkbox>
-  <mat-radio-group [(ngModel)]="multiSelectable">
-    <mat-radio-button [value]="false">Single</mat-radio-button>
-    <mat-radio-button [value]="true">Multiple</mat-radio-button>
-  </mat-radio-group>
+<div>
+  <mat-checkbox [(ngModel)]="rowSelection">Row selectable</mat-checkbox>
+  <mat-checkbox [(ngModel)]="multiple">Multiple</mat-checkbox>
 </div>
 
 <mat-table-ext 
     [dataSource]="list"
     [columns]="columns"
-    [rowSelection]="rowSelectable"
-    [multiRowSelection]="multiSelectable"
+    [showToolbar]="true"
+    [rowSelection]="rowSelection"
+    [multiRowSelection]="multiple"
     (selectionChanged)="log($event)">
 </mat-table-ext>

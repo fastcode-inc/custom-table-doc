@@ -1,9 +1,8 @@
-import { AppComponent as RowSelectableComponent } from './app.component';
+import { AppComponent as StickyHeaderFooterComponent } from './app.component';
 
-const rowSelectableExampleConfig = {
-  title: 'Row selectable',
-  description: `<p>Use <code>button controls</code> from toolbar to show or hide rows.</p>`,
-  component: RowSelectableComponent,
+const stickyHeaderFooterExampleConfig = {
+  title: 'StickyHeaderFooter',
+  component: StickyHeaderFooterComponent,
   files: [
     {
       file: 'app.component.html',
@@ -20,7 +19,12 @@ const rowSelectableExampleConfig = {
       content: require('!!highlight-loader?raw=true&lang=scss!./app.component.scss'),
       filecontent: require('!!raw-loader!./app.component.scss'),
     },
+    // {
+    //   file: 'data.ts',
+    //   content: require('!!highlight-loader?raw=true&lang=typescript!../../data.ts'),
+    //   filecontent: require('!!raw-loader!../../data.ts'),
+    // },
   ],
 };
 
-export { RowSelectableComponent, rowSelectableExampleConfig };
+export { StickyHeaderFooterComponent, stickyHeaderFooterExampleConfig };

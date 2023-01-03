@@ -1,6 +1,5 @@
 
 <mat-card class="main-table-ext-container mat-elevation-z8" [style.width]="tableWidth">
-
 <mat-form-field style="padding-left:24px" appearance="standard" *ngIf="globalSearch">
     <mat-label>Search</mat-label>
     <input matInput [ngModel]="globalFilter" (ngModelChange)="applyFilter($event)" placeholder="Ex. Mia" #input>
@@ -9,7 +8,7 @@
     <span class="toolbar-title" *ngIf="toolbarTitle">{{toolbarTitle}}</span>
     <ng-container *ngIf="toolbarTemplateRef" [ngTemplateOutlet]="toolbarTemplateRef"></ng-container>
     <span class="example-spacer"></span>
-    <ng-container *ngIf="multiRowSelection">
+    <ng-container *ngIf="rowSelection || multiRowSelection">
         <button class="hide-button" mat-stroked-button color="primary" (click)="hideSelectedRows()" >
             Hide Rows
         </button>
@@ -100,7 +99,8 @@
                 [style.width]="column.width"
                 [style.maxWidth]="column.maxWidth" 
                 [style.minWidth]="column.minWidth" 
-                 cdkDrag [cdkDragDisabled]="!dndColumns" [columnsResizable]="columnResizable" [index]="i"> 
+                cdkDragLockAxis="x"
+                cdkDrag [cdkDragDisabled]="!dndColumns" [columnsResizable]="columnResizable" [index]="i"> 
                 <span *ngIf="!headerTemplateRef" matTooltip="{{column.headerTooltip?.value}}" mat-sort-header [disabled]="!sorting">{{column.header}}</span>
                 <ng-container *ngIf="headerTemplateRef" [ngTemplateOutlet]="headerTemplateRef" [ngTemplateOutletContext]="{data:column}"></ng-container>
                 <ng-container *ngIf="column.headerTemplate" [ngTemplateOutlet]="column.headerTemplate" [ngTemplateOutletContext]="{data:column}"></ng-container>
@@ -109,16 +109,16 @@
             <div *ngIf="!row.editable && !cellEditing[i +'_'+column.field]" 
                     (dblclick)="cellEditing[i +'_'+column.field] = inCellEditing;setCellData(row,i)" 
                     matTooltip="{{column.cellTooltip}}"> 
-                    <span *ngIf="!cellTemplateRef && !column?.cellTemplate && !cellTemplateRefMap[column.field]">{{row[column.field]}}</span>
-                    <ng-container *ngIf="cellTemplateRefMap[column.field]" [ngTemplateOutlet]="cellTemplateRefMap[column.field]" [ngTemplateOutletContext]="{row:row,column:column,index:i}">
-                    </ng-container>
-                    <ng-container *ngIf="cellTemplateRef && column.cellTemplate && !cellTemplateRefMap[column.field]" [ngTemplateOutlet]="column.cellTemplate" [ngTemplateOutletContext]="{row:row,column:column,index:i}">
-                    </ng-container>
+                <span *ngIf="!cellTemplateRef && !column?.cellTemplate && !cellTemplateRefMap[column.field]">{{row[column.field]}}</span>
+                <ng-container *ngIf="cellTemplateRefMap[column.field]" [ngTemplateOutlet]="cellTemplateRefMap[column.field]" [ngTemplateOutletContext]="{row:row,column:column,index:i}">
+                </ng-container>
+                <ng-container *ngIf="cellTemplateRef && column.cellTemplate && !cellTemplateRefMap[column.field]" [ngTemplateOutlet]="column.cellTemplate" [ngTemplateOutletContext]="{row:row,column:column,index:i}">
+                </ng-container>
 
-                    <ng-container *ngIf="!cellTemplateRef && column.cellTemplate && !cellTemplateRefMap[column.field]" [ngTemplateOutlet]="column.cellTemplate" [ngTemplateOutletContext]="{row:row,column:column,index:i}">
-                    </ng-container>
-                    <ng-container *ngIf="cellTemplateRef && !column.cellTemplate && !cellTemplateRefMap[column.field]" [ngTemplateOutlet]="cellTemplateRef" [ngTemplateOutletContext]="{row:row,column:column,index:i}">
-                    </ng-container>
+                <ng-container *ngIf="!cellTemplateRef && column.cellTemplate && !cellTemplateRefMap[column.field]" [ngTemplateOutlet]="column.cellTemplate" [ngTemplateOutletContext]="{row:row,column:column,index:i}">
+                </ng-container>
+                <ng-container *ngIf="cellTemplateRef && !column.cellTemplate && !cellTemplateRefMap[column.field]" [ngTemplateOutlet]="cellTemplateRef" [ngTemplateOutletContext]="{row:row,column:column,index:i}">
+                </ng-container>
                     
 
             </div>
@@ -126,45 +126,45 @@
             <div *ngIf="row.editable || cellEditing[i +'_'+column.field]" (click)="$event.stopPropagation()" style="display: inline-block;">
                 <ng-container *ngIf="inlineEditingTemplateRef && !cellEditing[i +'_'+column.field]" [ngTemplateOutlet]="inlineEditingTemplateRef" [ngTemplateOutletContext]="{data:getInlineEditingData(row,i,column)}" ></ng-container>
                 <ng-container *ngIf="cellEditingTemplateRef && !(row.editable)" [ngTemplateOutlet]="cellEditingTemplateRef" [ngTemplateOutletContext]="{data:getInlineEditingData(row,i,column)}" ></ng-container>
-                <ng-container *ngIf="!inlineEditingTemplateRef && (row.editable)">
-                <mat-form-field *ngIf="column.type == 'number'" appearance="outline" class="inline-editing-field">
-                    <input matInput type="number" [(ngModel)]="rowDataTemp['e'+i][column.field]"  [ngModelOptions]="{standalone: true}">
-                </mat-form-field> 
-                <mat-form-field *ngIf="column.type == 'string'" appearance="outline" class="inline-editing-field" >
-                    <input matInput type="text" [(ngModel)]="rowDataTemp['e'+i][column.field]" [ngModelOptions]="{standalone: true}">
-                </mat-form-field>
-                <mat-form-field *ngIf="column.type == 'date'" appearance="outline" class="inline-editing-field">
-                    <input matInput type="date" [(ngModel)]="rowDataTemp['e'+i][column.field]" [ngModelOptions]="{standalone: true}">
-                </mat-form-field>
-                <mat-form-field *ngIf="column.type == 'selection'" appearance="outline" class="inline-editing-field">
-                    <mat-select [value]="rowDataTemp['e'+i][column.field]" [(ngModel)]="rowDataTemp['e'+i][column.field]">
-                        <mat-option *ngFor="let option of column.options" [value]="option">
-                            {{option}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <mat-checkbox (click)="$event.stopPropagation()"  *ngIf="column.type == 'boolean'"  color="primary"
-                        [(ngModel)]="row[column.field]"></mat-checkbox>
+                <ng-container *ngIf="!inlineEditingTemplateRef && (row.editable) && rowDataTemp['e'+i]">
+                    <mat-form-field *ngIf="column.type == 'number'" appearance="outline" class="inline-editing-field">
+                        <input matInput type="number" [(ngModel)]="rowDataTemp['e'+i][column.field]"  [ngModelOptions]="{standalone: true}">
+                    </mat-form-field> 
+                    <mat-form-field *ngIf="column.type == 'string'" appearance="outline" class="inline-editing-field" >
+                        <input matInput type="text" [(ngModel)]="rowDataTemp['e'+i][column.field]" [ngModelOptions]="{standalone: true}">
+                    </mat-form-field>
+                    <mat-form-field *ngIf="column.type == 'date'" appearance="outline" class="inline-editing-field">
+                        <input matInput type="date" [(ngModel)]="rowDataTemp['e'+i][column.field]" [ngModelOptions]="{standalone: true}">
+                    </mat-form-field>
+                    <mat-form-field *ngIf="column.type == 'selection'" appearance="outline" class="inline-editing-field">
+                        <mat-select [value]="rowDataTemp['e'+i][column.field]" [(ngModel)]="rowDataTemp['e'+i][column.field]">
+                            <mat-option *ngFor="let option of column.options" [value]="option">
+                                {{option}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-checkbox (click)="$event.stopPropagation()"  *ngIf="column.type == 'boolean'"  color="primary"
+                            [(ngModel)]="row[column.field]"></mat-checkbox>
                 </ng-container>
                 <ng-container *ngIf="!cellEditingTemplateRef && cellEditing[i +'_'+column.field]">
-                <mat-form-field *ngIf="column.type == 'number'" appearance="outline" class="inline-editing-field">
-                    <input matInput type="number" [(ngModel)]="rowDataTemp['e'+i][column.field]"  [ngModelOptions]="{standalone: true}">
-                </mat-form-field> 
-                <mat-form-field *ngIf="column.type == 'string'" appearance="outline" class="inline-editing-field" >
-                    <input matInput type="text" [(ngModel)]="rowDataTemp['e'+i][column.field]" [ngModelOptions]="{standalone: true}">
-                </mat-form-field>
-                <mat-form-field *ngIf="column.type == 'date'" appearance="outline" class="inline-editing-field">
-                    <input matInput type="date" [(ngModel)]="rowDataTemp['e'+i][column.field]" [ngModelOptions]="{standalone: true}">
-                </mat-form-field>
-                <mat-form-field *ngIf="column.type == 'selection'" appearance="outline" class="inline-editing-field">
-                    <mat-select [value]="rowDataTemp['e'+i][column.field]" [(ngModel)]="rowDataTemp['e'+i][column.field]">
-                        <mat-option *ngFor="let option of column.options" [value]="option">
-                            {{option}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <mat-checkbox (click)="$event.stopPropagation()"  *ngIf="column.type == 'boolean'"  color="primary"
-                        [(ngModel)]="row[column.field]"></mat-checkbox>
+                    <mat-form-field *ngIf="column.type == 'number'" appearance="outline" class="inline-editing-field">
+                        <input matInput type="number" [(ngModel)]="rowDataTemp['e'+i][column.field]"  [ngModelOptions]="{standalone: true}">
+                    </mat-form-field> 
+                    <mat-form-field *ngIf="column.type == 'string'" appearance="outline" class="inline-editing-field" >
+                        <input matInput type="text" [(ngModel)]="rowDataTemp['e'+i][column.field]" [ngModelOptions]="{standalone: true}">
+                    </mat-form-field>
+                    <mat-form-field *ngIf="column.type == 'date'" appearance="outline" class="inline-editing-field">
+                        <input matInput type="date" [(ngModel)]="rowDataTemp['e'+i][column.field]" [ngModelOptions]="{standalone: true}">
+                    </mat-form-field>
+                    <mat-form-field *ngIf="column.type == 'selection'" appearance="outline" class="inline-editing-field">
+                        <mat-select [value]="rowDataTemp['e'+i][column.field]" [(ngModel)]="rowDataTemp['e'+i][column.field]">
+                            <mat-option *ngFor="let option of column.options" [value]="option">
+                                {{option}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-checkbox (click)="$event.stopPropagation()"  *ngIf="column.type == 'boolean'"  color="primary"
+                            [(ngModel)]="row[column.field]"></mat-checkbox>
                 </ng-container>
             </div>
         </td>
@@ -174,17 +174,15 @@
     </div>
     
     <ng-container matColumnDef="edit" stickyEnd="false">
-        <th matTooltip="Header tooltip" mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header class="action-column-cells"> Edit
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header class="action-column-cells"> Edit
         </th>
-        <td matTooltip="cell tooltip" mat-cell *matCellDef="let row; let i = dataIndex" class="inline-edit-column-cell">
-                <mat-icon class="edit-column-icons" *ngIf="!row.editable && !row.editmodal" aria-hidden="false" (click)="editEnable(row,i)"
-                    matTooltip="Edit" fontIcon="edit_note"></mat-icon>
-                    <div class="inline-editing-controls" *ngIf="row.editable && !row.editmodal">
-                        <mat-icon class="edit-column-icons"  aria-hidden="false" (click)="saveData(row,i)"
-                            matTooltip="Save" fontIcon="done"></mat-icon>
-                        <mat-icon class="edit-column-icons"  aria-hidden="false" (click)="cencelInlineEditing(row,i)"
-                            matTooltip="Cencel" fontIcon="close"></mat-icon>
-                    </div>
+        <td mat-cell *matCellDef="let row; let i = dataIndex" class="inline-edit-column-cell">
+            <mat-icon class="edit-column-icons" *ngIf="!row.editable && !row.editmodal" aria-hidden="false" (click)="editEnable(row,i)" fontIcon="edit_note">
+            </mat-icon>
+            <div class="inline-editing-controls" *ngIf="row.editable && !row.editmodal">
+                <mat-icon class="edit-column-icons"  aria-hidden="false" (click)="saveData(row,i)" fontIcon="done"></mat-icon>
+                <mat-icon class="edit-column-icons"  aria-hidden="false" (click)="cencelInlineEditing(row,i)" fontIcon="close"></mat-icon>
+            </div>
         </td>
         <td matTooltip="footer tooltip" mat-footer-cell *matFooterCellDef> edit </td>
     </ng-container>

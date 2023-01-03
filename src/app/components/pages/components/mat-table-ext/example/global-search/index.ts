@@ -1,9 +1,8 @@
-import { AppComponent as RowSelectableComponent } from './app.component';
+import { AppComponent as GlobalSearchFilterComponent } from './app.component';
 
-const rowSelectableExampleConfig = {
-  title: 'Row selectable',
-  description: `<p>Use <code>button controls</code> from toolbar to show or hide rows.</p>`,
-  component: RowSelectableComponent,
+const globalSearchFilterExampleConfig = {
+  title: 'Global Search Filter',
+  component: GlobalSearchFilterComponent,
   files: [
     {
       file: 'app.component.html',
@@ -23,4 +22,4 @@ const rowSelectableExampleConfig = {
   ],
 };
 
-export { RowSelectableComponent, rowSelectableExampleConfig };
+export { GlobalSearchFilterComponent, globalSearchFilterExampleConfig };

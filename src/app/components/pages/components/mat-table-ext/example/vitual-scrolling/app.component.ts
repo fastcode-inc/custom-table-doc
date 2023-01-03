@@ -14,20 +14,10 @@ export class AppComponent {
     this.loadPage(10);
   }
   columns: MTExColumn[] = [
+    { header: 'ID', field: 'id', type: 'number' },
     { header: 'Name', field: 'name', type: 'string' },
-    {
-      header: 'Weight',
-      field: 'weight',
-      type: 'number',
-    },
     { header: 'Gender', field: 'gender', type: 'selection', options: ['male', 'female'] },
-    { header: 'Mobile', field: 'mobile', type: 'string' },
-    { header: 'City', field: 'city', type: 'string' },
-    {
-      header: 'Date',
-      field: 'date',
-      type: 'date'
-    },
+    { header: 'Age', field: 'age', type: 'string' },
   ];
 
   list = new MatTableDataSource;

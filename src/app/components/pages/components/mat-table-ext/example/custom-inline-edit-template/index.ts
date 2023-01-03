@@ -1,9 +1,8 @@
-import { AppComponent as RowSelectableComponent } from './app.component';
+import { AppComponent as CustomInlineEditTemplateComponent } from './app.component';
 
-const rowSelectableExampleConfig = {
-  title: 'Row selectable',
-  description: `<p>Use <code>button controls</code> from toolbar to show or hide rows.</p>`,
-  component: RowSelectableComponent,
+const customInlineEditTemplateExampleConfig = {
+  title: 'Custom Inline Editing template',
+  component: CustomInlineEditTemplateComponent,
   files: [
     {
       file: 'app.component.html',
@@ -23,4 +22,4 @@ const rowSelectableExampleConfig = {
   ],
 };
 
-export { RowSelectableComponent, rowSelectableExampleConfig };
+export { CustomInlineEditTemplateComponent, customInlineEditTemplateExampleConfig };
