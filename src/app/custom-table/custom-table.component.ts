@@ -109,7 +109,7 @@ export class CustomTableComponent implements OnInit, OnChanges, AfterViewInit {
   headersFilters: MtxGridColumn[] = [];
   headersFiltersIds: string[] = [];
   columnsListCtrl = new FormControl([]);
-  columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
+  columnsToDisplayWithExpand :string[]= [];
   columnsToDisplay: string[] = this.displayedColumns.slice();
   selection = new SelectionModel<any>(false, []);
   hiddenCtrl = new SelectionModel<any>(true, []);
@@ -258,6 +258,7 @@ export class CustomTableComponent implements OnInit, OnChanges, AfterViewInit {
           break;
         }
         case 'expandRows': {
+          this.columnsToDisplayWithExpand = [...this.displayedColumns, 'expand']
           this.expandRows = changes[propetry].currentValue;
           break;
         }

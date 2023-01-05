@@ -39,32 +39,32 @@
     [style.top.px]="menuY">
 </div>
 <mat-menu #columnMenu="matMenu" (closed)="resetMenuChecks()">
-            <div class="toolbar-menu-container" *ngIf="hideShowMenuCtrl" [formGroup]="hideShowMenuGroup" (click)="$event.stopPropagation()">
-                <h4>Visibile Columns</h4>
-                    <mat-form-field appearance="fill" style="width: -webkit-fill-available;">
-                        <mat-label>Filter Columns</mat-label>
-                        <input matInput  [(ngModel)]="showHideFilter" (ngModelChange)="filterColumns($event)" [ngModelOptions]="{standalone: true}">
-                    </mat-form-field>
-                <div class="showHide-menu-columns-list">
-                    <div class="toolbar-menu-item" *ngFor="let column of showHideColumnsArray">
-                        <mat-checkbox color="primary" class="toolbar-menu-checkbox" style="width: max-content;"
-                        [formControlName]="column.field" (change)="setColumnHideShow()">{{column.header}}</mat-checkbox>
-                    </div>
-                </div>
+    <div class="toolbar-menu-container" *ngIf="hideShowMenuCtrl" [formGroup]="hideShowMenuGroup" (click)="$event.stopPropagation()">
+        <h4>Visibile Columns</h4>
+            <mat-form-field appearance="fill" style="width: -webkit-fill-available;">
+                <mat-label>Filter Columns</mat-label>
+                <input matInput  [(ngModel)]="showHideFilter" (ngModelChange)="filterColumns($event)" [ngModelOptions]="{standalone: true}">
+            </mat-form-field>
+        <div class="showHide-menu-columns-list">
+            <div class="toolbar-menu-item" *ngFor="let column of showHideColumnsArray">
+                <mat-checkbox color="primary" class="toolbar-menu-checkbox" style="width: max-content;"
+                [formControlName]="column.field" (change)="setColumnHideShow()">{{column.header}}</mat-checkbox>
             </div>
-            <div class="toolbar-menu-container" *ngIf="columnPinMenuCtrl" (click)="$event.stopPropagation()">
-                <h4>Pin Columns</h4>
-                <form class="example-form">
-                    <mat-form-field appearance="fill" style="width: -webkit-fill-available;">
-                        <mat-label>Filter Columns</mat-label>
-                        <input matInput [(ngModel)]="showHideFilter" (ngModelChange)="filterColumns($event)"
-                        [ngModelOptions]="{standalone: true}">
-                    </mat-form-field>
-                </form>
-                <div class="showHide-menu-columns-list">
-                    <app-column-pinning [columns]="showHideColumnsArray" (columnsChanged)="setPinnedColumns($event)"></app-column-pinning>
-                </div>
-            </div>
+        </div>
+    </div>
+    <div class="toolbar-menu-container" *ngIf="columnPinMenuCtrl" (click)="$event.stopPropagation()">
+        <h4>Pin Columns</h4>
+        <form class="example-form">
+            <mat-form-field appearance="fill" style="width: -webkit-fill-available;">
+                <mat-label>Filter Columns</mat-label>
+                <input matInput [(ngModel)]="showHideFilter" (ngModelChange)="filterColumns($event)"
+                [ngModelOptions]="{standalone: true}">
+            </mat-form-field>
+        </form>
+        <div class="showHide-menu-columns-list">
+            <app-column-pinning [columns]="showHideColumnsArray" (columnsChanged)="setPinnedColumns($event)"></app-column-pinning>
+        </div>
+    </div>
 </mat-menu>
 
 <div style="padding: 10px" *ngIf="addremoveColumns">
@@ -169,7 +169,7 @@
             </div>
         </td>
         <ng-container *ngIf="showFooterRow">
-            <td matTooltip="footer tooltip" mat-footer-cell *matFooterCellDef> {{column.footerText}} </td>
+            <td mat-footer-cell *matFooterCellDef> {{column.footerText}} </td>
         </ng-container>
     </div>
     
