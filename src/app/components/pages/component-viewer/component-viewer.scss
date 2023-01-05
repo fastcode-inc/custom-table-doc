@@ -6,7 +6,7 @@ app-component-viewer {
   line-height: 1.5;
 
   // spacing for the component viewer
-  padding: 20px constants.$content-padding-sidenav;
+  padding: 20px 10px;
 
   // Sidenav is hidden
   @media (max-width: constants.$small-breakpoint-width) {
@@ -18,7 +18,7 @@ app-component-viewer {
     padding-right: constants.$content-padding-side-xs;
   }
   .docs-component-viewer{
-    width: 75%;
+    width: 80%;
   }
   .docs-component-viewer-section-tab {
     min-width: 160px;
@@ -30,22 +30,27 @@ app-component-viewer {
   margin-bottom: 25px;
 }
 
+.component-viewer-container {
+  display: flex;
+  align-items: flex-start;
+  overflow: visible;
+}
 .docs-component-viewer-content {
   position: relative;
   min-height: 500px;
 
   // Display outlet components with toc as flex and switch to
   // vertical direction on small screens
-  component-overview,
-  component-api {
-    display: flex;
-    align-items: flex-start;
-    overflow: visible;
+  // component-overview,
+  // component-api {
+  //   display: flex;
+  //   align-items: flex-start;
+  //   overflow: visible;
 
-    @media (max-width: constants.$small-breakpoint-width) {
-      flex-direction: column;
-    }
-  }
+  //   @media (max-width: constants.$small-breakpoint-width) {
+  //     flex-direction: column;
+  //   }
+  // }
 
   table-of-contents {
     top: 35px;

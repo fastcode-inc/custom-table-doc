@@ -3,7 +3,8 @@
   // Width is container width minus content width
   width: 19%;
   position: sticky;
-  top: 0;
+  top: 35px;
+  margin-top: 50px;
   padding-left: 25px;
   box-sizing: border-box;
   display: inline-flex;
@@ -14,7 +15,7 @@
   width: 100%;
   padding: 5px 0 10px 10px;
 
-  & + .docs-toc-container {
+  &+.docs-toc-container {
     padding-top: 8px;
   }
 }

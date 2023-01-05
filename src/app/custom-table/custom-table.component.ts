@@ -25,7 +25,7 @@ import { CustomTableService } from './service/custom-table.service';
     ]),
   ]
 })
-export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
+export class CustomTableComponent implements OnInit, OnChanges, AfterViewInit {
   @ViewChild(MatMenuTrigger) menuTrigger!: MatMenuTrigger;
   @ViewChild('columnMenuTrigger') columnMenuTrigger!: MatMenuTrigger;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -76,8 +76,8 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   @Input() inlineEditingTemplateRef!: TemplateRef<any> | undefined;
   @Input() cellEditingTemplateRef!: TemplateRef<any> | undefined;
   //for separate template for columns
-  @Input() cellTemplateRefMap: CellTemplateRefMap={};
-  
+  @Input() cellTemplateRefMap: CellTemplateRefMap = {};
+
 
   // Table outputs
   @Output() inlineChange: EventEmitter<any> = new EventEmitter<RowChange>();
@@ -99,8 +99,8 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   multiSelectRow: any = true;
   columnFilterBySelection: any = false;
   dragEnable: any = false;
-  rowDataTemp: any={};
-  inlineEditingTemplateRefData: any={};
+  rowDataTemp: any = {};
+  inlineEditingTemplateRefData: any = {};
   displayedColumns: string[] = [];
   showHideColumnsArray: MtxGridColumn[] = [];
   totalSelectionList: any = [];
@@ -128,7 +128,7 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   currentRow: any = {};
   cellEditing: any = {};
   hideShowMenuGroup!: FormGroup;
-  cellTemplate!:TemplateRef<any>
+  cellTemplate!: TemplateRef<any>
   dynamicDisplayedColumns: any[] = [
     { filter: false, name: 'select', show: false },
     { filter: false, name: 'edit', show: false },
@@ -154,10 +154,6 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
     this.setPropertyValue(changes);
   }
   ngOnInit() {
-    this.service.selectedRow.subscribe((row: any) => { 
-      console.log(this);
-      console.log(row);
-    })
     if (this.dataSource) {
       this.dataSource.filterPredicate = this.createFilter();
     }
@@ -183,7 +179,7 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
             this.dataSource = changes[propetry].currentValue;
             this.reCal()
           } else {
-            this.dataSource=new MatTableDataSource([{}])
+            this.dataSource = new MatTableDataSource([{}])
           }
           break;
         }
@@ -226,9 +222,9 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
         }
         case 'columnFilter': {
           if (changes[propetry].currentValue) {
-            this.headersFiltersIds=this.columnsArray.map((column,i) => column.field+'_'+i)
-            let array:MtxGridColumn[] = []
-            this.columnsArray.forEach((column,i) => { 
+            this.headersFiltersIds = this.columnsArray.map((column, i) => column.field + '_' + i)
+            let array: MtxGridColumn[] = []
+            this.columnsArray.forEach((column, i) => {
               let obj = {
                 type: column?.type,
                 field: column?.field + '_' + i
@@ -241,7 +237,7 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
           else {
             this.headersFilters = [];
             this.headersFiltersIds = [];
-            this.dataSource.filter=''
+            this.dataSource.filter = ''
           }
           this.toggleFilters = changes[propetry].currentValue;
           break;
@@ -305,12 +301,11 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
         break;
       }
     }
-   
   }
   menuClosed() {
     this.exportMenuCtrl = false;
   }
-  setColumnsData(columns:MtxGridColumn[]) {
+  setColumnsData(columns: MtxGridColumn[]) {
     if (columns.length) {
       this.columnsArray = [...columns];
       this.setColumnsList(columns);
@@ -324,7 +319,7 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
       if (typeof col?.header == 'string') {
         this.columnsList.push(col?.header);
         this.displayedColumns.push(col?.field);
-        columnsArray.push({filter:true,name:col?.field,show:!(col.hide)});
+        columnsArray.push({ filter: true, name: col?.field, show: !(col.hide) });
       }
     })
     this.dynamicDisplayedColumns = [
@@ -336,7 +331,7 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
     this.dynamicDisplayedColumns = columnsArray.concat(this.dynamicDisplayedColumns);
   }
 
-  showHideColumn(name:string,value:boolean) {
+  showHideColumn(name: string, value: boolean) {
     this.dynamicDisplayedColumns.filter(a => a.name == name)[0].show = value;
   }
   showSelectionColumn(name: string, value: boolean) {
@@ -350,7 +345,7 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   }
   drop(event: CdkDragDrop<string[]>) {
     if (this.dragEnable) {
-      moveItemInArray(this.dynamicDisplayedColumns, event.previousIndex + 1, event.currentIndex + 1);
+      moveItemInArray(this.dynamicDisplayedColumns, event.previousIndex, event.currentIndex);
       this.getDisplayedColumns();
     }
 
@@ -358,17 +353,14 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   removeColumn() {
     if (this.columnsToDisplay.length) {
       this.columnsToDisplay.pop();
-      //  this.selecteRow.pop();
     }
   }
 
   addColumn() {
     const randomColumn = Math.floor(Math.random() * this.displayedColumns.length);
     this.columnsToDisplay.push(this.displayedColumns[randomColumn]);
-    //this.selecteRow.push(this.selecteRow[randomColumn]+'new');
   }
   ToggleColumnfilter(event: any) {
-    console.log(this.headersFilters);
     this.toggleFilters = !this.toggleFilters;
   }
 
@@ -408,14 +400,14 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
     })
     this.dataSource.filter = JSON.stringify(columns);
   }
-  applySingleFilter(event:any,column:any) {
+  applySingleFilter(event: any, column: any) {
     this.individulFilter = column.field;
     this.filterValues[column.field] = event[column.field]
     this.dataSource.filter = JSON.stringify(this.filterValues);
   }
 
 
-  editEnable(row: any,i: number) {
+  editEnable(row: any, i: number) {
     const rowData: any = {}
     rowData['e' + i] = { ...row };
     this.rowDataTemp = rowData;
@@ -423,21 +415,21 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
       this.ELEMENT_DATA[i]['editable'] = !this.ELEMENT_DATA[i]['editable'];
     }, 0);
   }
-  getInlineEditingData(row: any, index: number,column:any) {
-    this.inlineEditingTemplateRefData={
-      row:{...row},
-      column:{...column},
+  getInlineEditingData(row: any, index: number, column: any) {
+    this.inlineEditingTemplateRefData = {
+      row: { ...row },
+      column: { ...column },
       index: index,
       updateFunc: this.updateInlineTemplateData
     }
     return this.inlineEditingTemplateRefData;
-   }
+  }
   setCellData(row: any, i: number) {
     this.currentRow = { ...row };
     this.currentRowIndex = i;
     this.rowDataTemp['e' + i] = { ...row };
   }
-  cencelInlineEditing(row: any,i:number) { 
+  cencelInlineEditing(row: any, i: number) {
     this.ELEMENT_DATA.filter((a: any) => a.id == row.id)[0]['editable'] = !this.ELEMENT_DATA.filter((a: { id: any; }) => a.id == row.id)[0]['editable'];
     this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
     this.rowDataTemp["e" + i] = {};
@@ -467,7 +459,7 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
     this.cellEditing = {};
     let index = this.currentRowIndex;
     if (index > -1) {
-      if (this.cellEditingTemplateRef ) {
+      if (this.cellEditingTemplateRef) {
         let changedData = this.service.selectedRow.value;
         if (changedData) {
           this.ELEMENT_DATA[index] = { ...changedData };
@@ -525,12 +517,12 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
     this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    this.rowDeleted.emit({removedRow: row,fromIndex:index});
+    this.rowDeleted.emit({ removedRow: row, fromIndex: index });
   }
 
-  expandRow(row: any, expand: boolean,index:number) {
+  expandRow(row: any, expand: boolean, index: number) {
     if (this.expandRows) {
-      this.expansionChange.emit({data: row, expanded: expand,index:index})
+      this.expansionChange.emit({ data: row, expanded: expand, index: index })
       this.expandedElement = this.expandedElement === row ? null : row
     }
   }
@@ -542,7 +534,7 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
     dialogConfig.height = "70%";
     dialogConfig.maxWidth = "100%"
     var rowData = { ...row };
-    dialogConfig.data = {row:rowData , columns:[...this.columnsArray],templateRef:this.popupEditingTemplateRef};
+    dialogConfig.data = { row: rowData, columns: [...this.columnsArray], templateRef: this.popupEditingTemplateRef };
 
     this.dialog.open(EditingComponent, dialogConfig).afterClosed().subscribe(data => {
       let index = this.ELEMENT_DATA.indexOf(row);
@@ -596,11 +588,11 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
     }
   }
 
-  openPinnablePropertyMenu(column: MtxGridColumn, event: MouseEvent):void{
+  openPinnablePropertyMenu(column: MtxGridColumn, event: MouseEvent): void {
     this.menuX = event.clientX;
     this.menuY = event.clientY;
     let options: MtxGridColumnPinOption[] = [
-      { label: "Pin Left", value: "left", selected: false ,field:column.field },
+      { label: "Pin Left", value: "left", selected: false, field: column.field },
       { label: "Pin Right", value: "right", selected: false, field: column.field },
       { label: "No Pin", value: null, selected: false, field: column.field },
     ]
@@ -626,11 +618,11 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
     this.columnPinningOptions = [];
   }
 
-  filterColumns(value:any) {
+  filterColumns(value: any) {
     if (value !== '') {
-      this.showHideColumnsArray = this.columnsArray.filter((col: MtxGridColumn)=>{ return ((col.header!).toLowerCase()).includes((value).toLowerCase())})
+      this.showHideColumnsArray = this.columnsArray.filter((col: MtxGridColumn) => { return ((col.header!).toLowerCase()).includes((value).toLowerCase()) })
     }
-    else{
+    else {
       this.showHideColumnsArray = this.columnsArray;
 
     }
@@ -649,19 +641,18 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
   }
   showHideAllColumns(val: boolean) {
     let array = [...this.dynamicDisplayedColumns];
-    for (let i = 0; i < array.length; i++){
+    for (let i = 0; i < array.length; i++) {
 
       this.showHideColumn(array[i], val);
     }
   }
-  updateColumnsHideShow(values:any) {
+  updateColumnsHideShow(values: any) {
     let keys = Object.keys(values);
-    keys.forEach((key: string) => { 
+    keys.forEach((key: string) => {
       this.showHideColumn(key, values[key]);
     })
   }
   setPinnedColumns(event: MtxGridColumn[]) {
-    console.log('TableCom',event)
   }
   onScroll(event: any) {
     this.scroll.emit(event);
@@ -704,5 +695,5 @@ export class CustomTableComponent implements OnInit, OnChanges,AfterViewInit {
       this.dataSource.filterPredicate = this.createFilter();
     }
   }
-  updateInlineTemplateData = (row: any) => { console.log("HAZMA ASLAM<", row); this.service.selectedRow.next(row) };
+  updateInlineTemplateData = (row: any) => {this.service.selectedRow.next(row) };
 }

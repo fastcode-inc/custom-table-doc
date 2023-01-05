@@ -10,16 +10,16 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class AppComponent {
   columns: MTExColumn[] = [
-    { header: 'Name', field: 'name', sortable: true, type: "string" },
-    { header: 'Weight', field: 'weight', sortable: true, type: "string" },
-    { header: 'Gender', field: 'gender', sortable: true, type: "selection", options: ['male', 'female'] },
-    { header: 'Mobile', field: 'mobile', sortable: false, type: "string" },
+    { header: 'Name', field: 'name', type: "string" },
+    { header: 'Weight', field: 'weight', type: "string" },
+    { header: 'Gender', field: 'gender', type: "selection", options: ['male', 'female'] },
+    { header: 'Mobile', field: 'mobile', type: "string" },
     {
       header: 'City',
       field: 'city',
       type: "string",
     },
   ];
-
+  dragCtrl = false;
   list = new MatTableDataSource(EXAMPLE_DATA);
 }

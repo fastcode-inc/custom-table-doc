@@ -9,18 +9,17 @@ Selector: `[mat-table-ext]`
 
 Exported as: `MatTableExt`
 
-##### Properties
+##### **Properties**
 
-###### Basic
+###### **Basic**
 
 | Name | Description |
 | :--- | :--- |
 | `@Input()`<br>`columns: MTExColumn[]` | The table's columns. |
 | `@Input()`<br>`dataSource: MatTableDataSource[]` | The table's data. |
 | `@Input()`<br>`loadingIdicator: boolean` | Whether the table's data is loading. Default is **`false`**. |
-| `@Input()`<br>`columnResizable: boolean` | Whether the column is resizable. Default is **`false`**. |
 
-###### Page
+###### **Page**
 
 | Name | Description |
 | :--- | :--- |
@@ -29,13 +28,13 @@ Exported as: `MatTableExt`
 | `@Input()`<br>`pageSizeOptions: number[]` | The set of provided page size options to display to the user. Default is **`[10, 50, 100]`** |
 | `@Output()`<br>`scroll : EventEmitter<any>` | The set of provided page size options to display to the user|
 
-###### Sort
+###### **Sort**
 
 | Name | Description |
 | :--- | :--- |
-| `@Input()`<br>`sorting: boolean` | Whether to sort the data on front end. Default is **`true`**. |
+| `@Input()`<br>`sorting: boolean` | Sorting for table columns. Default is **`false`**. |
 
-###### Expansion
+###### **Expansion**
 
 | Name | Description |
 | :--- | :--- |
@@ -43,7 +42,7 @@ Exported as: `MatTableExt`
 | `@Input()`<br>`expansionTemplateRef: TemplateRef<any>` | The template for the expandable row. |
 | `@Output()`<br>`expansionChange: EventEmitter<any>` | Event emitted when the user toggles the expandable row. |
 
-###### Selection
+###### **Selection**
 
 | Name | Description |
 | :--- | :--- |
@@ -51,7 +50,7 @@ Exported as: `MatTableExt`
 | `@Input()`<br>`rowSelection: boolean` | Whether the row is selectable. Default is **`false`**. |
 | `@Output()`<br>`selectionChanged: EventEmitter<any>` | Event emitted when the row is selected. |
 
-###### Toolbar
+###### **Toolbar**
 
 | Name | Description |
 | :--- | :--- |
@@ -59,47 +58,47 @@ Exported as: `MatTableExt`
 | `@Input()`<br>`toolbarTitle: string` | The text of the toolbar's title. Default is **`''`**. |
 | `@Input()`<br>`toolbarTemplate: TemplateRef<any>` | The template for the toolbar . |
 
-###### Column
+###### **Column**
 
 | Name | Description |
 | :--- | :--- |
 | `@Input()`<br>`columnHideable: boolean` | Whether the column is hideable. Default is **`false`**. |
-| `@Input()`<br>`columnSortable: boolean` | Whether the column is sortable. Default is **`false`**. |
 | `@Input()`<br>`columnPinnable: boolean` | Whether the column is pinnable. Default is **`false`**. |
 
-###### Row
+###### **Row**
 
 | Name | Description |
 | :--- | :--- |
 | `@Input()`<br>`rowHover: boolean` | Whether to use the row hover style. Default is **`false`**. |
 | `@Input()`<br>`stripedRows: boolean` | Whether to use the row striped style. Default is **`false`**. |
 
-###### Cell templates
+###### **Cell templates**
 
 | Name | Description |
 | :--- | :--- |
-| `@Input()`<br>`headerTemplate: TemplateRef<any>` | The header's cell template for the grid. |
-| `@Input()`<br>`cellTemplate: TemplateRef<any>` | The cell template for the grid. |
+| `@Input()`<br>`headerTemplateRef: TemplateRef<any>` | The header's cell template for the table. |
+| `@Input()`<br>`cellTemplateRef: TemplateRef<any>` | The cell template for the table. |
+| `@Input()`<br>`cellTemplateRefMap: TemplateRef<any>` | The cell template for the table when you want template for more columns. |
 
-### Interfaces
+### **Interfaces**
 
 #### `MTExColumn`
 
 ```ts
 interface MTExColumn {
   field: string;
-  header?: string | Observable<string>;
+  header?: string ;
   disabled?: boolean;
   width?: string;
   minWidth?: number;
   maxWidth?: number;
-  type?: MTExColumnType;
+  type: MTExColumnType;
   options?: string[] ;
   header?: string ;
   name?: string;
   footerText?: string;
-  headerTooltip?: TooltipProp;
-  cellTooltip?: TooltipProp;
+  headerTooltip?: string;
+  cellTooltip?: string;
 }
 ```
 

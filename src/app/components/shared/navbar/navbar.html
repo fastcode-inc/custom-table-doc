@@ -1,5 +1,3 @@
-<mat-progress-bar color="white"></mat-progress-bar>
-
 <nav class="docs-navbar-header" aria-label="Top Toolbar">
   <div class="skip-link-wrapper" [class.cdk-visually-hidden]="skipLinkHidden" *ngIf="skipLinkHref">
     <a mat-raised-button [href]="skipLinkHref" (focus)="skipLinkHidden = false"
@@ -21,12 +19,11 @@
 
   <div class="flex-spacer"></div>
 
-  <button mat-icon-button matTooltip="Toggle the theme" (click)="toggleTheme()">
+  <!-- <button mat-icon-button matTooltip="Toggle the theme" (click)="toggleTheme()">
     <mat-icon>{{dark ? 'brightness_3' : 'wb_sunny'}}</mat-icon>
-  </button>
+  </button> -->
 
   <a mat-button class="docs-button docs-navbar-hide-small"
-     href="https://github.com/ng-matero/extensions" target="_blank"
      aria-label="GitHub Repository">
     <img class="logo" matButtonIcon
          src="../../../../assets/img/github-circle-white-transparent.svg"
@@ -34,7 +31,6 @@
     GitHub
   </a>
   <a mat-icon-button class="docs-button docs-navbar-show-small"
-     href="https://github.com/ng-matero/extensions" target="_blank"
      aria-label="GitHub Repository">
     <img class="logo docs-navbar--github-logo" matButtonIcon
          src="../../../../assets/img/github-circle-white-transparent.svg"

@@ -120,11 +120,11 @@ export class TableOfContents implements OnInit, AfterViewInit, OnDestroy {
     const links = Array.from(docViewerContent.querySelectorAll('h3, h4'), header => {
       // remove the 'link' icon name from the inner text
       const name = (header as HTMLElement).innerText.trim().replace(/^link/, '');
-      const {top} = header.getBoundingClientRect();
+      var value = header.getBoundingClientRect();
       return {
         name,
         type: header.tagName.toLowerCase(),
-        top: top,
+        top: value.top,
         id: header.id,
         active: false
       };

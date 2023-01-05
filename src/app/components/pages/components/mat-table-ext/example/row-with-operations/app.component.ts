@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { EXAMPLE_DATA } from '../../data';
+import { EXAMPLE_DATA3 } from '../../data';
 import { MTExColumn } from '../../types';
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -21,5 +21,5 @@ export class AppComponent {
   cellEdit: boolean = true;
   popupEdit: boolean = true;
   rowDelete: boolean = true;
-  list = new MatTableDataSource(EXAMPLE_DATA);
+  list = new MatTableDataSource([...EXAMPLE_DATA3]);
 }

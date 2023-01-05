@@ -1,4 +1,4 @@
-import { Component, NgModule, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, NgModule, OnInit, ViewChild } from '@angular/core';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { SharedModule } from 'src/app/modules/shared.module';
 import { HttpClient } from '@angular/common/http';
@@ -27,20 +27,36 @@ import { CustomInlineEditTemplateComponent, customInlineEditTemplateExampleConfi
 import { GlobalSearchFilterComponent, globalSearchFilterExampleConfig } from './example/global-search';
 import { ColumnSearchFilterComponent, columnSearchFilterExampleConfig } from './example/column-type-search';
 import { StickyHeaderFooterComponent, stickyHeaderFooterExampleConfig } from './example/sticky-header-footer';
+import { TableOfContents } from 'src/app/components/shared/table-of-contents/table-of-contents';
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/data-grid/', '_json');
 }
 @Component({
   selector: 'app-mat-table-ext-overview',
   templateUrl: './mat-table-ext-overview.html',
+  styleUrls: ['./mat-table-ext-overview.scss'],
 })
-export class MatTableExtOverviewComponent implements OnInit {
-
-  constructor(public route: ActivatedRoute) { }
+export class MatTableExtOverviewComponent implements OnInit, AfterViewInit {
+  @ViewChild('toc') tableOfContents!: TableOfContents;
+  constructor(public route: ActivatedRoute,
+    public elRef: ElementRef,
+  ) { }
 
   ngOnInit(): void {
   }
-
+  ngAfterViewInit() {
+    if (this.elRef) {
+      setTimeout(() => {
+        this.updateTableOfContents("Overview", this.elRef.nativeElement);
+      }, 0);
+    }
+  }
+  updateTableOfContents(sectionName: string, docViewerContent: HTMLElement, sectionIndex = 0) {
+    if (this.tableOfContents) {
+      this.tableOfContents.addHeaders(sectionName, docViewerContent, sectionIndex);
+      this.tableOfContents.updateScrollPosition();
+    }
+  }
 }
 @Component({
   selector: 'app-mat-table-ext-api',

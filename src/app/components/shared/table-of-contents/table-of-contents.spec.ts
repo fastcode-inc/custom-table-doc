@@ -3,7 +3,6 @@ import {Observable} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {TableOfContents} from './table-of-contents';
 import {TableOfContentsModule} from './table-of-contents.module';
-import {DocsAppTestingModule} from '../../testing/testing-module';
 
 const mockActivatedRoute = {
   fragment: new Observable(observer => {
@@ -15,7 +14,7 @@ describe('TableOfContents', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [TableOfContentsModule, DocsAppTestingModule],
+      imports: [TableOfContentsModule],
       providers: [
         {provide: ActivatedRoute, useValue: mockActivatedRoute},
       ]

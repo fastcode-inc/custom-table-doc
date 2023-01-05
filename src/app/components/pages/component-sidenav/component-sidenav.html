@@ -1,4 +1,4 @@
-<mat-sidenav-container class="docs-component-viewer-sidenav-container" >
+<mat-sidenav-container class="docs-component-viewer-sidenav-container" style="margin-top:40px ;" >
   <!-- If on small screen, menu resides in drawer -->
   <mat-sidenav #sidenav class="docs-component-viewer-sidenav" role="navigation"
                *ngIf="(isScreenSmall | async)"
@@ -9,7 +9,7 @@
     <app-component-nav [params]="params"></app-component-nav>
   </mat-sidenav>
 
-  <div class="docs-component-sidenav-content" style="margin-top: 40px;">
+  <div class="docs-component-sidenav-content">
     <component-page-header (toggleSidenav)="toggleSidenav(sidenav)"></component-page-header>
     <div class="docs-component-sidenav-inner-content">
       <main class="docs-component-sidenav-body-content">

@@ -1,7 +1,7 @@
 import { AppComponent as StickyHeaderFooterComponent } from './app.component';
 
 const stickyHeaderFooterExampleConfig = {
-  title: 'StickyHeaderFooter',
+  title: 'Sticky Header & Footer',
   component: StickyHeaderFooterComponent,
   files: [
     {
