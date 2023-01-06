@@ -43,7 +43,6 @@ export class CustomTableComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() enableDelete: boolean = false;
   @Input() rowSelection: boolean = false;
   @Input() multiRowSelection: boolean = false;
-  @Input() stickyColumns: boolean = false;
   @Input() stickyFooter: boolean = false;
   @Input() stickyHeader: boolean = false;
   @Input() showFooterRow: boolean = false;
@@ -75,9 +74,7 @@ export class CustomTableComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() popupEditingTemplateRef!: TemplateRef<any> | undefined;
   @Input() inlineEditingTemplateRef!: TemplateRef<any> | undefined;
   @Input() cellEditingTemplateRef!: TemplateRef<any> | undefined;
-  //for separate template for columns
   @Input() cellTemplateRefMap: CellTemplateRefMap = {};
-
 
   // Table outputs
   @Output() inlineChange: EventEmitter<any> = new EventEmitter<RowChange>();
@@ -88,7 +85,6 @@ export class CustomTableComponent implements OnInit, OnChanges, AfterViewInit {
   @Output() selectionChanged: EventEmitter<RowSelectionChange> = new EventEmitter<any>();
   @Output() expansionChange: EventEmitter<ExpansionChange> = new EventEmitter<any>();
 
-
   columnPinningOptions: MtxGridColumnPinOption[] = []
   exportMenuCtrl: boolean = false;
   columnPinMenuCtrl: boolean = false;
@@ -98,7 +94,6 @@ export class CustomTableComponent implements OnInit, OnChanges, AfterViewInit {
   toggleColumnfilter: any = false;
   multiSelectRow: any = true;
   columnFilterBySelection: any = false;
-  dragEnable: any = false;
   rowDataTemp: any = {};
   inlineEditingTemplateRefData: any = {};
   displayedColumns: string[] = [];
@@ -113,7 +108,7 @@ export class CustomTableComponent implements OnInit, OnChanges, AfterViewInit {
   columnsToDisplay: string[] = this.displayedColumns.slice();
   selection = new SelectionModel<any>(false, []);
   hiddenCtrl = new SelectionModel<any>(true, []);
-  ELEMENT_DATA: any = [];
+  tableData: any = [];
   filterValues: any = {};
   globalFilter = '';
   showHideFilter = '';
@@ -128,14 +123,18 @@ export class CustomTableComponent implements OnInit, OnChanges, AfterViewInit {
   currentRow: any = {};
   cellEditing: any = {};
   hideShowMenuGroup!: FormGroup;
-  cellTemplate!: TemplateRef<any>
+  cellTemplate!: TemplateRef<any>;
+  menuX: number = 0;
+  menuY: number = 0;
   dynamicDisplayedColumns: any[] = [
     { filter: false, name: 'select', show: false },
     { filter: false, name: 'edit', show: false },
     { filter: false, name: 'popup', show: false },
     { filter: false, name: 'delete', show: false }
   ];
-
+  inputPropertyKeys: string[] = ['dataSource', 'columns', 'inlineRowEditing', 'popupRowEditing', 'enableDelete',
+    'rowSelection', 'multiRowSelection', 'stickyHeader', 'stickyFooter', 'columnFilter', 'globalSearch', 'expandRows', 'sorting'
+  ]
 
   constructor(
     public dialog: MatDialog,
@@ -143,13 +142,11 @@ export class CustomTableComponent implements OnInit, OnChanges, AfterViewInit {
     public formBuildersService: FormBuilder
   ) {
     if (this.dataSource) {
-      this.ELEMENT_DATA = this.dataSource.data;
+      this.tableData = this.dataSource.data;
     }
 
   }
-  /**
-   * Control column ordering and which columns are displayed.
-   */
+
   ngOnChanges(changes: SimpleChanges) {
     this.setPropertyValue(changes);
   }
@@ -158,125 +155,84 @@ export class CustomTableComponent implements OnInit, OnChanges, AfterViewInit {
       this.dataSource.filterPredicate = this.createFilter();
     }
   }
-  setColumnHideShow() {
-    if (this.hideShowMenuGroup !== undefined && this.hideShowMenuGroup !== null) {
-      this.updateColumnsHideShow(this.hideShowMenuGroup.value);
-    }
-  }
   ngAfterViewInit() {
     if (this.dataSource) {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     }
   }
+  setColumnHideShow() {
+    if (this.hideShowMenuGroup !== undefined && this.hideShowMenuGroup !== null) {
+      this.updateColumnsHideShow(this.hideShowMenuGroup.value);
+    }
+  }
+
   setPropertyValue(changes: SimpleChanges) {
     let keys = Object.keys(changes);
     keys.forEach(propetry => {
-      switch (propetry) {
-        case 'dataSource': {
-          if (changes[propetry].currentValue) {
-            this.ELEMENT_DATA = changes[propetry].currentValue.data;
-            this.dataSource = changes[propetry].currentValue;
-            this.reCal()
-          } else {
-            this.dataSource = new MatTableDataSource([{}])
-          }
-          break;
+      if (this.inputPropertyKeys.includes(propetry)) {
+        this.setPropertiesMap[propetry](changes[propetry]);
+      }
+      else if (propetry == 'showToolbar') {
+        if (changes['columns']) {
+          this.setToolbarMenuControls(changes['columns'].currentValue);
         }
-        case 'columns': {
-          this.setColumnsData(changes[propetry].currentValue)
-          break;
-        }
-        case 'inlineRowEditing': {
-          this.showHideColumn('edit', changes[propetry].currentValue);
-          break;
-        }
-        case 'popupRowEditing': {
-          this.showHideColumn('popup', changes[propetry].currentValue);
-          break;
-        }
-        case 'enableDelete': {
-          this.showHideColumn('delete', changes[propetry].currentValue);
-          break;
-        }
-        case 'rowSelection': {
-          this.selection = new SelectionModel<any>(true, []);
-          this.showSelectionColumn('select', changes[propetry].currentValue);
-          break;
-        }
-        case 'multiRowSelection': {
-          this.selection = new SelectionModel<any>(changes[propetry].currentValue, []);
-          break;
-        }
-        case 'stickyColumns': {
-          this.stickyColumns = changes[propetry].currentValue;
-          break;
-        }
-        case 'stickyHeader': {
-          this.stickyHeader = changes[propetry].currentValue;
-          break;
-        }
-        case 'stickyFooter': {
-          this.stickyFooter = changes[propetry].currentValue;
-          break;
-        }
-        case 'columnFilter': {
-          if (changes[propetry].currentValue) {
-            this.headersFiltersIds = this.columnsArray.map((column, i) => column.field + '_' + i)
-            let array: MtxGridColumn[] = []
-            this.columnsArray.forEach((column, i) => {
-              let obj = {
-                type: column?.type,
-                field: column?.field + '_' + i
-              }
-              array.push(obj);
-            })
-            this.headersFilters = array;
-            this.dataSource.filterPredicate = this.createFilter();
-          }
-          else {
-            this.headersFilters = [];
-            this.headersFiltersIds = [];
-            this.dataSource.filter = ''
-          }
-          this.toggleFilters = changes[propetry].currentValue;
-          break;
-        }
-        case 'globalSearch': {
-          if (changes[propetry].currentValue) {
-            this.dataSource.filterPredicate = this.createFilter();
-          }
-          break;
-        }
-        case 'showToolbar': {
-          if (changes['columns']) {
-            this.setToolbarMenuControls(changes['columns'].currentValue);
-          }
-          else {
-            this.setToolbarMenuControls(this.columnsArray);
-          }
-          break;
-        }
-        case 'expandRows': {
-          this.columnsToDisplayWithExpand = [...this.displayedColumns, 'expand']
-          this.expandRows = changes[propetry].currentValue;
-          break;
-        }
-        case 'dndColumns': {
-          this.dragEnable = changes[propetry].currentValue;
-          break;
-        }
-        case 'sorting': {
-          if (changes[propetry].currentValue) {
-            this.dataSource.sort = this.sort;
-          }
-          break;
+        else {
+          this.setToolbarMenuControls(this.columnsArray);
         }
       }
     })
   }
-  menuX: number = 0
-  menuY: number = 0
+  setPropertiesMap: any = {
+    dataSource: (value: any) => this.setTableDataSource(value),
+    columns: (value: any) => this.setColumnsData(value.currentValue),
+    inlineRowEditing: (value: any) => this.showHideColumn('edit', value.currentValue),
+    popupRowEditing: (value: any) => this.showHideColumn('popup', value.currentValue),
+    enableDelete: (value: any) => this.showHideColumn('delete', value.currentValue),
+    rowSelection: (value: any) => this.setRowSelection(value.currentValue),
+    multiRowSelection: (value: any) => { this.selection = new SelectionModel<any>(value.currentValue, []) },
+    stickyHeader: (value: any) => { this.stickyHeader = value.currentValue },
+    stickyFooter: (value: any) => { this.stickyFooter = value.currentValue },
+    columnFilter: (value: any) => this.setColumnFilter(value.currentValue),
+    globalSearch: (value: any) => this.dataSource.filterPredicate = this.createFilter(),
+    expandRows: (value: any) => this.columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'],
+    sorting: (value: any) => this.dataSource.sort = this.sort
+  }
+  setTableDataSource(value: any) {
+    if (value.currentValue) {
+      this.tableData = value.currentValue.data;
+      this.dataSource = value.currentValue;
+      this.reCal()
+    } else {
+      this.dataSource = new MatTableDataSource([{}])
+    }
+  }
+  setRowSelection(value: boolean) {
+    this.selection = new SelectionModel<any>(true, []);
+    this.showSelectionColumn('select', value);
+  }
+  setColumnFilter(value: boolean) {
+    if (value) {
+      this.headersFiltersIds = this.columnsArray.map((column, i) => column.field + '_' + i)
+      let array: MtxGridColumn[] = []
+      this.columnsArray.forEach((column, i) => {
+        let obj = {
+          type: column?.type,
+          field: column?.field + '_' + i
+        }
+        array.push(obj);
+      })
+      this.headersFilters = array;
+      this.dataSource.filterPredicate = this.createFilter();
+    }
+    else {
+      this.headersFilters = [];
+      this.headersFiltersIds = [];
+      this.dataSource.filter = ''
+    }
+    this.toggleFilters = value;
+  }
+
   getDisplayedColumns(): string[] {
     let list = this.dynamicDisplayedColumns.filter((cd) => cd.show).map((cd) => cd.name);;
     return list;
@@ -331,48 +287,35 @@ export class CustomTableComponent implements OnInit, OnChanges, AfterViewInit {
     ]
     this.dynamicDisplayedColumns = columnsArray.concat(this.dynamicDisplayedColumns);
   }
-
   showHideColumn(name: string, value: boolean) {
     this.dynamicDisplayedColumns.filter(a => a.name == name)[0].show = value;
   }
   showSelectionColumn(name: string, value: boolean) {
-    let col = this.dynamicDisplayedColumns.filter(a => a.name == name)[0];
+    let column = this.dynamicDisplayedColumns.filter(a => a.name == name)[0];
     let index = this.dynamicDisplayedColumns.findIndex((column: any) => column.name == name);
     if (index > -1) {
       this.dynamicDisplayedColumns.splice(index, 1);
-      this.dynamicDisplayedColumns.unshift(col);
-      this.dynamicDisplayedColumns.filter(a => a.name == name)[0].show = value;
+      this.dynamicDisplayedColumns.unshift(column);
+      this.dynamicDisplayedColumns.filter(column => column.name == name)[0].show = value;
     }
   }
-  drop(event: CdkDragDrop<string[]>) {
-    if (this.dragEnable) {
-      moveItemInArray(this.dynamicDisplayedColumns, event.previousIndex, event.currentIndex);
-      this.getDisplayedColumns();
+  onDrop(event: CdkDragDrop<any>) {
+    if (this.dndColumns) {
+      let adjustedValue = 0;
+      if (this.dynamicDisplayedColumns[0].name == 'select' && this.dynamicDisplayedColumns[0].show == false) {
+        adjustedValue = 1;
+      }
+      moveItemInArray(this.dynamicDisplayedColumns, event.previousIndex + adjustedValue, event.currentIndex + adjustedValue);
     }
 
   }
-  removeColumn() {
-    if (this.columnsToDisplay.length) {
-      this.columnsToDisplay.pop();
-    }
-  }
-
-  addColumn() {
-    const randomColumn = Math.floor(Math.random() * this.displayedColumns.length);
-    this.columnsToDisplay.push(this.displayedColumns[randomColumn]);
-  }
-  ToggleColumnfilter(event: any) {
-    this.toggleFilters = !this.toggleFilters;
-  }
-
-
   createFilter(): (data: any, filter: string) => boolean {
-    const myFilterPredicate = (data: any, filter: string): boolean => {
+    const tableFilterPredicate = (data: any, filter: string): boolean => {
       let result: boolean = true;
+      // search all column fields
       if (this.globalFilter) {
-        // search all text fields
-        let keys = Object.keys(data);
         let expression = '';
+        let keys = Object.keys(data);
         keys.forEach(key => {
           expression = expression + `data.${key}.toString().trim().toLowerCase().indexOf(this.globalFilter.toLowerCase()) !== -1 ||`
         })
@@ -385,12 +328,13 @@ export class CustomTableComponent implements OnInit, OnChanges, AfterViewInit {
         return false;
       }
       let searchString = JSON.parse(filter);
+      //search single column field
       if (this.individulFilter) {
         return data[this.individulFilter].toString().trim().toLowerCase().indexOf(searchString[this.individulFilter].toString().toLowerCase()) !== -1;
       }
       return true;
     }
-    return myFilterPredicate;
+    return tableFilterPredicate;
   }
   applyFilter(event: any) {
     this.globalFilter = event;
@@ -406,14 +350,12 @@ export class CustomTableComponent implements OnInit, OnChanges, AfterViewInit {
     this.filterValues[column.field] = event[column.field]
     this.dataSource.filter = JSON.stringify(this.filterValues);
   }
-
-
-  editEnable(row: any, i: number) {
+  enableInlineEditing(row: any, i: number) {
     const rowData: any = {}
     rowData['e' + i] = { ...row };
     this.rowDataTemp = rowData;
     setTimeout(() => {
-      this.ELEMENT_DATA[i]['editable'] = !this.ELEMENT_DATA[i]['editable'];
+      this.tableData[i]['editable'] = !this.tableData[i]['editable'];
     }, 0);
   }
   getInlineEditingData(row: any, index: number, column: any) {
@@ -425,123 +367,91 @@ export class CustomTableComponent implements OnInit, OnChanges, AfterViewInit {
     }
     return this.inlineEditingTemplateRefData;
   }
+  updateInlineTemplateData = (row: any) => { this.service.selectedRow.next(row) };
   setCellData(row: any, i: number) {
     this.currentRow = { ...row };
     this.currentRowIndex = i;
     this.rowDataTemp['e' + i] = { ...row };
   }
   cencelInlineEditing(row: any, i: number) {
-    this.ELEMENT_DATA.filter((a: any) => a.id == row.id)[0]['editable'] = !this.ELEMENT_DATA.filter((a: { id: any; }) => a.id == row.id)[0]['editable'];
-    this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
+    this.tableData.filter((a: any) => a.id == row.id)[0]['editable'] = !this.tableData.filter((a: { id: any; }) => a.id == row.id)[0]['editable'];
+    this.dataSource = new MatTableDataSource(this.tableData);
     this.rowDataTemp["e" + i] = {};
     this.service.selectedRow.next(undefined)
   }
-  saveData(row: any, index: number) {
+  saveInlineEditing(row: any, index: number) {
     if (!this.inlineEditingTemplateRef) {
-      this.ELEMENT_DATA[index] = { ...this.rowDataTemp["e" + index] };
+      this.tableData[index] = { ...this.rowDataTemp["e" + index] };
       row = { ...this.rowDataTemp["e" + index] };
     }
     else {
       let changedData = this.service.selectedRow.value;
       if (changedData) {
-        this.ELEMENT_DATA[index] = { ...changedData };
+        this.tableData[index] = { ...changedData };
       }
     }
-    this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
+    this.dataSource = new MatTableDataSource(this.tableData);
     this.rowDataTemp["e" + index] = {};
     let data: RowChange = {
       row: row,
       index: index
     }
     this.inlineChange.emit(data);
-    this.ELEMENT_DATA[index]['editable'] = false;
+    this.tableData[index]['editable'] = false;
   }
-  saveCellData() {
+  saveCellEditing() {
     this.cellEditing = {};
     let index = this.currentRowIndex;
     if (index > -1) {
       if (this.cellEditingTemplateRef) {
         let changedData = this.service.selectedRow.value;
         if (changedData) {
-          this.ELEMENT_DATA[index] = { ...changedData };
+          this.tableData[index] = { ...changedData };
         }
       }
       else {
-        this.ELEMENT_DATA[index] = { ...this.rowDataTemp["e" + index] };
+        this.tableData[index] = { ...this.rowDataTemp["e" + index] };
       }
-      this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
+      this.dataSource = new MatTableDataSource(this.tableData);
       this.rowDataTemp["e" + index] = {};
       let data: RowChange = {
-        row: { ...this.ELEMENT_DATA[index] },
+        row: { ...this.tableData[index] },
         index: index
       }
       this.currentRowIndex = -1;
       this.cellChange.emit(data);
     }
+  }
 
-  }
-  editGridmodalChanged(event: any) {
-    if (event.checked) {
-      this.ELEMENT_DATA.forEach((a: { editmodal: boolean; }) => a.editmodal = true)
-    }
-    else {
-      this.ELEMENT_DATA.forEach((a: { editmodal: boolean; }) => a.editmodal = false)
-    }
-  }
-  multiSelectRowCheck(event: any) {
-    if (event.checked) {
-      this.multiSelectRow = false;
-      this.displayedColumns.splice(0, 1)
-      //  this.selecteRow.splice(0,1)
-
-    }
-    else {
-      this.multiSelectRow = false;
-      this.displayedColumns.splice(0, 1)
-      //this.selecteRow.splice(0,1)
-    }
-
-    this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
-    this.dataSource.filterPredicate = this.createFilter();
-  }
-  deleteRowToggle(event: any) {
-    if (event.checked) {
-      this.ELEMENT_DATA.forEach((a: { deleterow: boolean; }) => a.deleterow = true)
-    }
-    else {
-      this.ELEMENT_DATA.forEach((a: { deleterow: boolean; }) => a.deleterow = false)
-    }
-  }
-  deleteRow(row: any) {
-    let index = this.ELEMENT_DATA.findIndex((a: { id: any; }) => a.id == row.id);
-    this.ELEMENT_DATA.splice(index, 1);
-    this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
+  deleteRow(row: any, index: number) {
+    this.tableData.splice(index, 1);
+    this.dataSource = new MatTableDataSource(this.tableData);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.rowDeleted.emit({ removedRow: row, fromIndex: index });
   }
 
+  // function trigger when row expanded or collapsed.
   expandRow(row: any, expand: boolean, index: number) {
     if (this.expandRows) {
-      this.expansionChange.emit({ data: row, expanded: expand, index: index })
-      this.expandedElement = this.expandedElement === row ? null : row
+      this.expansionChange.emit({ data: row, expanded: expand, index: index });
+      this.expandedElement = this.expandedElement === row ? null : row;
     }
   }
 
-  editPopupEnable(row: any, index?: any) {
+  openEditingDialog(row: any, index?: any) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = "40%";
     dialogConfig.height = "70%";
     dialogConfig.maxWidth = "100%"
-    var rowData = { ...row };
+    let rowData = { ...row };
     dialogConfig.data = { row: rowData, columns: [...this.columnsArray], templateRef: this.popupEditingTemplateRef };
-
     this.dialog.open(EditingComponent, dialogConfig).afterClosed().subscribe(data => {
-      let index = this.ELEMENT_DATA.indexOf(row);
+      let index = this.tableData.indexOf(row);
       if (data && index > -1) {
-        this.ELEMENT_DATA[index] = data;
-        this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
+        this.tableData[index] = data;
+        this.dataSource = new MatTableDataSource(this.tableData);
         let dataChange: RowChange = {
           row: data,
           index: index
@@ -550,7 +460,6 @@ export class CustomTableComponent implements OnInit, OnChanges, AfterViewInit {
       }
     })
   }
-
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -564,7 +473,6 @@ export class CustomTableComponent implements OnInit, OnChanges, AfterViewInit {
       this.selection.clear();
       return;
     }
-
     this.selection.select(...this.dataSource.data);
   }
 
@@ -576,7 +484,7 @@ export class CustomTableComponent implements OnInit, OnChanges, AfterViewInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
 
-  /**create form control for columns */
+  /**create form control for columns for hiding and and pinning purpose*/
 
   setToolbarMenuControls(columns: MtxGridColumn[]) {
     if (columns.length > 0 && this.showToolbar) {
@@ -622,57 +530,43 @@ export class CustomTableComponent implements OnInit, OnChanges, AfterViewInit {
   filterColumns(value: any) {
     if (value !== '') {
       this.showHideColumnsArray = this.columnsArray.filter((col: MtxGridColumn) => { return ((col.header!).toLowerCase()).includes((value).toLowerCase()) })
-    }
-    else {
-      this.showHideColumnsArray = this.columnsArray;
-
-    }
-  }
-  returnDataType(val: any, column: MtxGridColumn) {
-    if (column.options) {
-      return 'selection';
     } else {
-      return typeof val[column.field];
+      this.showHideColumnsArray = this.columnsArray;
     }
   }
+
   openHideShowMenu(columns: MtxGridColumn[]) {
     this.showHideColumnsArray = [...columns];
     this.columnMenuTrigger.openMenu();
-
   }
-  showHideAllColumns(val: boolean) {
-    let array = [...this.dynamicDisplayedColumns];
-    for (let i = 0; i < array.length; i++) {
 
-      this.showHideColumn(array[i], val);
-    }
-  }
   updateColumnsHideShow(values: any) {
     let keys = Object.keys(values);
     keys.forEach((key: string) => {
       this.showHideColumn(key, values[key]);
     })
   }
-  setPinnedColumns(event: MtxGridColumn[]) {
-  }
+
+//funtion to emit scroll event.
   onScroll(event: any) {
     this.scroll.emit(event);
   }
+  //funtion to emit event when user select or deselect row.
   setSelectedRows(row: any, index: number) {
     this.selection.toggle(row);
     if (this.selection.isSelected(row)) {
       this.selectionChanged.emit({ row: row, index: index, isSelected: true })
-    }
-    else {
-
+    }else {
       this.selectionChanged.emit({ row: row, index: index, isSelected: false })
     }
   }
-  showSelectedRows() {
+ //funtion to show all hidden rows.
+  showHiddenRows() {
     this.hideRows = false;
     this.selection.clear();
     this.hiddenCtrl.clear();
   }
+  //funtion to hide selected rows.
   hideSelectedRows() {
     if (!this.selection.isEmpty()) {
       let values = [...this.selection.selected];
@@ -685,6 +579,7 @@ export class CustomTableComponent implements OnInit, OnChanges, AfterViewInit {
       this.hideRows = true;
     }
   }
+  //function to reassign values when dataSouce is changed.
   reCal() {
     if (this.showPaginator) {
       this.dataSource.paginator = this.paginator;
@@ -696,10 +591,4 @@ export class CustomTableComponent implements OnInit, OnChanges, AfterViewInit {
       this.dataSource.filterPredicate = this.createFilter();
     }
   }
-  getVal() {
-    // setTimeout(() => {
-      return false;
-    // }, 2230);
-  }
-  updateInlineTemplateData = (row: any) => {this.service.selectedRow.next(row) };
 }

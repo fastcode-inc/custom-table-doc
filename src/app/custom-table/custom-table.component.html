@@ -12,7 +12,7 @@
         <button class="hide-button" mat-stroked-button color="primary" (click)="hideSelectedRows()" >
             Hide Rows
         </button>
-        <button class="hide-button" mat-stroked-button color="primary" (click)="showSelectedRows()">
+        <button class="hide-button" mat-stroked-button color="primary" (click)="showHiddenRows()">
             Show All Rows
         </button>
     </ng-container>
@@ -61,7 +61,7 @@
             </mat-form-field>
         </form>
         <div class="showHide-menu-columns-list">
-            <app-column-pinning [columns]="showHideColumnsArray" (columnsChanged)="setPinnedColumns($event)"></app-column-pinning>
+            <app-column-pinning [columns]="showHideColumnsArray"></app-column-pinning>
         </div>
     </div>
 </mat-menu>
@@ -69,11 +69,11 @@
 <mat-progress-bar *ngIf="loadingIndicator" mode="indeterminate"></mat-progress-bar>
 <section id="tableContainer" class="mat-table-ext-container" (scroll)="onScroll($event)" [style.height]="tableHeight ? tableHeight :'max-content'">
     <table mat-table [dataSource]="dataSource" matSort cdkDropList cdkDropListOrientation="horizontal" matTableExporter
-        #exporter="matTableExporter" multiTemplateDataRows (cdkDropListDropped)="drop($event)" (click)="saveCellData()" 
+        #exporter="matTableExporter" multiTemplateDataRows (cdkDropListDropped)="onDrop($event)" (click)="saveCellEditing()" 
         [style.width]="scrollbarH?'max-content':'100%'">
         <!-- Row selection column -->
-        <ng-container matColumnDef="select" sticky="true"> 
-            <th mat-header-cell *matHeaderCellDef >
+        <ng-container matColumnDef="select"> 
+            <th mat-header-cell *matHeaderCellDef cdkDragLockAxis="x" cdkDrag [cdkDragDisabled]="!dndColumns">
                 <mat-checkbox (change)="$event ? toggleAllRows() : null" [checked]="selection.hasValue() && isAllSelected()"
                     [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
                 </mat-checkbox>
@@ -162,22 +162,22 @@
                 </ng-container>
         </div>
         <ng-container matColumnDef="edit" stickyEnd="false">
-            <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header class="action-column-cells"> Edit </th>
+            <th mat-header-cell cdkDragLockAxis="x" cdkDrag [cdkDragDisabled]="!dndColumns" *matHeaderCellDef mat-sort-header class="action-column-cells"> Edit </th>
             <td mat-cell *matCellDef="let row; let i = dataIndex" class="inline-edit-column-cell">
-                <mat-icon class="edit-column-icons" *ngIf="!row.editable && !row.editmodal" aria-hidden="false" (click)="editEnable(row,i)" fontIcon="edit_note">
+                <mat-icon class="edit-column-icons" *ngIf="!row.editable && !row.editmodal" aria-hidden="false" (click)="enableInlineEditing(row,i)" fontIcon="edit_note">
                 </mat-icon>
                 <div class="inline-editing-controls" *ngIf="row.editable && !row.editmodal">
-                    <mat-icon class="edit-column-icons"  aria-hidden="false" (click)="saveData(row,i)" fontIcon="done"></mat-icon>
+                    <mat-icon class="edit-column-icons"  aria-hidden="false" (click)="saveInlineEditing(row,i)" fontIcon="done"></mat-icon>
                     <mat-icon class="edit-column-icons"  aria-hidden="false" (click)="cencelInlineEditing(row,i)" fontIcon="close"></mat-icon>
                 </div>
             </td>
-            <td matTooltip="footer tooltip" mat-footer-cell *matFooterCellDef> edit </td>
+            <td  mat-footer-cell *matFooterCellDef> edit </td>
         </ng-container>
         <ng-container matColumnDef="popup" stickyEnd="false">
-            <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header class="action-column-cells"> Popup
+            <th mat-header-cell cdkDragLockAxis="x" cdkDrag [cdkDragDisabled]="!dndColumns" *matHeaderCellDef mat-sort-header class="action-column-cells"> Popup
             </th>
             <td mat-cell *matCellDef="let row; let i = index">
-                <button mat-icon-button (click)="editPopupEnable(row,i)">
+                <button mat-icon-button (click)="openEditingDialog(row,i)">
                     <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="edit">
                     </mat-icon>
                 </button>
@@ -186,10 +186,10 @@
         </ng-container>
 
         <ng-container matColumnDef="delete">
-            <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header class="action-column-cells"> Delete
+            <th mat-header-cell cdkDragLockAxis="x" cdkDrag [cdkDragDisabled]="!dndColumns" *matHeaderCellDef mat-sort-header class="action-column-cells"> Delete
             </th>
             <td mat-cell *matCellDef="let row;let i=dataIndex">
-                <mat-icon (click)="deleteRow(row)" aria-hidden="false" aria-label="Example home icon" fontIcon="delete">
+                <mat-icon (click)="deleteRow(row,i)" aria-hidden="false" aria-label="Example home icon" fontIcon="delete">
                 </mat-icon>
             </td>
             <td mat-footer-cell *matFooterCellDef></td>

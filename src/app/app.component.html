@@ -1,2 +1,366 @@
-<app-navbar class="mat-elevation-z6"></app-navbar>
-<router-outlet></router-outlet>
+<!-- <app-navbar class="mat-elevation-z6"></app-navbar>
+<router-outlet></router-outlet> -->
+<mat-card class="result">
+            <h2 class="example-h2">Table</h2> 
+        <mat-card-content style="display: flex; gap: 50px;">
+    <div style="display: flex;flex-direction: column;">
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="popupRowEditing" [disabled]="false">
+            Popup Editing
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="inlineRowEditing" [disabled]="false">
+            Inline Editing
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="inCellEditing" [disabled]="false">
+            Cell Editing
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="deleteRow" [disabled]="false">
+            Delete Row
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="stripedRows" [disabled]="false">
+            Striped Rows
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="rowSelection" [disabled]="false">
+           Row Selection
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="multiRowSelection" [disabled]="false">
+           Multi Row Selection
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="columnResizable" [disabled]="false">
+            Column Resizable
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="stickyHeader" [disabled]="false">
+            Sticky Header
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="stickyFooter" [disabled]="false">
+            Sticky Footer
+        </mat-slide-toggle>
+    </section>
+
+</div>
+<div style="display: flex;flex-direction: column;">
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="toolbarToggle" [disabled]="false">
+            Table Toolbar
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section" style="padding-left: 15px;" >
+        <mat-slide-toggle [(ngModel)]="exportButtonEnable" [disabled]="!toolbarToggle">
+            Export Button
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section" style="padding-left: 15px;">
+        <mat-slide-toggle [(ngModel)]="columnPinnable" [disabled]="!toolbarToggle">
+            Column Pinnable
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section" style="padding-left: 15px;">
+        <mat-slide-toggle [(ngModel)]="columnHideable" [disabled]="!toolbarToggle">
+            Column Hide/Show 
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="topSearchFilter" [disabled]="false">
+            Global Search
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="isExpandEnable" [disabled]="false">
+            Row Expandable
+        </mat-slide-toggle>
+    </section>
+
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="dragEnable" [disabled]="false">
+            Drag & Drop Columns
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="isLoading" [disabled]="false">
+            Loading Indicator
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="paginationEnable" [disabled]="false">
+            Pagination
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section" style="padding-left: 15px;">
+        <mat-slide-toggle [(ngModel)]="showFirstLastButtons" [disabled]="!paginationEnable">
+            Show First Last Page Buttons
+        </mat-slide-toggle>
+    </section>
+</div>
+<div style="display: flex;flex-direction: column;">
+        <section class="example-section">
+            <mat-slide-toggle [(ngModel)]="simpleFilter" [disabled]="false">
+                Columns Filter
+            </mat-slide-toggle>
+        </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="sorting" [disabled]="false">
+            Sorting
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="infiniteScroll" [disabled]="false">
+            Infinite Scroll
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="scrollbarH" [disabled]="false">
+            Horizontal Scroll
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="headerTemplateRefCtrl" [disabled]="false">
+            Header TemplateRef
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="cellTemplateRefCtrl" [disabled]="false">
+            Cell TemplateRef
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="toolbarTemplateRefCtrl" [disabled]="!toolbarToggle">
+            Toolbar TemplateRef
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="popupTemplateRefCtrl" >
+            Popup Editing TemplateRef
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="inlineTemplateRefCtrl" >
+            Inline Editing TemplateRef
+        </mat-slide-toggle>
+    </section>
+    <section class="example-section">
+        <mat-slide-toggle [(ngModel)]="cellEditingTemplateRefCtrl" >
+            Cell Editing TemplateRef
+        </mat-slide-toggle>
+    </section>
+</div>
+<div style="display: flex; flex-direction: column;">
+        <section class="example-section">
+            <mat-form-field class="example-full-width" appearance="outline">
+                <mat-label>Table Height</mat-label>
+                <input matInput placeholder="Default is 500px" [(ngModel)]="tableHeight" [disabled]="false">
+            </mat-form-field>
+        </section>
+        <mat-divider></mat-divider>
+        <section class="example-section">
+            <mat-form-field class="example-full-width" appearance="outline">
+                <mat-label>Table Width</mat-label>
+                <input matInput placeholder="Default is 100%" [(ngModel)]="tableWidth" [disabled]="false">
+            </mat-form-field>
+        </section>
+        <mat-divider></mat-divider>
+        <section class="example-section" >
+            <mat-form-field class="example-full-width" appearance="outline" disabled>
+                <mat-label>Toolbar Height</mat-label>
+                <input matInput placeholder="Default is 50px" [(ngModel)]="toolbarHeight" [disabled]="!toolbarToggle">
+            </mat-form-field>
+        </section>
+        <mat-divider></mat-divider>
+</div>
+        </mat-card-content>
+    </mat-card>
+    
+    <mat-table-ext
+    style="margin: 15px;"
+    [dataSource]="dataSource"
+    [columns]="columns"
+    [columnResizable]="columnResizable"
+    [inlineRowEditing]="inlineRowEditing"
+    [inCellEditing]="inCellEditing"
+    [popupRowEditing]="popupRowEditing"
+    [enableDelete]="deleteRow"
+    [rowSelection]="rowSelection"
+    [multiRowSelection]="multiRowSelection"
+    [stickyHeader]="stickyHeader"
+    [stickyFooter]="stickyFooter"
+    [columnFilter]="simpleFilter"
+    [showToolbar]="toolbarToggle"
+    [toolbarHeight]="toolbarHeight"
+    [globalSearch]="topSearchFilter"
+    [expandRows]="isExpandEnable"
+    [dndColumns]="dragEnable"
+    [showPaginator]="paginationEnable"
+    [pageSizeOptions]="[10, 25, 100]"
+    [showFirstLastButtons]="showFirstLastButtons"
+    [columnPinnable]="columnPinnable"
+    [columnHideable]="columnHideable"
+    [exportButtonEnable]="exportButtonEnable"
+    [stripedRows]="stripedRows"
+    [loadingIndicator]="isLoading"
+    [sorting]="sorting"
+    [tableHeight]="tableHeight"
+    [tableWidth]="tableWidth"
+    [scrollbarH]="scrollbarH"
+    (inlineChange)="showData($event,'inline change')"
+    (popupChange)="showData($event,'popup change')"
+    (cellChange)="showData($event,'Cell change')"
+    (scroll)="onScroll($event)"
+    [expansionTemplateRef]="ex"
+    (selectionChanged)="onSelectionChange($event)"
+    (rowDeleted)="showData($event,'Delete change')"
+    [headerTemplateRef]="headerTemplateRefCtrl?headerTemplate:undefined"
+    [cellTemplateRef]="cellTemplateRefCtrl?cellTemplateRef:undefined"
+    [cellTemplateRefMap]="{'id':cellTemplateID}"
+    [toolbarTemplateRef]="toolbarTemplateRefCtrl?toolbarTemplate:undefined"
+    [popupEditingTemplateRef]="popupTemplateRefCtrl?popupEditing:undefined"
+    [inlineEditingTemplateRef]="inlineTemplateRefCtrl?inlineEditing:undefined"
+    [cellEditingTemplateRef]="cellEditingTemplateRefCtrl?cellEditing:undefined"
+    ></mat-table-ext>
+    <ng-template #headerTemplate let-data="data">
+        <div style="display: flex;">
+            <mat-icon style="color:purple;">bolt</mat-icon><span style="font-size: 15px; font-style: italic;">{{data.header}}</span>
+        </div>
+    </ng-template>
+    <ng-template #cellTemplateRef let-column="column" let-row="row">
+        <div style="display: flex;">
+            <mat-icon style="color:blue">bolt</mat-icon><span style="font-size: 15px; font-style: italic;">{{row[column.field]}}</span>
+        </div>
+    </ng-template>
+    <ng-template #cellTemplate1 let-column="column" let-row="row">
+        <div style="display: flex;">
+            <mat-icon style="color:green">bolt</mat-icon><span style="font-size: 15px; font-style: italic;">{{row[column.field]}}</span>
+        </div>
+    </ng-template>
+    <ng-template #cellTemplate2 let-column="column" let-row="row">
+        <div style="display: flex;">
+            <mat-icon style="color:yellow">folder</mat-icon><span style="font-size: 15px; font-style: italic;">{{row[column.field]}}</span>
+        </div>
+    </ng-template>
+    <ng-template #cellTemplateID let-column="column" let-row="row">
+        <div style="display: flex;">
+            <mat-icon style="color:yellow">folder</mat-icon><span style="font-size: 15px; font-style: italic;">{{row[column.field]}}</span>
+        </div>
+    </ng-template>
+    <ng-template #toolbarTemplate>
+        <div style="display: flex;">
+            <button mat-button>
+                <mat-icon style="color:green">sync</mat-icon>
+            </button>
+        </div>
+    </ng-template>
+<ng-template #popupEditing let-row="data.row" let-column="data.columns" let-keys="data.columnKeys" let-types="data.columnTypes" let-close="data.closeDialog" >
+    <div style="height: 100%;" class="main-dialog-container">
+        <div mat-dialog-title class="dialog-title-container" style="display: flex;">
+            <h2 style="margin: 0;">Edit Row</h2>
+            <span class="example-spacer"></span>
+            <button mat-icon-button aria-label="Example icon button with a vertical three dot icon">
+                <mat-icon mat-dialog-close style="cursor: pointer;" fxFlex="5">close</mat-icon>
+            </button>
+        </div>
+        <mat-dialog-content style="margin-right: 20px;">
+            <div style="display: flex; flex-direction: column;">
+                <ng-container *ngFor="let key of keys">
+                    <mat-form-field *ngIf="types[key] == 'number'" color="accent" appearance="outline" class="inline-editing-field">
+                        <mat-label>{{key | titlecase}}</mat-label>
+                        <input matInput type="number" [(ngModel)]="row[key]" color="accent" [ngModelOptions]="{standalone: true}">
+                    </mat-form-field>
+
+                    <mat-form-field *ngIf="types[key] == 'string'" appearance="outline" color="accent" class="inline-editing-field">
+                        <mat-label>{{key | titlecase}}</mat-label>
+                        <input matInput type="text" [(ngModel)]="row[key]" color="accent" [ngModelOptions]="{standalone: true}">
+                    </mat-form-field>
+                    <mat-form-field *ngIf="types[key] == 'date'" appearance="outline" color="accent" class="inline-editing-field">
+                        <mat-label>{{key | titlecase}}</mat-label>
+                        <input matInput type="text" [(ngModel)]="row[key]" [ngModelOptions]="{standalone: true}">
+                    </mat-form-field>
+                    <mat-form-field *ngIf="types[key] == 'selection'" appearance="outline" color="accent" class="inline-editing-field">
+                        <mat-label>{{key | titlecase}}</mat-label>
+                        <mat-select [value]="row[key].value" [(ngModel)]="row[key].value">
+                            <mat-option *ngFor="let option of row[key].options" [value]="option">
+                                {{option}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <p>
+                        <mat-checkbox *ngIf="types[key] == 'boolean'" color="accent" [(ngModel)]="row[key]">
+                            <mat-label>{{key | titlecase}}</mat-label>
+                        </mat-checkbox>
+                    </p>
+                </ng-container>
+            </div>
+        </mat-dialog-content>
+        <div class="spacer"></div>
+        <mat-dialog-actions style="margin-top: 20px;" align="end">
+            <button mat-raised-button color="accent" mat-dialog-close>
+                Cancel
+            </button>
+            <button mat-raised-button color="primary" [mat-dialog-close]="row" >Save</button>
+        </mat-dialog-actions>
+    </div>
+</ng-template>
+<ng-template #inlineEditing let-row="data.row" let-column="data.column" let-updateData="data.updateFunc" >
+    <mat-form-field *ngIf="column.type == 'number'" appearance="outline" class="inline-editing-field">
+        <input matInput type="number" [(ngModel)]="row[column.field]" [ngModelOptions]="{standalone: true}" (ngModelChange)="updateData(row)">
+    </mat-form-field>
+    <mat-form-field *ngIf="column.type == 'string'" appearance="outline" class="inline-editing-field">
+        <input matInput type="text" [(ngModel)]="row[column.field]" [ngModelOptions]="{standalone: true}" (ngModelChange)="updateData(row)">
+    </mat-form-field>
+    <mat-form-field *ngIf="column.type == 'date'" appearance="outline" class="inline-editing-field">
+        <input matInput type="date" [(ngModel)]="row[column.field]" [ngModelOptions]="{standalone: true}" (ngModelChange)="updateData(row)">
+    </mat-form-field>
+    <mat-form-field *ngIf="column.type == 'selection'" appearance="outline" class="inline-editing-field">
+        <mat-select [value]="row[column.field]" [(ngModel)]="row[column.field]" (ngModelChange)="updateData(row)"  [ngModelOptions]="{standalone: true}">
+            <mat-option *ngFor="let option of column.options" [value]="option">
+                {{option}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-checkbox (click)="$event.stopPropagation()" (ngModelChange)="updateData(row)" *ngIf="column.type == 'boolean'" color="primary"
+        [(ngModel)]="row[column.field]"></mat-checkbox>
+</ng-template>
+<ng-template #cellEditing let-row="data.row" let-column="data.column" let-updateData="data.updateFunc" >
+
+    <mat-form-field *ngIf="column.type == 'number'" color="accent" appearance="outline" class="inline-editing-field">
+        <input matInput type="number" [(ngModel)]="row[column.field]" [ngModelOptions]="{standalone: true}"
+            (ngModelChange)="updateData(row)">
+    </mat-form-field>
+
+    <mat-form-field *ngIf="column.type == 'string'"color="accent" appearance="outline" class="inline-editing-field">
+        <input matInput type="text" [(ngModel)]="row[column.field]" [ngModelOptions]="{standalone: true}"
+            (ngModelChange)="updateData(row)">
+    </mat-form-field>
+    <mat-form-field *ngIf="column.type == 'date'" color="accent" appearance="outline" class="inline-editing-field">
+        <input matInput type="date" [(ngModel)]="row[column.field]" [ngModelOptions]="{standalone: true}"
+            (ngModelChange)="updateData(row)">
+    </mat-form-field>
+    <mat-form-field *ngIf="column.type == 'selection'" color="accent" appearance="outline" class="inline-editing-field">
+        <mat-select [value]="row[column.field]" [(ngModel)]="row[column.field]" (ngModelChange)="updateData(row)"
+            [ngModelOptions]="{standalone: true}">
+            <mat-option *ngFor="let option of column.options" [value]="option">
+                {{option}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-checkbox (click)="$event.stopPropagation()" color="accent" (ngModelChange)="updateData(row)" *ngIf="column.type == 'boolean'"
+        color="primary" [(ngModel)]="row[column.field]"></mat-checkbox>
+</ng-template>
+<ng-template #ex >
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus accusantium quod corrupti? Beatae minima natus tempora iure doloremque magnam excepturi consequatur? Odit ullam eius ea necessitatibus autem aliquam, qui nulla.
+</ng-template>
