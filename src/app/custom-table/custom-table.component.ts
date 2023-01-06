@@ -84,7 +84,7 @@ export class CustomTableComponent implements OnInit, OnChanges, AfterViewInit {
   @Output() cellChange: EventEmitter<any> = new EventEmitter<RowChange>();
   @Output() popupChange: EventEmitter<any> = new EventEmitter<RowChange>();
   @Output() rowDeleted: EventEmitter<any> = new EventEmitter<any>();
-  @Output() scroll: any = new EventEmitter<any>();
+  @Output() scroll: EventEmitter<any> = new EventEmitter<any>();
   @Output() selectionChanged: EventEmitter<RowSelectionChange> = new EventEmitter<any>();
   @Output() expansionChange: EventEmitter<ExpansionChange> = new EventEmitter<any>();
 
@@ -695,6 +695,11 @@ export class CustomTableComponent implements OnInit, OnChanges, AfterViewInit {
     if (this.columnFilter) {
       this.dataSource.filterPredicate = this.createFilter();
     }
+  }
+  getVal() {
+    // setTimeout(() => {
+      return false;
+    // }, 2230);
   }
   updateInlineTemplateData = (row: any) => {this.service.selectedRow.next(row) };
 }

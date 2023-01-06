@@ -1,14 +1,10 @@
 table{
     min-width: 100%;
 }
+
 td.mat-column-star {
     width: 20px;
     padding-right: 8px;
-}
-
-th.mat-column-position,
-td.mat-column-position {
-    padding-left: 8px;
 }
 
 .mat-table-sticky-border-elem-right {
@@ -25,35 +21,12 @@ tr.example-detail-row {
 
 
 .example-element-row td {
-    border-bottom-width: 0;
+    border-bottom-width: 0 !important;
 }
 
 .example-element-detail {
     overflow: hidden;
     display: flex;
-}
-
-.example-element-diagram {
-    min-width: 80px;
-    border: 2px solid black;
-    padding: 8px;
-    font-weight: lighter;
-    margin: 8px 0;
-    height: 104px;
-}
-
-.example-element-symbol {
-    font-weight: bold;
-    font-size: 40px;
-    line-height: normal;
-}
-
-.example-element-description {
-    padding: 16px;
-}
-
-.example-element-description-attribution {
-    opacity: 0.5;
 }
 
 .stripedRows {
@@ -62,11 +35,6 @@ tr.example-detail-row {
 .hoverClass:hover {
     background: #dbdbdb !important;
 }
-
-// tr.example-element-row:not(.example-expanded-row):hover {
-//     background: whitesmoke;
-// }
-
 
 tr.example-element-row:not(.example-expanded-row):active {
     background: #efefef;
@@ -92,9 +60,6 @@ tr.example-element-row:not(.example-expanded-row):active {
 th,
 td {
     padding: 0 1rem;
-}
-::ng-deep .mat-form-field-wrapper {
-    padding-bottom: 0;
 }
 
 .table-container .no-default-height {
@@ -256,8 +221,8 @@ mat-card.main-table-ext-container{
 .mat-column-select{
     width: 50px !important; 
 }
-.hidden{
-    display: none !important;
+.expand-row td {
+    border-bottom-style: none !important;
 }
 .action-column-cells {
     width: 40px;
