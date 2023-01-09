@@ -31,8 +31,7 @@ export class AppComponent {
   list = new MatTableDataSource(EXAMPLE_DATA);
 
   columnPinnable = true;
-  columnHideable = true;
-  columnHideableChecked: 'show' | 'hide' = 'show';
+  columnHidable = true;
 
   closeMenu() {
     this.grid.columnMenu.menuTrigger.closeMenu();

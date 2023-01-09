@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { EXAMPLE_DATA } from '../../data';
-import { MtxGridColumn } from 'src/app/models/tableExtModels';
+import { MTExColumn } from '../../types';
 import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
@@ -9,7 +9,7 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  columns: MtxGridColumn[] = [
+  columns: MTExColumn[] = [
     {
       header: 'Name',
       field: 'name',

@@ -9,8 +9,6 @@ import { MTExColumn } from '../../types';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  @ViewChild('grid') grid!: any;
-
   columns: MTExColumn[] = [
     { header: 'Position', field: 'position', width: '200px',type:'string' },
     { header: 'Name', field: 'name', width: '200px', pinned: 'left', type: 'string' },
@@ -29,16 +27,4 @@ export class AppComponent {
   ];
 
   list = new MatTableDataSource(EXAMPLE_DATA);
-
-  columnPinnable = true;
-  columnHideable = true;
-  columnHideableChecked: 'show' | 'hide' = 'show';
-
-  closeMenu() {
-    this.grid.columnMenu.menuTrigger.closeMenu();
-  }
-
-  log(e: any) {
-    console.log(e);
-  }
 }

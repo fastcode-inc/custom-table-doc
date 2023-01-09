@@ -20,7 +20,7 @@ import { columnReorderComponent, columnReorderExampleConfig } from './example/co
 import { CustomCellTemplateComponent, customCellTemplateExampleConfig } from './example/custom-cell-template';
 import { CustomCellTemplate2Component, customCellTemplate2ExampleConfig } from './example/custom-cell-template-2';
 import { CustomHeaderTemplateComponent, customHeaderTemplateExampleConfig } from './example/custom-header-template';
-import { VitualScrollingComponent, vitualScrollingExampleConfig } from './example/vitual-scrolling';
+import { VirtualScrollingComponent, virtualScrollingExampleConfig } from './example/virtual-scrolling';
 import { CustomToolbarTemplateComponent, customToolbarTemplateExampleConfig } from './example/custom-toolbar-template';
 import { CustomPopupEditTemplateComponent, customPopupEditTemplateExampleConfig } from './example/custom-popup-edit-template';
 import { CustomInlineEditTemplateComponent, customInlineEditTemplateExampleConfig } from './example/custom-inline-edit-template';
@@ -44,6 +44,7 @@ export class MatTableExtOverviewComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
   }
+  
   ngAfterViewInit() {
     if (this.elRef) {
       setTimeout(() => {
@@ -99,7 +100,7 @@ export class MatTableExtApiComponent implements OnInit {
             columnHidingPinningExampleConfig,
             exportExampleConfig,
             hoverStripedExampleConfig,
-            vitualScrollingExampleConfig,
+            virtualScrollingExampleConfig,
             rowOpExampleConfig,
             columnReorderExampleConfig,
             customCellTemplateExampleConfig,
@@ -139,7 +140,7 @@ export class MatTableExtApiComponent implements OnInit {
     ExpandableRowComponent,
     ColumnHidingPinningComponent,
     HoverStripedComponent,
-    VitualScrollingComponent,
+    VirtualScrollingComponent,
     TableExportComponent,
     RowOpComponent,
     columnReorderComponent,

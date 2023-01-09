@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { EXAMPLE_DATA } from '../../data';
-import { MTExColumn, RowSelectionChange } from '../../types';
+import { MTExColumn } from '../../types';
 import { MatTableDataSource } from '@angular/material/table';
-import { CustomTableService } from 'src/app/custom-table/service/custom-table.service';
+import { CustomTableService } from 'src/app/service/custom-table.service';
 
 @Component({
   selector: 'data-grid-example',
@@ -47,8 +46,5 @@ export class AppComponent {
       }
       this.isLoading = false;
     });
-  }
-  onSelectionChange(event: RowSelectionChange) {
-    console.log("Selection Change: ", event)
   }
 }

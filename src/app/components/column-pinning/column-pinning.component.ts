@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MtxGridColumn } from 'src/app/models/tableExtModels';
+import { MTExColumn } from 'src/app/models/tableExtModels';
 
 @Component({
   selector: 'app-column-pinning',
@@ -7,8 +7,8 @@ import { MtxGridColumn } from 'src/app/models/tableExtModels';
   styleUrls: ['./column-pinning.component.scss']
 })
 export class ColumnPinningComponent implements OnInit {
-  @Input() columns!: MtxGridColumn[];
-  @Output() columnsChanged: EventEmitter<MtxGridColumn[]> = new EventEmitter();
+  @Input() columns!: MTExColumn[];
+  @Output() columnsChanged: EventEmitter<MTExColumn[]> = new EventEmitter();
   public icons = {
     left: "pinLeft",
     right: "pinRight",
@@ -20,7 +20,7 @@ export class ColumnPinningComponent implements OnInit {
   constructor() { }
   ngOnInit(): void {
   }
-  changeValue(column: MtxGridColumn) {
+  changeValue(column: MTExColumn) {
     if (column.pinned) {
       if (column.pinned == 'left') {
         this.setColumnPinValue(column, 'right');
@@ -33,7 +33,7 @@ export class ColumnPinningComponent implements OnInit {
     }
     this.columnsChanged.emit(this.columns);
   }
-  setColumnPinValue(column: MtxGridColumn, value: 'left' | 'right' | undefined) {
+  setColumnPinValue(column: MTExColumn, value: 'left' | 'right' | undefined) {
     this.columns.forEach(col => {
       if (column?.header == col.header) {
         col.pinned = value;

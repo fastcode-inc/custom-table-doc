@@ -1,191 +1,191 @@
 <!-- <app-navbar class="mat-elevation-z6"></app-navbar>
 <router-outlet></router-outlet> -->
 <mat-card class="result">
-            <h2 class="example-h2">Table</h2> 
-        <mat-card-content style="display: flex; gap: 50px;">
-    <div style="display: flex;flex-direction: column;">
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="popupRowEditing" [disabled]="false">
-            Popup Editing
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="inlineRowEditing" [disabled]="false">
-            Inline Editing
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="inCellEditing" [disabled]="false">
-            Cell Editing
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="deleteRow" [disabled]="false">
-            Delete Row
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="stripedRows" [disabled]="false">
-            Striped Rows
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="rowSelection" [disabled]="false">
-           Row Selection
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="multiRowSelection" [disabled]="false">
-           Multi Row Selection
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="columnResizable" [disabled]="false">
-            Column Resizable
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="stickyHeader" [disabled]="false">
-            Sticky Header
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="stickyFooter" [disabled]="false">
-            Sticky Footer
-        </mat-slide-toggle>
-    </section>
-
-</div>
-<div style="display: flex;flex-direction: column;">
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="toolbarToggle" [disabled]="false">
-            Table Toolbar
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section" style="padding-left: 15px;" >
-        <mat-slide-toggle [(ngModel)]="exportButtonEnable" [disabled]="!toolbarToggle">
-            Export Button
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section" style="padding-left: 15px;">
-        <mat-slide-toggle [(ngModel)]="columnPinnable" [disabled]="!toolbarToggle">
-            Column Pinnable
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section" style="padding-left: 15px;">
-        <mat-slide-toggle [(ngModel)]="columnHideable" [disabled]="!toolbarToggle">
-            Column Hide/Show 
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="topSearchFilter" [disabled]="false">
-            Global Search
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="isExpandEnable" [disabled]="false">
-            Row Expandable
-        </mat-slide-toggle>
-    </section>
-
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="dragEnable" [disabled]="false">
-            Drag & Drop Columns
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="isLoading" [disabled]="false">
-            Loading Indicator
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="paginationEnable" [disabled]="false">
-            Pagination
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section" style="padding-left: 15px;">
-        <mat-slide-toggle [(ngModel)]="showFirstLastButtons" [disabled]="!paginationEnable">
-            Show First Last Page Buttons
-        </mat-slide-toggle>
-    </section>
-</div>
-<div style="display: flex;flex-direction: column;">
+    <h2 class="example-h2">Table</h2> 
+    <mat-card-content style="display: flex; gap: 50px;">
+        <div style="display: flex;flex-direction: column;">
         <section class="example-section">
-            <mat-slide-toggle [(ngModel)]="simpleFilter" [disabled]="false">
-                Columns Filter
+            <mat-slide-toggle [(ngModel)]="popupRowEditing" [disabled]="false">
+                Popup Editing
             </mat-slide-toggle>
         </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="sorting" [disabled]="false">
-            Sorting
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="infiniteScroll" [disabled]="false">
-            Infinite Scroll
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="scrollbarH" [disabled]="false">
-            Horizontal Scroll
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="headerTemplateRefCtrl" [disabled]="false">
-            Header TemplateRef
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="cellTemplateRefCtrl" [disabled]="false">
-            Cell TemplateRef
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="toolbarTemplateRefCtrl" [disabled]="!toolbarToggle">
-            Toolbar TemplateRef
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="popupTemplateRefCtrl" >
-            Popup Editing TemplateRef
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="inlineTemplateRefCtrl" >
-            Inline Editing TemplateRef
-        </mat-slide-toggle>
-    </section>
-    <section class="example-section">
-        <mat-slide-toggle [(ngModel)]="cellEditingTemplateRefCtrl" >
-            Cell Editing TemplateRef
-        </mat-slide-toggle>
-    </section>
-</div>
-<div style="display: flex; flex-direction: column;">
         <section class="example-section">
-            <mat-form-field class="example-full-width" appearance="outline">
-                <mat-label>Table Height</mat-label>
-                <input matInput placeholder="Default is 500px" [(ngModel)]="tableHeight" [disabled]="false">
-            </mat-form-field>
+            <mat-slide-toggle [(ngModel)]="inlineRowEditing" [disabled]="false">
+                Inline Editing
+            </mat-slide-toggle>
         </section>
-        <mat-divider></mat-divider>
         <section class="example-section">
-            <mat-form-field class="example-full-width" appearance="outline">
-                <mat-label>Table Width</mat-label>
-                <input matInput placeholder="Default is 100%" [(ngModel)]="tableWidth" [disabled]="false">
-            </mat-form-field>
+            <mat-slide-toggle [(ngModel)]="inCellEditing" [disabled]="false">
+                Cell Editing
+            </mat-slide-toggle>
         </section>
-        <mat-divider></mat-divider>
-        <section class="example-section" >
-            <mat-form-field class="example-full-width" appearance="outline" disabled>
-                <mat-label>Toolbar Height</mat-label>
-                <input matInput placeholder="Default is 50px" [(ngModel)]="toolbarHeight" [disabled]="!toolbarToggle">
-            </mat-form-field>
+        <section class="example-section">
+            <mat-slide-toggle [(ngModel)]="deleteRow" [disabled]="false">
+                Delete Row
+            </mat-slide-toggle>
         </section>
-        <mat-divider></mat-divider>
-</div>
-        </mat-card-content>
-    </mat-card>
+        <section class="example-section">
+            <mat-slide-toggle [(ngModel)]="stripedRows" [disabled]="false">
+                Striped Rows
+            </mat-slide-toggle>
+        </section>
+        <section class="example-section">
+            <mat-slide-toggle [(ngModel)]="rowSelection" [disabled]="false">
+            Row Selection
+            </mat-slide-toggle>
+        </section>
+        <section class="example-section">
+            <mat-slide-toggle [(ngModel)]="multiRowSelection" [disabled]="false">
+            Multi Row Selection
+            </mat-slide-toggle>
+        </section>
+        <section class="example-section">
+            <mat-slide-toggle [(ngModel)]="columnResizable" [disabled]="false">
+                Column Resizable
+            </mat-slide-toggle>
+        </section>
+        <section class="example-section">
+            <mat-slide-toggle [(ngModel)]="stickyHeader" [disabled]="false">
+                Sticky Header
+            </mat-slide-toggle>
+        </section>
+        <section class="example-section">
+            <mat-slide-toggle [(ngModel)]="stickyFooter" [disabled]="false">
+                Sticky Footer
+            </mat-slide-toggle>
+        </section>
+
+        </div>
+        <div style="display: flex;flex-direction: column;">
+        <section class="example-section">
+            <mat-slide-toggle [(ngModel)]="toolbarToggle" [disabled]="false">
+                Table Toolbar
+            </mat-slide-toggle>
+        </section>
+        <section class="example-section" style="padding-left: 15px;" >
+            <mat-slide-toggle [(ngModel)]="exportButtonEnable" [disabled]="!toolbarToggle">
+                Export Button
+            </mat-slide-toggle>
+        </section>
+        <section class="example-section" style="padding-left: 15px;">
+            <mat-slide-toggle [(ngModel)]="columnPinnable" [disabled]="!toolbarToggle">
+                Column Pinnable
+            </mat-slide-toggle>
+        </section>
+        <section class="example-section" style="padding-left: 15px;">
+            <mat-slide-toggle [(ngModel)]="columnHidable" [disabled]="!toolbarToggle">
+                Column Hide/Show 
+            </mat-slide-toggle>
+        </section>
+        <section class="example-section">
+            <mat-slide-toggle [(ngModel)]="topSearchFilter" [disabled]="false">
+                Global Search
+            </mat-slide-toggle>
+        </section>
+        <section class="example-section">
+            <mat-slide-toggle [(ngModel)]="isExpandEnable" [disabled]="false">
+                Row Expandable
+            </mat-slide-toggle>
+        </section>
+
+        <section class="example-section">
+            <mat-slide-toggle [(ngModel)]="dragEnable" [disabled]="false">
+                Drag & Drop Columns
+            </mat-slide-toggle>
+        </section>
+        <section class="example-section">
+            <mat-slide-toggle [(ngModel)]="isLoading" [disabled]="false">
+                Loading Indicator
+            </mat-slide-toggle>
+        </section>
+        <section class="example-section">
+            <mat-slide-toggle [(ngModel)]="paginationEnable" [disabled]="false">
+                Pagination
+            </mat-slide-toggle>
+        </section>
+        <section class="example-section" style="padding-left: 15px;">
+            <mat-slide-toggle [(ngModel)]="showFirstLastButtons" [disabled]="!paginationEnable">
+                Show First Last Page Buttons
+            </mat-slide-toggle>
+        </section>
+        </div>
+        <div style="display: flex;flex-direction: column;">
+            <section class="example-section">
+                <mat-slide-toggle [(ngModel)]="simpleFilter" [disabled]="false">
+                    Columns Filter
+                </mat-slide-toggle>
+            </section>
+        <section class="example-section">
+            <mat-slide-toggle [(ngModel)]="sorting" [disabled]="false">
+                Sorting
+            </mat-slide-toggle>
+        </section>
+        <section class="example-section">
+            <mat-slide-toggle [(ngModel)]="infiniteScroll" [disabled]="false">
+                Infinite Scroll
+            </mat-slide-toggle>
+        </section>
+        <section class="example-section">
+            <mat-slide-toggle [(ngModel)]="scrollbarH" [disabled]="false">
+                Horizontal Scroll
+            </mat-slide-toggle>
+        </section>
+        <section class="example-section">
+            <mat-slide-toggle [(ngModel)]="headerTemplateRefCtrl" [disabled]="false">
+                Header TemplateRef
+            </mat-slide-toggle>
+        </section>
+        <section class="example-section">
+            <mat-slide-toggle [(ngModel)]="cellTemplateRefCtrl" [disabled]="false">
+                Cell TemplateRef
+            </mat-slide-toggle>
+        </section>
+        <section class="example-section">
+            <mat-slide-toggle [(ngModel)]="toolbarTemplateRefCtrl" [disabled]="!toolbarToggle">
+                Toolbar TemplateRef
+            </mat-slide-toggle>
+        </section>
+        <section class="example-section">
+            <mat-slide-toggle [(ngModel)]="popupTemplateRefCtrl" >
+                Popup Editing TemplateRef
+            </mat-slide-toggle>
+        </section>
+        <section class="example-section">
+            <mat-slide-toggle [(ngModel)]="inlineTemplateRefCtrl" >
+                Inline Editing TemplateRef
+            </mat-slide-toggle>
+        </section>
+        <section class="example-section">
+            <mat-slide-toggle [(ngModel)]="cellEditingTemplateRefCtrl" >
+                Cell Editing TemplateRef
+            </mat-slide-toggle>
+        </section>
+        </div>
+        <div style="display: flex; flex-direction: column;">
+            <section class="example-section">
+                <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Table Height</mat-label>
+                    <input matInput placeholder="Default is 500px" [(ngModel)]="tableHeight" [disabled]="false">
+                </mat-form-field>
+            </section>
+            <mat-divider></mat-divider>
+            <section class="example-section">
+                <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Table Width</mat-label>
+                    <input matInput placeholder="Default is 100%" [(ngModel)]="tableWidth" [disabled]="false">
+                </mat-form-field>
+            </section>
+            <mat-divider></mat-divider>
+            <section class="example-section" >
+                <mat-form-field class="example-full-width" appearance="outline" disabled>
+                    <mat-label>Toolbar Height</mat-label>
+                    <input matInput placeholder="Default is 50px" [(ngModel)]="toolbarHeight" [disabled]="!toolbarToggle">
+                </mat-form-field>
+            </section>
+            <mat-divider></mat-divider>
+        </div>
+    </mat-card-content>
+</mat-card>
     
     <mat-table-ext
     style="margin: 15px;"
@@ -210,7 +210,7 @@
     [pageSizeOptions]="[10, 25, 100]"
     [showFirstLastButtons]="showFirstLastButtons"
     [columnPinnable]="columnPinnable"
-    [columnHideable]="columnHideable"
+    [columnHidable]="columnHidable"
     [exportButtonEnable]="exportButtonEnable"
     [stripedRows]="stripedRows"
     [loadingIndicator]="isLoading"

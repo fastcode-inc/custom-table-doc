@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { EXAMPLE_DATA } from '../../data';
-import { MTExColumn, MTExRowSelectionFormatter } from '../../types';
+import { MTExColumn } from '../../types';
 import { MatTableDataSource } from '@angular/material/table';
 
 @Component({

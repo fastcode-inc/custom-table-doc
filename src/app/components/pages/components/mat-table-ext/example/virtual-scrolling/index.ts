@@ -1,8 +1,8 @@
-import { AppComponent as VitualScrollingComponent } from './app.component';
+import { AppComponent as VirtualScrollingComponent } from './app.component';
 
-const vitualScrollingExampleConfig = {
-  title: 'Vitual Scrolling',
-  component: VitualScrollingComponent,
+const virtualScrollingExampleConfig = {
+  title: 'Virtual Scrolling',
+  component: VirtualScrollingComponent,
   files: [
     {
       file: 'app.component.html',
@@ -27,4 +27,4 @@ const vitualScrollingExampleConfig = {
   ],
 };
 
-export { VitualScrollingComponent, vitualScrollingExampleConfig };
+export { VirtualScrollingComponent, virtualScrollingExampleConfig };

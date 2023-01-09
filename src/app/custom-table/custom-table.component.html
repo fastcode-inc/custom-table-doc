@@ -16,7 +16,7 @@
             Show All Rows
         </button>
     </ng-container>
-    <button *ngIf="columnHideable" class="hide-button" mat-stroked-button color="primary" (click)="openMenu('hideShow',$event)" matTooltip="Column Visibillity" matTooltipPosition="above">
+    <button *ngIf="columnHidable" class="hide-button" mat-stroked-button color="primary" (click)="openMenu('hideShow',$event)" matTooltip="Column Visibility" matTooltipPosition="above">
         <mat-icon>visibility</mat-icon>
     </button>
     <button *ngIf="columnPinnable" class="pin-button" mat-stroked-button color="primary" (click)="openMenu('columnPin',$event)" matTooltip="Column Pinning">
@@ -39,7 +39,7 @@
 </div>
 <mat-menu #columnMenu="matMenu" (closed)="resetMenuChecks()">
     <div class="toolbar-menu-container" *ngIf="hideShowMenuCtrl" [formGroup]="hideShowMenuGroup" (click)="$event.stopPropagation()">
-        <h4>Visibile Columns</h4>
+        <h4>Visible Columns</h4>
         <mat-form-field appearance="fill" style="width: -webkit-fill-available;">
             <mat-label>Filter Columns</mat-label>
             <input matInput  [(ngModel)]="showHideFilter" (ngModelChange)="filterColumns($event)" [ngModelOptions]="{standalone: true}">
@@ -87,14 +87,14 @@
                 <td mat-footer-cell *matFooterCellDef></td>
             </ng-container>
         </ng-container>
-        <!--dymanic columns are being generated here-->
+        <!--dynamic columns are being generated here-->
         <div matColumnDef="{{column['field']}}" 
             [sticky]="column.pinned == 'left' ? true:false"
             [stickyEnd]="column.pinned == 'right' ? true:false"
             *ngFor="let column of columnsArray; let i = index">
                 <th  mat-header-cell *matHeaderCellDef [style.width]="column.width" [style.maxWidth]="column.maxWidth" [style.minWidth]="column.minWidth" 
                     cdkDragLockAxis="x" cdkDrag [cdkDragDisabled]="!dndColumns" [columnsResizable]="columnResizable" [index]="i"> 
-                    <span *ngIf="!headerTemplateRef" matTooltip="{{column.headerTooltip?.value}}" mat-sort-header [disabled]="!sorting">{{column.header}}</span>
+                    <span *ngIf="!headerTemplateRef" matTooltip="{{column.headerTooltip?.value}}" [matTooltipPosition]="column?.headerTooltip?.tooltipPosition!" mat-sort-header [disabled]="!sorting">{{column.header}}</span>
                     <ng-container *ngIf="headerTemplateRef" [ngTemplateOutlet]="headerTemplateRef" [ngTemplateOutletContext]="{data:column}"></ng-container>
                     <ng-container *ngIf="column.headerTemplate" [ngTemplateOutlet]="column.headerTemplate" [ngTemplateOutletContext]="{data:column}"></ng-container>
                 </th>
@@ -168,7 +168,7 @@
                 </mat-icon>
                 <div class="inline-editing-controls" *ngIf="row.editable && !row.editmodal">
                     <mat-icon class="edit-column-icons"  aria-hidden="false" (click)="saveInlineEditing(row,i)" fontIcon="done"></mat-icon>
-                    <mat-icon class="edit-column-icons"  aria-hidden="false" (click)="cencelInlineEditing(row,i)" fontIcon="close"></mat-icon>
+                    <mat-icon class="edit-column-icons"  aria-hidden="false" (click)="cancelInlineEditing(row,i)" fontIcon="close"></mat-icon>
                 </div>
             </td>
             <td  mat-footer-cell *matFooterCellDef> edit </td>
