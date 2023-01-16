@@ -1,0 +1,36 @@
+<nav class="docs-navbar-header" aria-label="Top Toolbar">
+  <div class="skip-link-wrapper" [class.cdk-visually-hidden]="skipLinkHidden" *ngIf="skipLinkHref">
+    <a mat-raised-button [href]="skipLinkHref" (focus)="skipLinkHidden = false"
+       (blur)="skipLinkHidden = true" color="accent">
+      Skip to main content
+    </a>
+  </div>
+
+  <a mat-button class="docs-button" aria-label="Angular Material">
+    <img class="logo" matButtonIcon src="../../../../assets/img/angular-white-transparent.svg" alt="angular"
+         aria-hidden="true">
+    <span>Material Extensions</span>
+  </a>
+
+  <!-- <a mat-button class="docs-navbar-hide-small docs-button" routerLink="components"
+       routerLinkActive="docs-navbar-header-item-selected">Components</a> -->
+
+  <div class="flex-spacer"></div>
+  <a mat-button class="docs-button docs-navbar-hide-small"
+     aria-label="GitHub Repository">
+    <img class="logo" matButtonIcon
+         src="../../../../assets/img/github-circle-white-transparent.svg"
+         alt="angular" aria-hidden="true">
+    GitHub
+  </a>
+  <a mat-icon-button class="docs-button docs-navbar-show-small"
+     aria-label="GitHub Repository">
+    <img class="logo docs-navbar--github-logo" matButtonIcon
+         src="../../../../assets/img/github-circle-white-transparent.svg"
+         alt="angular" aria-hidden="true">
+  </a>
+</nav>
+<nav class="docs-navbar docs-navbar-show-small" aria-label="Section Nav Bar">
+  <a mat-button class="docs-navbar-link" routerLink="components">Components</a>
+  <a mat-button class="docs-navbar-link" routerLink="guides">Guides</a>
+</nav>

@@ -1,0 +1,38 @@
+@use 'sass:map';
+
+@use '../app/components/pages/component-category-list/_component-category-list-theme';
+@use '../app/components/pages/component-page-header/_component-page-header-theme';
+@use '../app/components/pages/component-nav/_component-nav-theme';
+@use '../app/components/pages/component-sidenav/_component-sidenav-theme';
+@use '../app/components/pages/component-viewer/_component-viewer-theme';
+@use '../app/components/pages/homepage/_homepage-theme';
+@use '../app/components/shared/doc-viewer/_doc-viewer-theme';
+@use '../app/components/shared/example-viewer/_example-viewer-theme';
+@use '../app/components/shared/table-of-contents/_table-of-contents-theme';
+@use '../app/components/shared/navbar/_navbar-theme';
+
+@use './highlightjs/material-light' as *;
+@use './highlightjs/material-dark' as *;
+
+// Styles for the docs app that are based on the current theme.
+@mixin theme($theme) {
+  $is-dark-theme: map.get($theme, is-dark);
+
+  @include component-category-list-theme.theme($theme);
+  @include component-page-header-theme.theme($theme);
+  @include component-nav-theme.theme($theme);
+  @include component-sidenav-theme.theme($theme);
+  @include component-viewer-theme.theme($theme);
+  @include homepage-theme.theme($theme);
+  @include doc-viewer-theme.theme($theme);
+  @include example-viewer-theme.theme($theme);
+  @include table-of-contents-theme.theme($theme);
+  @include navbar-theme.theme($theme);
+
+  @if $is-dark-theme {
+    @include highlightjs-material-dark();
+  }
+  @else {
+    @include highlightjs-material-light();
+  }
+}

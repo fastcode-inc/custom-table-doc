@@ -1,0 +1,9 @@
+<mat-table-ext 
+      [dataSource]="list"
+      [columns]="columns"
+      [headerTemplateRef]="headerTpl">
+</mat-table-ext>
+
+<ng-template #headerTpl let-col="data">
+  {{col.header}} <mat-icon [matTooltip]="col.description">info</mat-icon>
+</ng-template>

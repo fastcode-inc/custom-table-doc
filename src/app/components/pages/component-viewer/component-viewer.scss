@@ -1,0 +1,70 @@
+@use '../../../../styles/constants';
+
+app-component-viewer {
+  width: calc(100% - #{constants.$content-padding-sidenav * 2});
+  font-weight: 400;
+  line-height: 1.5;
+
+  // spacing for the component viewer
+  padding: 20px 10px;
+
+  // Sidenav is hidden
+  @media (max-width: constants.$small-breakpoint-width) {
+    width: calc(100% - #{constants.$content-padding-sidenav * 2});
+  }
+  @media (max-width: 599px) {
+    width: calc(100% - #{constants.$content-padding-side-xs * 2});
+    padding-left: constants.$content-padding-side-xs;
+    padding-right: constants.$content-padding-side-xs;
+  }
+  .docs-component-viewer{
+    width: 80%;
+  }
+  .docs-component-viewer-section-tab {
+    min-width: 160px;
+    text-transform: uppercase;
+  }
+}
+
+.docs-component-viewer-tabbed-content {
+  width: 400px;
+  margin-bottom: 25px;
+}
+
+.component-viewer-container {
+  display: flex;
+  align-items: flex-start;
+  overflow: visible;
+}
+.docs-component-viewer-content {
+  position: relative;
+  min-height: 500px;
+  table-of-contents {
+    top: 35px;
+    position: sticky;
+
+    // Reposition on top of content on small screens and remove
+    // sticky positioning
+    @media (max-width: constants.$small-breakpoint-width) {
+      order: -1;
+      position: inherit;
+      width: auto;
+      padding-left: 0;
+    }
+  }
+}
+
+.docs-component-view-text-content {
+  flex-grow: 1;
+  width: 100%;
+}
+
+.docs-component-api,
+.docs-component-overview {
+  width: 80%;
+
+  @media (max-width: constants.$small-breakpoint-width) {
+    width: 100%;
+    margin-right: 0;
+  }
+}

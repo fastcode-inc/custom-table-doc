@@ -1,0 +1,22 @@
+<div class="component-viewer-container">
+  <table-of-contents #toc container=".mat-drawer-content"></table-of-contents>
+  <div class="docs-component-viewer">
+    <nav mat-tab-nav-bar mat-stretch-tabs="true" mat-align-tabs="end" class="docs-component-viewer-tabbed-content"
+         aria-label="Documentation Sections"
+         id="component-viewer"
+         focusOnNavigation
+         [tabPanel]="panel"
+         >
+          <a mat-tab-link class="docs-component-viewer-section-tab"
+          *ngFor="let section of sections"
+          (click)="onTabChanged(section)"
+            [routerLink]="'/' + section.toLowerCase()"
+            routerLinkActive #rla="routerLinkActive"
+            [active]="rla.isActive">{{section}}</a>
+    </nav>
+  
+    <mat-tab-nav-panel #panel class="docs-component-viewer-content">
+      <router-outlet ></router-outlet>
+    </mat-tab-nav-panel>
+  </div>
+</div>
