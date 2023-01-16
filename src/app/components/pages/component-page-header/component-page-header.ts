@@ -12,6 +12,6 @@ export class ComponentPageHeader {
   @Output() toggleSidenav = new EventEmitter<void>();
 
   getTitle() {
-    return this._componentPageTitle.title;
+    return "Mat Table Ext";
   }
 }

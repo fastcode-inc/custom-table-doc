@@ -11,7 +11,7 @@ const routes = [
     component: ComponentViewer,
     children: [
       {
-        path: 'matTableExt',
+        path: '',
         loadChildren: () => import('./mat-table-ext/mat-table-ext').then(m => m.MatTableExtModule),
       },
     ],

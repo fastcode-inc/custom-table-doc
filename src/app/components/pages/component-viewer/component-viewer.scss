@@ -27,6 +27,7 @@ app-component-viewer {
 }
 
 .docs-component-viewer-tabbed-content {
+  width: 400px;
   margin-bottom: 25px;
 }
 
@@ -38,20 +39,6 @@ app-component-viewer {
 .docs-component-viewer-content {
   position: relative;
   min-height: 500px;
-
-  // Display outlet components with toc as flex and switch to
-  // vertical direction on small screens
-  // component-overview,
-  // component-api {
-  //   display: flex;
-  //   align-items: flex-start;
-  //   overflow: visible;
-
-  //   @media (max-width: constants.$small-breakpoint-width) {
-  //     flex-direction: column;
-  //   }
-  // }
-
   table-of-contents {
     top: 35px;
     position: sticky;

@@ -7,18 +7,12 @@ import { ComponentCategoryList } from '../component-category-list/component-cate
 import { ComponentNav } from '../component-nav/component-nav';
 import { ComponentPageHeader } from '../component-page-header/component-page-header';
 import { ComponentViewer } from '../component-viewer/component-viewer';
-import { MaterialModule } from 'src/app/modules/material.module';
 
 const routes: Routes = [
   {
     path: '',
     component: ComponentSidenav,
     children: [
-      { path: '', redirectTo: 'categories', pathMatch: 'full' },
-      {
-        path: 'categories',
-        children: [{ path: '', component: ComponentCategoryList }],
-      },
       {
         path: '',
         loadChildren: () => import('../components/components.module').then(m => m.ComponentsModule),

@@ -17,7 +17,7 @@ export class ComponentViewer implements AfterViewInit , OnDestroy {
   sections: Set<string> = new Set(['Overview', 'Api']);
   private _destroyed = new Subject<void>();
 
-  componentId = '';
+  componentId = 'matTableExt';
 
   constructor(
     _route: ActivatedRoute,
@@ -31,17 +31,17 @@ export class ComponentViewer implements AfterViewInit , OnDestroy {
     }
 
     // TODO: NavigationEnd not working if reload page
-    this.router.events.subscribe(s => {
-      if (s instanceof NavigationEnd) {
-        this.componentId = s.url.split('/')[2];
-        this._componentPageTitle.title = this.componentId;
-      } else if (s instanceof Scroll) {
-        this.componentId = s.routerEvent.url.split('/')[2];
-        if (this.componentId) {
-          this._componentPageTitle.title = this.componentId;
-        }
-      }
-    });
+    // this.router.events.subscribe(s => {
+    //   if (s instanceof NavigationEnd) {
+    //     this.componentId = s.url.split('/')[2];
+    //     this._componentPageTitle.title = this.componentId;
+    //   } else if (s instanceof Scroll) {
+    //     this.componentId = s.routerEvent.url.split('/')[2];
+    //     if (this.componentId) {
+    //       this._componentPageTitle.title = this.componentId;
+    //     }
+    //   }
+    // });
   }
   ngAfterViewInit() {
     if (this.elRef) {
