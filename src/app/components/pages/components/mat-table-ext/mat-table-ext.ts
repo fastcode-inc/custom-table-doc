@@ -5,7 +5,6 @@ import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { BasicComponent, basicExampleConfig } from './example/basic';
-import { CustomTableModule } from 'src/app/modules/customTable.module';
 import { ColumnResizeComponent, columnResizeExampleConfig } from './example/column-resize';
 import { LoadingStatusComponent, loadingStatusExampleConfig } from './example/loading-status';
 import { HidePaginationComponent, hidePaginationExampleConfig } from './example/hide-pagination';
@@ -28,6 +27,7 @@ import { GlobalSearchFilterComponent, globalSearchFilterExampleConfig } from './
 import { ColumnSearchFilterComponent, columnSearchFilterExampleConfig } from './example/column-type-search';
 import { StickyHeaderFooterComponent, stickyHeaderFooterExampleConfig } from './example/sticky-header-footer';
 import { TableOfContents } from 'src/app/components/shared/table-of-contents/table-of-contents';
+import { MatTableExtModule } from 'mat-table-sample';
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/data-grid/', '_json');
 }
@@ -74,7 +74,7 @@ export class MatTableExtApiComponent implements OnInit {
 @NgModule({
   imports: [
     SharedModule,
-    CustomTableModule,
+    MatTableExtModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -112,8 +112,6 @@ export class MatTableExtApiComponent implements OnInit {
             globalSearchFilterExampleConfig,
             columnSearchFilterExampleConfig,
             stickyHeaderFooterExampleConfig,
-
-            
           ],
         },
       },
@@ -152,7 +150,7 @@ export class MatTableExtApiComponent implements OnInit {
     CustomInlineEditTemplateComponent,
     GlobalSearchFilterComponent,
     ColumnSearchFilterComponent,
-    StickyHeaderFooterComponent
+    StickyHeaderFooterComponent,
   ],
 })
-export class MatTableExtModule { }
+export class MatTableExtExampleModule {}

@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../shared';
 
 import { ComponentViewer } from '../component-viewer/component-viewer';
-import { CustomTableModule } from 'src/app/modules/customTable.module';
+import { MatTableExtModule } from 'mat-table-sample';
 
 const routes = [
   {
@@ -12,15 +12,15 @@ const routes = [
     children: [
       {
         path: '',
-        loadChildren: () => import('./mat-table-ext/mat-table-ext').then(m => m.MatTableExtModule),
+        loadChildren: () => import('./mat-table-ext/mat-table-ext').then(m => m.MatTableExtExampleModule),
       },
     ],
   },
 ];
 
 @NgModule({
-  imports: [SharedModule, CustomTableModule, RouterModule.forChild(routes)],
+  imports: [SharedModule, MatTableExtModule, RouterModule.forChild(routes)],
   declarations: [],
-  exports: [CustomTableModule],
+  exports: [MatTableExtModule],
 })
 export class ComponentsModule {}

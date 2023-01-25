@@ -2,7 +2,7 @@ import { AppComponent as TableExportComponent } from './app.component';
 
 const exportExampleConfig = {
   title: 'Table export',
-  description: ``,
+  description: ` Expanded rows can also be exported when enabled`,
   component: TableExportComponent,
   files: [
     {

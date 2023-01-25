@@ -9,17 +9,14 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MaterialModule } from './modules/material.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatTableExporterModule } from 'mat-table-exporter';
 import { SharedModule } from './modules/shared.module';
 import { RouterModule } from '@angular/router';
 import { DOCS_APP_ROUTES } from './routes';
-import { CustomTableModule } from './modules/customTable.module';
 import { TableOfContentsModule } from './components/shared/table-of-contents/table-of-contents.module';
+import { MatTableExtModule } from 'mat-table-sample';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -31,19 +28,13 @@ import { TableOfContentsModule } from './components/shared/table-of-contents/tab
     MaterialModule,
     HttpClientModule,
     MatFormFieldModule,
-    MatTableExporterModule,
     SharedModule,
-    CustomTableModule,
+    MatTableExtModule,
     TableOfContentsModule,
-    RouterModule.forRoot(DOCS_APP_ROUTES, {
-    }),
-    SharedModule,
+    RouterModule.forRoot(DOCS_APP_ROUTES, {}),
   ],
-  exports: [
-    CustomTableModule,
-    TableOfContentsModule,
-  ],
+  exports: [MatTableExtModule, TableOfContentsModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
