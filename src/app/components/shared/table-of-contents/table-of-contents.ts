@@ -64,9 +64,7 @@ export class TableOfContents implements OnInit, AfterViewInit, OnDestroy {
     this.subscriptions.add(this._navigationFocusService.navigationEndEvents
       .subscribe(() => {
         const rootUrl = _router.url.split('#')[0];
-        if (rootUrl !== this._rootUrl) {
-          this._rootUrl = rootUrl;
-        }
+        this._rootUrl = rootUrl.substring(1, rootUrl.length);
       }));
 
     this.subscriptions.add(this._route.fragment.subscribe(fragment => {

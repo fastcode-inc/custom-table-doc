@@ -27,7 +27,7 @@ import { GlobalSearchFilterComponent, globalSearchFilterExampleConfig } from './
 import { ColumnSearchFilterComponent, columnSearchFilterExampleConfig } from './example/column-type-search';
 import { StickyHeaderFooterComponent, stickyHeaderFooterExampleConfig } from './example/sticky-header-footer';
 import { TableOfContents } from 'src/app/components/shared/table-of-contents/table-of-contents';
-import { MatTableExtModule } from 'mat-table-sample';
+import { MatTableExtModule } from 'mat-table-ext';
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/data-grid/', '_json');
 }

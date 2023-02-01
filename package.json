@@ -24,7 +24,7 @@
     "@ngx-translate/http-loader": "^7.0.0",
     "highlight-loader": "^0.7.4",
     "markdown-loader": "^8.0.0",
-    "mat-table-sample": "^0.0.63",
+    "mat-table-ext": "^0.0.1",
     "raw-loader": "^4.0.2",
     "rxjs": "~7.5.0",
     "sass-loader": "^10.1.1",

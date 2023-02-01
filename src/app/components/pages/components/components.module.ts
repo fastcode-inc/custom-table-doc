@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../shared';
 
 import { ComponentViewer } from '../component-viewer/component-viewer';
-import { MatTableExtModule } from 'mat-table-sample';
+import { MatTableExtModule } from 'mat-table-ext';
 
 const routes = [
   {
