@@ -9,11 +9,11 @@ import {
   NgZone,
   ChangeDetectorRef,
 } from '@angular/core';
-import {DOCUMENT} from '@angular/common';
-import {ActivatedRoute, Router} from '@angular/router';
-import {fromEvent, Subscription} from 'rxjs';
-import {debounceTime} from 'rxjs/operators';
-import {NavigationFocusService} from '../navigation-focus/navigation-focus.service';
+import { DOCUMENT } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { fromEvent, Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+import { NavigationFocusService } from '../navigation-focus/navigation-focus.service';
 
 interface LinkSection {
   name: string;
@@ -54,17 +54,22 @@ export class TableOfContents implements OnInit, AfterViewInit, OnDestroy {
   private subscriptions = new Subscription();
 
   constructor(private _router: Router,
-              private _route: ActivatedRoute,
-              private _element: ElementRef,
-              private _navigationFocusService: NavigationFocusService,
-              @Inject(DOCUMENT) private _document: Document,
-              private _ngZone: NgZone,
-              private _changeDetectorRef: ChangeDetectorRef) {
+    private _route: ActivatedRoute,
+    private _element: ElementRef,
+    private _navigationFocusService: NavigationFocusService,
+    @Inject(DOCUMENT) private _document: Document,
+    private _ngZone: NgZone,
+    private _changeDetectorRef: ChangeDetectorRef) {
 
     this.subscriptions.add(this._navigationFocusService.navigationEndEvents
       .subscribe(() => {
         const rootUrl = _router.url.split('#')[0];
         this._rootUrl = rootUrl.substring(1, rootUrl.length);
+        if (!_router.url.includes('#')) {
+          setTimeout(() => {
+            document.getElementsByTagName('component-page-header')[0].scrollIntoView();
+          }, 0);
+        }
       }));
 
     this.subscriptions.add(this._route.fragment.subscribe(fragment => {
@@ -90,8 +95,8 @@ export class TableOfContents implements OnInit, AfterViewInit, OnDestroy {
 
         if (this._scrollContainer) {
           this.subscriptions.add(fromEvent(this._scrollContainer, 'scroll').pipe(
-              debounceTime(10))
-              .subscribe(() => this.onScroll()));
+            debounceTime(10))
+            .subscribe(() => this.onScroll()));
         }
       });
     });
@@ -115,26 +120,38 @@ export class TableOfContents implements OnInit, AfterViewInit, OnDestroy {
   }
 
   addHeaders(sectionName: string, docViewerContent: HTMLElement, sectionIndex = 0) {
-    const links = Array.from(docViewerContent.querySelectorAll('h3, h4'), header => {
+    let sectionName1 = '';
+    const links = Array.from(docViewerContent.querySelectorAll('h3, h4'), (header: any) => {
       // remove the 'link' icon name from the inner text
       const name = (header as HTMLElement).innerText.trim().replace(/^link/, '');
       var value = header.getBoundingClientRect();
+      let id = header?.id;
+      if (id == '') {
+        id = (header.innerText).toLowerCase().split(' ').filter((s: any) => s !== '&').join('-');
+        let anchor = document.createElement('a');
+        anchor.href = '/custom-table-doc/api#' + id;
+        anchor.classList.add('docs-markdown-a');
+        anchor.classList.add('header-link');
+        header.id = id;
+        header.appendChild(anchor);
+        sectionName1 = 'Api content';
+      }
       return {
         name,
         type: header.tagName.toLowerCase(),
         top: value.top,
-        id: header.id,
+        id: id,
         active: false
       };
     });
 
-    this._linkSections[sectionIndex] = {name: sectionName, links};
+    this._linkSections[sectionIndex] = { name: sectionName1?sectionName1:sectionName, links };
     this._links.push(...links);
   }
 
   /** Gets the scroll offset of the scroll container */
   private getScrollOffset(): number | void {
-    const {top} = this._element.nativeElement.getBoundingClientRect();
+    const { top } = this._element.nativeElement.getBoundingClientRect();
     const container = this._scrollContainer;
 
     if (container instanceof HTMLElement) {
@@ -156,7 +173,7 @@ export class TableOfContents implements OnInit, AfterViewInit, OnDestroy {
       const currentLink = this._links[i];
       const nextLink = this._links[i + 1];
       const isActive = scrollOffset >= currentLink.top &&
-                       (!nextLink || nextLink.top >= scrollOffset);
+        (!nextLink || nextLink.top >= scrollOffset);
 
       if (isActive !== currentLink.active) {
         currentLink.active = isActive;
