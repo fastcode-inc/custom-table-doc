@@ -15,8 +15,7 @@
     .docs-navbar-header {
       background: mat.get-color-from-palette($primary);
 
-      & a:hover,
-      & a:focus {
+      & a:hover {
         background: rgba(0, 0, 0, .4);
         color: mat.get-color-from-palette($accent, 200);
       }

@@ -10,7 +10,7 @@
           <a mat-tab-link class="docs-component-viewer-section-tab"
           *ngFor="let section of sections"
           (click)="onTabChanged(section)"
-            [routerLink]="'/' + section.toLowerCase()"
+            [routerLink]="'/mat-table-ext/' + section.toLowerCase()"
             routerLinkActive #rla="routerLinkActive"
             [active]="rla.isActive">{{section}}</a>
     </nav>

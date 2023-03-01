@@ -6,33 +6,45 @@
     </a>
   </div>
 
-  <a mat-button class="docs-button" aria-label="Angular Material">
+  <a mat-button class="docs-button" aria-label="Angular Material" routerLink="/">
     <img class="logo" matButtonIcon src="assets/img/angular-white-transparent.svg" alt="angular"
          aria-hidden="true">
     <span>Material Extensions</span>
   </a>
-
+  <a mat-button class="docs-button" routerLink="/getting-started" routerLinkActive="docs-navbar-header-item-selected">
+    <span>Get started</span>
+  </a>
+  <a mat-button class="docs-button" aria-label="Angular Material" routerLink="/mat-table-ext"
+    routerLinkActive="docs-navbar-header-item-selected">
+    <span>Mat Table Ext</span>
+  </a>
+  
   <!-- <a mat-button class="docs-navbar-hide-small docs-button" routerLink="components"
-       routerLinkActive="docs-navbar-header-item-selected">Components</a> -->
-
-  <div class="flex-spacer"></div>
-  <a mat-button class="docs-button docs-navbar-hide-small"
+    routerLinkActive="docs-navbar-header-item-selected">Components</a> -->
+    
+    <div class="flex-spacer"></div>
+    <a mat-button class="docs-button docs-navbar-hide-small"
     href="https://github.com/fastcode-inc/custom-table"
     target="_blank"
-     aria-label="GitHub Repository">
+    aria-label="GitHub Repository">
     <img class="logo" matButtonIcon
-         src="assets/img/github-circle-white-transparent.svg"
+    src="assets/img/github-circle-white-transparent.svg"
          alt="angular" aria-hidden="true">
     GitHub
   </a>
   <a mat-icon-button class="docs-button docs-navbar-show-small"
-     aria-label="GitHub Repository">
-    <img class="logo docs-navbar--github-logo" matButtonIcon
-         src="assets/img/github-circle-white-transparent.svg"
-         alt="angular" aria-hidden="true">
-  </a>
+  aria-label="GitHub Repository">
+  <img class="logo docs-navbar--github-logo" matButtonIcon
+  src="assets/img/github-circle-white-transparent.svg"
+  alt="angular" aria-hidden="true">
+</a>
 </nav>
 <nav class="docs-navbar docs-navbar-show-small" aria-label="Section Nav Bar">
-  <a mat-button class="docs-navbar-link" routerLink="components">Components</a>
-  <a mat-button class="docs-navbar-link" routerLink="guides">Guides</a>
+  <a mat-button class="docs-button" routerLink="/getting-started" routerLinkActive="docs-navbar-header-item-selected">
+    <span>Get started</span>
+  </a>
+  <a mat-button class="docs-button" aria-label="Angular Material" routerLink="/mat-table-ext"
+    routerLinkActive="docs-navbar-header-item-selected">
+    <span>Mat Table Ext</span>
+  </a>
 </nav>
