@@ -15,7 +15,7 @@
     "esModuleInterop": true,
     "declaration": false,
     "experimentalDecorators": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "es2020",
     "module": "es2020",

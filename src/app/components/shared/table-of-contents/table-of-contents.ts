@@ -8,8 +8,9 @@ import {
   OnInit,
   NgZone,
   ChangeDetectorRef,
+  DOCUMENT
 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
