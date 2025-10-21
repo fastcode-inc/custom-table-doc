@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -16,26 +16,19 @@ import { TableOfContentsModule } from './components/shared/table-of-contents/tab
 import { MatTableExtModule } from 'mat-table-ext';
 
 
-@NgModule({
-  declarations: [AppComponent],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatTableModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatNativeDateModule,
-    MaterialModule,
-    HttpClientModule,
-    MatFormFieldModule,
-    SharedModule,
-    MatTableExtModule,
-    TableOfContentsModule,
-    RouterModule.forRoot(DOCS_APP_ROUTES, {}),
-  ],
-  exports: [MatTableExtModule, TableOfContentsModule],
-  providers: [],
-  bootstrap: [AppComponent],
-})
+@NgModule({ declarations: [AppComponent],
+    exports: [MatTableExtModule, TableOfContentsModule],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatTableModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatNativeDateModule,
+        MaterialModule,
+        MatFormFieldModule,
+        SharedModule,
+        MatTableExtModule,
+        TableOfContentsModule,
+        RouterModule.forRoot(DOCS_APP_ROUTES, {})], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule {}
