@@ -8,18 +8,18 @@ const columnHidingPinningExampleConfig = {
   files: [
     {
       file: 'app.component.html',
-      content: require('!!highlight-loader?raw=true&lang=html!./app.component.html'),
-      filecontent: require('!!raw-loader!./app.component.html'),
+      content: () => fetch('assets/examples/column-hiding-pinning/app.component.html').then(r => r.ok ? r.text() : ''),
+      filecontent: () => fetch('assets/examples/column-hiding-pinning/app.component.html').then(r => r.ok ? r.text() : ''),
     },
     {
       file: 'app.component.ts',
-      content: require('!!highlight-loader?raw=true&lang=typescript!./app.component.ts'),
-      filecontent: require('!!raw-loader!./app.component.ts'),
+      content: () => fetch('assets/examples/column-hiding-pinning/app.component.ts.txt').then(r => r.ok ? r.text() : ''),
+      filecontent: () => fetch('assets/examples/column-hiding-pinning/app.component.ts.txt').then(r => r.ok ? r.text() : ''),
     },
     {
       file: 'app.component.scss',
-      content: require('!!highlight-loader?raw=true&lang=scss!./app.component.scss'),
-      filecontent: require('!!raw-loader!./app.component.scss'),
+      content: () => fetch('assets/examples/column-hiding-pinning/app.component.scss').then(r => r.ok ? r.text() : ''),
+      filecontent: () => fetch('assets/examples/column-hiding-pinning/app.component.scss').then(r => r.ok ? r.text() : ''),
     },
   ],
 };

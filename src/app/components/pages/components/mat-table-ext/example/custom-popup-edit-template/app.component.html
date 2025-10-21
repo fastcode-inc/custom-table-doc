@@ -18,22 +18,22 @@
     <mat-dialog-content style="margin-right: 20px;">
       <div style="display: flex; flex-direction: column;">
         <ng-container *ngFor="let key of keys">
-          <mat-form-field *ngIf="types[key] == 'number'" color="accent" appearance="standard"
+          <mat-form-field *ngIf="types[key] == 'number'" color="accent" appearance="fill"
             class="inline-editing-field">
             <mat-label>{{key | titlecase}}</mat-label>
             <input matInput type="number" [(ngModel)]="row[key]" color="accent" [ngModelOptions]="{standalone: true}">
           </mat-form-field>
 
-          <mat-form-field *ngIf="types[key] == 'string'" appearance="standard" color="accent"
+          <mat-form-field *ngIf="types[key] == 'string'" appearance="fill" color="accent"
             class="inline-editing-field">
             <mat-label>{{key | titlecase}}</mat-label>
             <input matInput type="text" [(ngModel)]="row[key]" color="accent" [ngModelOptions]="{standalone: true}">
           </mat-form-field>
-          <mat-form-field *ngIf="types[key] == 'date'" appearance="standard" color="accent" class="inline-editing-field">
+          <mat-form-field *ngIf="types[key] == 'date'" appearance="fill" color="accent" class="inline-editing-field">
             <mat-label>{{key | titlecase}}</mat-label>
             <input matInput type="text" [(ngModel)]="row[key]" [ngModelOptions]="{standalone: true}">
           </mat-form-field>
-          <mat-form-field *ngIf="types[key] == 'selection'" appearance="standard" color="accent"
+          <mat-form-field *ngIf="types[key] == 'selection'" appearance="fill" color="accent"
             class="inline-editing-field">
             <mat-label>{{key | titlecase}}</mat-label>
             <mat-select [(ngModel)]="row[key].value">

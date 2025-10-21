@@ -13,7 +13,7 @@ import { SharedModule } from './modules/shared.module';
 import { RouterModule } from '@angular/router';
 import { DOCS_APP_ROUTES } from './routes';
 import { TableOfContentsModule } from './components/shared/table-of-contents/table-of-contents.module';
-import { MatTableExtModule } from 'mat-table-ext';
+import { MatTableExtModule } from 'mat-table-ext-test1';
 
 
 @NgModule({ declarations: [AppComponent],

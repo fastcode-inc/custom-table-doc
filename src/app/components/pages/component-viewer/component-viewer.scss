@@ -1,9 +1,11 @@
 @use '../../../../styles/constants';
 
 app-component-viewer {
-  width: calc(100% - #{constants.$content-padding-sidenav * 2});
+  // width: calc(100% - #{constants.$content-padding-sidenav * 2});
   font-weight: 400;
   line-height: 1.5;
+  box-sizing: border-box;
+  width: calc(100%);
 
   // spacing for the component viewer
   padding: 20px 10px;
@@ -12,14 +14,17 @@ app-component-viewer {
   @media (max-width: constants.$small-breakpoint-width) {
     width: calc(100% - #{constants.$content-padding-sidenav * 2});
   }
+
   @media (max-width: 599px) {
     width: calc(100% - #{constants.$content-padding-side-xs * 2});
     padding-left: constants.$content-padding-side-xs;
     padding-right: constants.$content-padding-side-xs;
   }
-  .docs-component-viewer{
+
+  .docs-component-viewer {
     width: 80%;
   }
+
   .docs-component-viewer-section-tab {
     min-width: 160px;
     text-transform: uppercase;
@@ -36,9 +41,11 @@ app-component-viewer {
   align-items: flex-start;
   overflow: visible;
 }
+
 .docs-component-viewer-content {
   position: relative;
   min-height: 500px;
+
   table-of-contents {
     top: 35px;
     position: sticky;

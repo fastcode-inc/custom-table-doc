@@ -4,7 +4,10 @@
   align-items: center;
   padding: 4px 16px;
 
-  > .mat-mdc-button {
+  color: #005cbb;
+  background: #d7e3ff;
+
+  >.mat-mdc-button {
     &:last-child {
       margin-left: auto;
     }
@@ -72,5 +75,19 @@ theme-picker {
 
   @media (min-width: 328px) {
     display: block;
+  }
+}
+
+svg {
+  // width: 100%;
+  // height: 100%;
+  fill: currentColor;
+}
+
+.docs-button{
+  >span.mdc-button__label{
+    display: flex !important;
+    align-items: center;
+    gap: 5px;
   }
 }

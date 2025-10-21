@@ -39,10 +39,10 @@ interface Link {
 }
 
 @Component({
-    selector: 'table-of-contents',
-    styleUrls: ['./table-of-contents.scss'],
-    templateUrl: './table-of-contents.html',
-    standalone: false
+  selector: 'table-of-contents',
+  styleUrls: ['./table-of-contents.scss'],
+  templateUrl: './table-of-contents.html',
+  standalone: false
 })
 export class TableOfContents implements OnInit, AfterViewInit, OnDestroy {
   @Input() container: string | undefined;
@@ -62,6 +62,7 @@ export class TableOfContents implements OnInit, AfterViewInit, OnDestroy {
     @Inject(DOCUMENT) private _document: Document,
     private _ngZone: NgZone,
     private _changeDetectorRef: ChangeDetectorRef) {
+    console.log("..", this._router.url)
 
     this.subscriptions.add(this._navigationFocusService.navigationEndEvents
       .subscribe(() => {
@@ -147,7 +148,7 @@ export class TableOfContents implements OnInit, AfterViewInit, OnDestroy {
       };
     });
 
-    this._linkSections[sectionIndex] = { name: sectionName1?sectionName1:sectionName, links };
+    this._linkSections[sectionIndex] = { name: sectionName1 ? sectionName1 : sectionName, links };
     this._links.push(...links);
   }
 
@@ -174,8 +175,8 @@ export class TableOfContents implements OnInit, AfterViewInit, OnDestroy {
       // anchor without also being scrolled passed the next link.
       const currentLink = this._links[i];
       const nextLink = this._links[i + 1];
-      const isActive = scrollOffset >= currentLink.top &&
-        (!nextLink || nextLink.top >= scrollOffset);
+      const isActive = Number(scrollOffset) >= Number(currentLink.top) &&
+        (!nextLink || Number(nextLink.top) >= Number(scrollOffset));
 
       if (isActive !== currentLink.active) {
         currentLink.active = isActive;
@@ -188,5 +189,11 @@ export class TableOfContents implements OnInit, AfterViewInit, OnDestroy {
       // we need to bring it back in only when something has changed.
       this._ngZone.run(() => this._changeDetectorRef.markForCheck());
     }
+  }
+
+  scrollTo(id: any) {
+    this._router.navigate(['custom-table-doc/overview'], {
+      fragment: id
+    })
   }
 }

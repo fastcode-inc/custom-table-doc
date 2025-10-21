@@ -1,11 +1,12 @@
-<div *ngFor="let linkSection of _linkSections" class="docs-toc-container">
+@for (linkSection of _linkSections; track $index) {
+<div class="docs-toc-container">
   <div class="docs-toc-heading">{{linkSection?.name}}</div>
   <nav [attr.aria-label]="linkSection?.name + ' Table of Contents'">
-    <a [href]="_rootUrl + '#' + link.id"
-      *ngFor="let link of linkSection?.links; let i = index"
-      class="docs-level-{{link.type}} docs-link"
-      [class.docs-active]="link.active">
+    @for (link of linkSection?.links; track $index) {
+    <a (click)="scrollTo(link.id)" class="docs-level-{{link.type}} docs-link" [class.docs-active]="link.active">
       {{link.name}}
     </a>
+    }
   </nav>
 </div>
+}

@@ -27,7 +27,7 @@ import { GlobalSearchFilterComponent, globalSearchFilterExampleConfig } from './
 import { ColumnSearchFilterComponent, columnSearchFilterExampleConfig } from './example/column-type-search';
 import { StickyHeaderFooterComponent, stickyHeaderFooterExampleConfig } from './example/sticky-header-footer';
 import { TableOfContents } from 'src/app/components/shared/table-of-contents/table-of-contents';
-import { MatTableExtModule } from 'mat-table-ext';
+import { MatTableExtModule } from 'mat-table-ext-test1';
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/data-grid/', '_json');
 }
@@ -122,7 +122,8 @@ export class MatTableExtApiComponent implements OnInit {
         component: MatTableExtApiComponent,
         pathMatch: 'full',
         data: {
-          content: require('!!raw-loader!!highlight-loader!markdown-loader!./tableExt.md'),
+          // load markdown from assets at runtime to avoid bundler-specific loader syntax
+          content: () => fetch('assets/docs/tableExt.md').then(r => r.ok ? r.text() : ''),
         },
       },
       { path: '**', redirectTo: 'overview' },
