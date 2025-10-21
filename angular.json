@@ -70,14 +70,14 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "matTable:build"
+            "buildTarget": "matTable:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "matTable:build:production"
+              "buildTarget": "matTable:build:production"
             },
             "development": {
-              "browserTarget": "matTable:build:development"
+              "buildTarget": "matTable:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -85,7 +85,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "matTable:build"
+            "buildTarget": "matTable:build"
           }
         },
         "test": {
@@ -174,10 +174,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "documentation:build:production"
+              "buildTarget": "documentation:build:production"
             },
             "development": {
-              "browserTarget": "documentation:build:development"
+              "buildTarget": "documentation:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -185,7 +185,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "documentation:build"
+            "buildTarget": "documentation:build"
           }
         },
         "test": {
