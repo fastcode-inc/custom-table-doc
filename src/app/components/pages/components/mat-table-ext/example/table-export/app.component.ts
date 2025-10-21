@@ -4,9 +4,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MTExColumn } from '../../types';
 
 @Component({
-  selector: 'data-grid-example',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+    selector: 'data-grid-example',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    standalone: false
 })
 export class AppComponent {
   columns: MTExColumn[] = [

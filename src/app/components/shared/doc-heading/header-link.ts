@@ -2,8 +2,8 @@ import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { PlatformLocation } from '@angular/common';
 
 @Component({
-  selector: 'header-link',
-  template: `
+    selector: 'header-link',
+    template: `
     <a
       aria-label="Link to this heading"
       class="docs-markdown-a header-link"
@@ -13,8 +13,9 @@ import { PlatformLocation } from '@angular/common';
       <mat-icon>link</mat-icon>
     </a>
   `,
-  styleUrls: ['./header-link.scss'],
-  encapsulation: ViewEncapsulation.None,
+    styleUrls: ['./header-link.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class HeaderLinkComponent implements OnInit {
   /**

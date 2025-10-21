@@ -121,12 +121,13 @@ describe('Navigation focus service', () => {
 });
 
 @Component({
-  selector: 'navigation-focus-test',
-  template: `
+    selector: 'navigation-focus-test',
+    template: `
     <button id="target1">Target 1</button>
     <button id="target2">Target 2</button>
     <button class="no-id" focusOnNavigation>Target 3</button>
-  `
+  `,
+    standalone: false
 })
 class NavigationFocusTest {
 }
@@ -135,8 +136,9 @@ class NavigationFocusTest {
 })
 
 @Component({
-  selector: 'route-test',
-  template: '',
+    selector: 'route-test',
+    template: '',
+    standalone: false
 })
 class RouteTest {
 }

@@ -3,9 +3,10 @@ import { MTExColumn, RowSelectionChange } from './models/tableExtModels';
 import { CustomTableService } from './service/custom-table.service';
 import { MatTableDataSource } from '@angular/material/table';
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    standalone: false
 })
 export class AppComponent implements OnInit {
   isLoading: boolean = false;

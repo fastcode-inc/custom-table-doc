@@ -1,10 +1,11 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'doc-viewer',
-  template: `<div class="docs-markdown" [innerHTML]="innerHtmlData"></div>`,
-  styleUrls: ['./doc-viewer.scss'],
-  encapsulation: ViewEncapsulation.None,
+    selector: 'doc-viewer',
+    template: `<div class="docs-markdown" [innerHTML]="innerHtmlData"></div>`,
+    styleUrls: ['./doc-viewer.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class DocViewer implements OnDestroy {
   innerHtmlData: string|undefined;

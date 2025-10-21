@@ -4,9 +4,10 @@ import { MTExColumn } from '../../types';
 import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
-  selector: 'data-grid-example',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+    selector: 'data-grid-example',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    standalone: false
 })
 export class AppComponent implements OnInit {
   @ViewChild('statusTpl', { static: true }) statusTpl!: TemplateRef<any>;

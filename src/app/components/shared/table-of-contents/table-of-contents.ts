@@ -38,9 +38,10 @@ interface Link {
 }
 
 @Component({
-  selector: 'table-of-contents',
-  styleUrls: ['./table-of-contents.scss'],
-  templateUrl: './table-of-contents.html'
+    selector: 'table-of-contents',
+    styleUrls: ['./table-of-contents.scss'],
+    templateUrl: './table-of-contents.html',
+    standalone: false
 })
 export class TableOfContents implements OnInit, AfterViewInit, OnDestroy {
   @Input() container: string | undefined;

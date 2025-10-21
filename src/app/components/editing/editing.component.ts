@@ -4,9 +4,10 @@ import { MTExColumn } from 'src/app/models/tableExtModels';
 import { CustomTableService } from 'src/app/service/custom-table.service';
 
 @Component({
-  selector: 'app-editing',
-  templateUrl: './editing.component.html',
-  styleUrls: ['./editing.component.scss'],
+    selector: 'app-editing',
+    templateUrl: './editing.component.html',
+    styleUrls: ['./editing.component.scss'],
+    standalone: false
 })
 export class EditingComponent implements OnInit {
   public templateRef!: TemplateRef<any>;

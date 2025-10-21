@@ -2,9 +2,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 @Component({
-  selector: 'app-filter-columns-component',
-  templateUrl: './filter-columns-component.component.html',
-  styleUrls: ['./filter-columns-component.component.scss'],
+    selector: 'app-filter-columns-component',
+    templateUrl: './filter-columns-component.component.html',
+    styleUrls: ['./filter-columns-component.component.scss'],
+    standalone: false
 })
 export class FilterColumnsComponentComponent implements OnInit {
   @Input() obj!: any;

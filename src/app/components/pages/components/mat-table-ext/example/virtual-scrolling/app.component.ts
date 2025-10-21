@@ -4,9 +4,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import { CustomTableService } from 'src/app/service/custom-table.service';
 
 @Component({
-  selector: 'data-grid-example',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+    selector: 'data-grid-example',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    standalone: false
 })
 export class AppComponent {
   constructor(public service: CustomTableService,) {

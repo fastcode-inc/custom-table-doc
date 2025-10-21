@@ -2,9 +2,10 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { ComponentPageTitle } from '../page-title/page-title';
 
 @Component({
-  selector: 'component-page-header',
-  templateUrl: './component-page-header.html',
-  styleUrls: ['./component-page-header.scss'],
+    selector: 'component-page-header',
+    templateUrl: './component-page-header.html',
+    styleUrls: ['./component-page-header.scss'],
+    standalone: false
 })
 export class ComponentPageHeader {
   constructor(public _componentPageTitle: ComponentPageTitle) {}

@@ -32,9 +32,10 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/data-grid/', '_json');
 }
 @Component({
-  selector: 'app-mat-table-ext-overview',
-  templateUrl: './mat-table-ext-overview.html',
-  styleUrls: ['./mat-table-ext-overview.scss'],
+    selector: 'app-mat-table-ext-overview',
+    templateUrl: './mat-table-ext-overview.html',
+    styleUrls: ['./mat-table-ext-overview.scss'],
+    standalone: false
 })
 export class MatTableExtOverviewComponent implements OnInit, AfterViewInit {
   @ViewChild('toc') tableOfContents!: TableOfContents;
@@ -60,8 +61,9 @@ export class MatTableExtOverviewComponent implements OnInit, AfterViewInit {
   }
 }
 @Component({
-  selector: 'app-mat-table-ext-api',
-  templateUrl: './mat-table-ext-api.html',
+    selector: 'app-mat-table-ext-api',
+    templateUrl: './mat-table-ext-api.html',
+    standalone: false
 })
 export class MatTableExtApiComponent implements OnInit {
 

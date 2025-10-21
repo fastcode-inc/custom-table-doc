@@ -4,9 +4,10 @@ import { NavigationFocusService } from '../navigation-focus/navigation-focus.ser
 import { AppThemes } from '../themes';
 
 @Component({
-  selector: 'app-navbar',
-  templateUrl: './navbar.html',
-  styleUrls: ['./navbar.scss'],
+    selector: 'app-navbar',
+    templateUrl: './navbar.html',
+    styleUrls: ['./navbar.scss'],
+    standalone: false
 })
 export class Navbar implements OnDestroy {
   private subscriptions = new Subscription();

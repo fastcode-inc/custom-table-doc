@@ -5,9 +5,10 @@ import { COMPONENTS_MENU } from '../component-nav/component-nav';
 import { ComponentPageTitle } from '../page-title/page-title';
 
 @Component({
-  selector: 'app-component-category-list',
-  templateUrl: './component-category-list.html',
-  styleUrls: ['./component-category-list.scss'],
+    selector: 'app-component-category-list',
+    templateUrl: './component-category-list.html',
+    styleUrls: ['./component-category-list.scss'],
+    standalone: false
 })
 export class ComponentCategoryList implements OnInit, OnDestroy {
   params!: Observable<Params>;

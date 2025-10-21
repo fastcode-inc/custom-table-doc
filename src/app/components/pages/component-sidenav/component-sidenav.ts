@@ -10,10 +10,11 @@ const EXTRA_SMALL_WIDTH_BREAKPOINT = 720;
 const SMALL_WIDTH_BREAKPOINT = 959;
 
 @Component({
-  selector: 'app-component-sidenav',
-  templateUrl: 'component-sidenav.html',
-  styleUrls: ['component-sidenav.scss'],
-  encapsulation: ViewEncapsulation.None,
+    selector: 'app-component-sidenav',
+    templateUrl: 'component-sidenav.html',
+    styleUrls: ['component-sidenav.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class ComponentSidenav implements OnInit, OnDestroy {
   @ViewChild(MatSidenav) sidenav!: MatSidenav;

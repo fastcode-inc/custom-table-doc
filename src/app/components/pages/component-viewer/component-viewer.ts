@@ -7,10 +7,11 @@ import { DocViewer } from '../../shared/doc-viewer/doc-viewer';
 import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
-  selector: 'app-component-viewer',
-  templateUrl: './component-viewer.html',
-  styleUrls: ['./component-viewer.scss'],
-  encapsulation: ViewEncapsulation.None,
+    selector: 'app-component-viewer',
+    templateUrl: './component-viewer.html',
+    styleUrls: ['./component-viewer.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class ComponentViewer implements AfterViewInit , OnDestroy {
   @ViewChild('toc') tableOfContents!: TableOfContents;

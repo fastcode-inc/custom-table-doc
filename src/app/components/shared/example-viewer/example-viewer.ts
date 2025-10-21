@@ -25,9 +25,10 @@ export interface ExampleType {
 }
 
 @Component({
-  selector: 'example-viewer',
-  templateUrl: './example-viewer.html',
-  styleUrls: ['./example-viewer.scss'],
+    selector: 'example-viewer',
+    templateUrl: './example-viewer.html',
+    styleUrls: ['./example-viewer.scss'],
+    standalone: false
 })
 export class ExampleViewer implements OnInit, OnDestroy {
   @Input() type!: string;
