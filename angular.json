@@ -115,25 +115,25 @@
           "style": "scss"
         }
       },
-      "root": "custom-table-doc",
-      "sourceRoot": "custom-table-doc/src",
+      "root": "projects/custom-table-doc",
+      "sourceRoot": "projects/custom-table-doc/src",
       "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/documentation",
-            "index": "custom-table-doc/src/index.html",
-            "main": "custom-table-doc/src/main.ts",
-            "polyfills": "custom-table-doc/src/polyfills.ts",
-            "tsConfig": "custom-table-doc/tsconfig.app.json",
+            "index": "projects/custom-table-doc/src/index.html",
+            "main": "projects/custom-table-doc/src/main.ts",
+            "polyfills": "projects/custom-table-doc/src/polyfills.ts",
+            "tsConfig": "projects/custom-table-doc/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "custom-table-doc/src/favicon.ico",
-              "custom-table-doc/src/assets"
+              "projects/custom-table-doc/src/favicon.ico",
+              "projects/custom-table-doc/src/assets"
             ],
             "styles": [
-              "custom-table-doc/src/styles.scss"
+              "projects/custom-table-doc/src/styles.scss"
             ],
             "scripts": []
           },
@@ -153,8 +153,8 @@
               ],
               "fileReplacements": [
                 {
-                  "replace": "custom-table-doc/src/environments/environment.ts",
-                  "with": "custom-table-doc/src/environments/environment.prod.ts"
+                  "replace": "projects/custom-table-doc/src/environments/environment.ts",
+                  "with": "projects/custom-table-doc/src/environments/environment.prod.ts"
                 }
               ],
               "outputHashing": "all"
@@ -191,17 +191,17 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "custom-table-doc/src/test.ts",
-            "polyfills": "custom-table-doc/src/polyfills.ts",
-            "tsConfig": "custom-table-doc/tsconfig.spec.json",
-            "karmaConfig": "custom-table-doc/karma.conf.js",
+            "main": "projects/custom-table-doc/src/test.ts",
+            "polyfills": "projects/custom-table-doc/src/polyfills.ts",
+            "tsConfig": "projects/custom-table-doc/tsconfig.spec.json",
+            "karmaConfig": "projects/custom-table-doc/karma.conf.js",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "custom-table-doc/src/favicon.ico",
-              "custom-table-doc/src/assets"
+              "projects/custom-table-doc/src/favicon.ico",
+              "projects/custom-table-doc/src/assets"
             ],
             "styles": [
-              "custom-table-doc/src/styles.scss"
+              "projects/custom-table-doc/src/styles.scss"
             ],
             "scripts": []
           }
