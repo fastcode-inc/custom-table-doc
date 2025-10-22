@@ -1,0 +1,8 @@
+<mat-checkbox [(ngModel)]="columnResizable">Column Resizable</mat-checkbox>
+<mat-table-ext 
+        [dataSource]="list"
+        [columns]="columns"
+        [columnResizable]="columnResizable"
+        [scrollbarH]="true"
+        [pageSizeOptions]="[3,10,15]">
+</mat-table-ext>

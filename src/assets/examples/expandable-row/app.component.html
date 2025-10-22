@@ -14,3 +14,19 @@
 </p>
   </div>
 </ng-template>
+<mat-table-ext 
+  [dataSource]="list"
+  [columns]="columns"
+  [expandRows]="true"
+  [expansionTemplateRef]="expansionTpl"
+  (expansionChange)="log($event)">
+</mat-table-ext>
+
+<ng-template #expansionTpl let-row="row">
+  <div style="height: 70px;">
+    {{row.name}}
+<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Doloremque libero animi accusantium totam mollitia
+  corrupti, illum qui cumque sequi, culpa sunt deleniti, officia quaerat distinctio ipsam velit corporis amet aliquid?
+</p>
+  </div>
+</ng-template>

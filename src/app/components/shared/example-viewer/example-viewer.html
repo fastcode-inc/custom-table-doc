@@ -23,7 +23,7 @@
             </button>
           </div>
           <div class="code-snippet">
-            <pre class="docs-example-source" [innerHtml]="f.content" #textContent></pre>
+            <pre class="docs-example-source" [innerHtml]="loadedFiles[f.file] || ''" #textContent></pre>
           </div>
         </div>
       </mat-tab>
