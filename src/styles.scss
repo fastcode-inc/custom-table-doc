@@ -1,4 +1,5 @@
 @use '@angular/material' as mat;
+@import 'highlight.js/styles/github.css';
 @import './styles/_code-theme.scss';
 
 /* Include Material core styles once per project. */
@@ -35,9 +36,37 @@ body {
 
 .main-sidenav-bg {
 
-    @include mat.sidenav-overrides((
-        container-background-color:white,
-        content-background-color:white,
+    @include mat.sidenav-overrides((container-background-color:white,
+            content-background-color:white,
         ));
 
+}
+
+.docs-api {
+    h5 {
+        font-size: 16px !important;
+    }
+
+    h6 {
+        margin-top: 10px;
+        font-size: 14px !important;
+    }
+
+    table.api-table {
+        width: 100%;
+        border-collapse: collapse;
+        padding: 10px 0;
+    }
+
+    tr {
+        border-bottom: 1px solid #c4c6d0;
+        height: 56px;
+    }
+    thead{
+        tr{
+            th{
+                font-weight: 500;
+            }
+        }
+    }
 }

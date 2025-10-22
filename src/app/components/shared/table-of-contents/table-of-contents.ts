@@ -192,8 +192,16 @@ export class TableOfContents implements OnInit, AfterViewInit, OnDestroy {
   }
 
   scrollTo(id: any) {
-    this._router.navigate(['custom-table-doc/overview'], {
+    this._router.navigate(['custom-table-doc/api'], {
       fragment: id
     })
+    
+    // if (this._rootUrl.includes('api')) {
+    // } else {
+      
+    //   this._router.navigate(['custom-table-doc/overview'], {
+    //     fragment: id
+    //   })
+    // }
   }
 }
