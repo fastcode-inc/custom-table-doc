@@ -1,0 +1,10 @@
+<mat-table-ext 
+    [dataSource]="list"
+    [columns]="columns"
+    [showToolbar]="true"
+    [toolbarTemplateRef]="toolbarTpl">
+</mat-table-ext>
+
+<ng-template #toolbarTpl>
+  <input placeholder="Search">
+</ng-template>
