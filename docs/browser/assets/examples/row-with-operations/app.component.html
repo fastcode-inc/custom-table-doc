@@ -1,6 +1,7 @@
 <div class="ctrls">
     <mat-checkbox [(ngModel)]="inlineEdit">Inline Edit</mat-checkbox>
     <mat-checkbox [(ngModel)]="cellEdit">Cell Edit</mat-checkbox>
+    <mat-checkbox [(ngModel)]="cellPopup">Cell popup Edit</mat-checkbox>
     <mat-checkbox [(ngModel)]="popupEdit">Popup Edit</mat-checkbox>
     <mat-checkbox [(ngModel)]="rowDelete">Delete Row</mat-checkbox>
 </div>
@@ -11,5 +12,6 @@
     [inCellEditing]="cellEdit"
     [inlineRowEditing]="inlineEdit"
     [popupRowEditing]="popupEdit"
+    [cellPopupEditing]="cellPopup"
     >
 </mat-table-ext>
