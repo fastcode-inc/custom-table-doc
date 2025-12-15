@@ -1,0 +1,13 @@
+<div>
+  <mat-checkbox [(ngModel)]="rowSelection">Row selectable</mat-checkbox>
+  <mat-checkbox [(ngModel)]="multiple">Multiple</mat-checkbox>
+</div>
+
+<mat-table-ext 
+    [dataSource]="list"
+    [columns]="columns"
+    [showToolbar]="true"
+    [rowSelection]="rowSelection"
+    [multiRowSelection]="multiple"
+    (selectionChanged)="log($event)">
+</mat-table-ext>
