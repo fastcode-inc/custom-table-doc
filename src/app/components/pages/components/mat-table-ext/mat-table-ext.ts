@@ -32,6 +32,9 @@ import { StickyHeaderFooterComponent, stickyHeaderFooterExampleConfig } from './
 import { TableOfContents } from 'src/app/components/shared/table-of-contents/table-of-contents';
 import { MatTableExtModule } from 'mat-table-ext-test1';
 import tableExtMd from './tableExt.generated';
+import { RowFreezingComponent, rowFreezingExampleConfig } from './example/row-freezing';
+import { ColumnGroupingComponent, ColumnGroupingExampleConfig } from './example/column-grouping';
+import { RowHidingComponent, RowHidingExampleConfig } from './example/row-hiding';
 export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/data-grid/', '_json');
 }
@@ -204,6 +207,9 @@ export class MatTableExtApiComponent implements OnInit {
             globalSearchFilterExampleConfig,
             columnSearchFilterExampleConfig,
             stickyHeaderFooterExampleConfig,
+            rowFreezingExampleConfig,
+            ColumnGroupingExampleConfig,
+            RowHidingExampleConfig
           ],
         },
       },
@@ -231,11 +237,14 @@ export class MatTableExtApiComponent implements OnInit {
     RowSelectableComponent,
     ExpandableRowComponent,
     ColumnHidingPinningComponent,
+    ColumnGroupingComponent,
     HoverStripedComponent,
     VirtualScrollingComponent,
     TableExportComponent,
     RowOpComponent,
+    RowHidingComponent,
     columnReorderComponent,
+    RowFreezingComponent,
     CustomCellTemplateComponent,
     CustomCellTemplate2Component,
     CustomHeaderTemplateComponent,

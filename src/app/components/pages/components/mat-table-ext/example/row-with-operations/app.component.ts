@@ -15,12 +15,15 @@ export class AppComponent {
     { header: 'Weight', field: 'weight', type: 'string' },
     { header: 'Gender', field: 'gender', type: 'selection',options:['male','female'] },
     { header: 'Mobile', field: 'mobile', type: 'string' },
-    { header: 'City', field: 'city', type: 'string' },
+    { header: 'City', field: 'city', type: 'string',  },
+    { header: 'Description', field: 'description', type: 'textarea'},
+    { header: 'Date', field: 'date', type: 'datepicker'},
   ];
 
   inlineEdit: boolean = true;
   cellEdit: boolean = true;
   popupEdit: boolean = true;
   rowDelete: boolean = true;
+  cellPopup: boolean = false;
   list = new MatTableDataSource([...EXAMPLE_DATA3]);
 }

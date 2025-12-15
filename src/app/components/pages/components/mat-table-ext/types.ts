@@ -2,6 +2,7 @@ import { TemplateRef } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import { Observable } from 'rxjs';
+
 /** Column definition of grid. */
 export interface MTExColumn {
     field: string;
@@ -18,14 +19,13 @@ export interface MTExColumn {
     right?: string;
     width?: string;
     resizable?: boolean;
+    type: MTExColumnType;
     minWidth?: string;
     maxWidth?: string;
     sortable?: boolean | string;
     sortProp?: MTExColumnSortProp;
-    type: MTExColumnType;
     typeParameter?: MTExColumnTypeParameter;
     tag?: MTExColumnTag;
-    buttons?: MTExColumnButton[];
     formatter?: (rowData: any, colDef?: MTExColumn) => void;
     cellTemplate?: TemplateRef<any> | null;
     headerTemplate?: TemplateRef<any> | null;
@@ -33,6 +33,7 @@ export interface MTExColumn {
     description?: string;
     summary?: ((data: any[], colDef?: MTExColumn) => void) | string;
     class?: string;
+    groupName?: string;
 }
 export interface DisplayColumn {
     filter: boolean;
@@ -53,7 +54,14 @@ export interface CellTemplateRefMap {
 
 }
 /** Possible column type values. */
-export declare type MTExColumnType = 'selection' | string | 'tag' | 'button' | 'link' | 'image' | boolean | number | 'currency' | 'percent' | 'date';
+export declare type MTExColumnType =
+    | 'selection'
+    | 'string'
+    | 'boolean'
+    | 'number'
+    | 'date'
+    | 'datepicker'
+    | 'textarea';
 /** Column type parameter. */
 export interface MTExColumnTypeParameter {
     currencyCode?: string;
